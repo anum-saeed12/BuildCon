@@ -24,10 +24,11 @@ class QuotationController extends Controller
     {
         $select = [
             'quotations.id',
-            'customer_name',
-            'project_name',
-            'item_description',
-            'total',
+            'customers.customer_name',
+            'quotations.project_name',
+            'quotations.date',
+            'quotations.total',
+            'quotations.terms_condition',
             'users.name'
         ];
 

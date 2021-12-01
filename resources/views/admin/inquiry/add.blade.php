@@ -60,13 +60,6 @@
                                            value="{{ old('timeline') }}">
                                     <div class="text-danger">@error('timeline'){{ $message }}@enderror</div>
                                 </div>
-
-                                <div class="col-md-2">
-                                    <label for="currency">Currency</label><br/>
-                                    <input type="text" name="currency" class="form-control" id="currency"
-                                           value="{{ old('currency') }}">
-                                    <div class="text-danger">@error('currency'){{ $message }}@enderror</div>
-                                </div>
                                 </div>
                             </div>
                             <br/>
@@ -82,7 +75,7 @@
                                     <div id="category_spinner"></div>
                                     <div class="text-danger">@error('category_id'){{ $message }}@enderror</div>
                                 </div>
-                                <div class="col-md-2 item-container">
+                                <div class="col-md-3 item-container">
                                     <label for="item_id">Select Item</label><br/>
                                     <select name="item_id[]" class="form-control" id="item_id"  data-target="#brand_id" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner" onchange="itemSelect($(this))">
                                         <option selected="selected" value>Select</option>
@@ -103,21 +96,13 @@
                                     </select>
                                     <div class="text-danger">@error('brand_id'){{ $message }}@enderror</div>
                                 </div>
-                                <div class="col-md-1 quantity-container">
+                                <div class="col-md-2 quantity-container">
                                     <label for="quantity">Quantity</label><br/>
                                     <input type="text" name="quantity[]" class="form-control with_out" id="quantity" data-target="#total_amount" data-into="#rate" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
                                 </div>
                                 <div class="col-md-1 unit-container">
                                     <label for="unit">Unit</label><br/>
                                     <input type="text" name="unit[]" class="form-control" id="unit">
-                                </div>
-                                <div class="col-md-1 rate-container">
-                                    <label for="rate">Rate</label><br/>
-                                    <input type="text" name="rate[]" class="form-control with_out" id="rate" data-target="#total_amount" data-into="#quantity" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
-                                </div>
-                                <div class="col-md-1 amount-container">
-                                    <label for="amount">Sub-Total</label><br/>
-                                    <input type="text" name="amount[]" class="form-control total n" id="amount">
                                 </div>
                                 <div class="col-md-1">
                                     <label for="button">&nbsp;</label><br/>
@@ -136,16 +121,6 @@
                                            class="form-control-file"
                                            required="required" multiple>
                                 </div>
-                                </div>
-                                <div class="col-md-2 ">
-                                    <label for="discount">Discount</label><br/>
-                                    <input type="text" name="discount" class="form-control" id="discount"
-                                           value="{{ old('discount') }}">
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="total">Total Amount</label><br/>
-                                    <input type="text" name="total" class="form-control" id="total"
-                                           value="{{ old('total') }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="remarks">Remarks</label><br/>
@@ -176,7 +151,6 @@
                 item_container = $('.item-container'),
                 brand_container = $('.brand-container'),
                 quantity_container = $('.quantity-container'),
-                amount_container = $('.amount-container'),
                 rate_container = $('.rate-container'),
                 unit_container = $('.unit-container'),
                 $uid = $('.quantity').length;
@@ -199,7 +173,7 @@
                     '</select>' +
                     `<div id="category_spinner_${$uid}"></div>` +
                 '</div>' +
-                '<div class="col-md-2 item-container">' +
+                '<div class="col-md-3 item-container">' +
                     '<label for="item_id">Select Item</label><br/>' +
                     `<select name="item_id[]" class="form-control" id="item_id_${$uid}" data-target="#brand_id_${$uid}" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner_${$uid}" onchange="itemSelect($(this))">` +
                         '<option selected="selected" value>Select</option>' +
@@ -218,21 +192,13 @@
                     @endforeach
                     '</select>' +
                 '</div>' +
-                    '<div class="col-md-1 quantity-container">' +
+                    '<div class="col-md-2 quantity-container">' +
                     `<label for="quantity_${$uid}">Quantity</label><br/>` +
                     `<input type="text" name="quantity[]" class="form-control common quantity" id="quantity_${$uid}" data-target="#total_amount_${$uid}" data-into="#rate_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">`+
                     '</div>' +
                     '<div class="col-md-1 unit-container">' +
                     `<label for="unit_${$uid}">Unit</label><br/>` +
                     `<input type="text" name="unit[]" class="form-control" id="unit_${$uid}" >` +
-                    '</div>' +
-                    '<div class="col-md-1 rate-container">' +
-                    `<label for="rate_${$uid}">Rate</label><br/>` +
-                    `<input type="text" name="rate[]" class="form-control common" id="rate_${$uid}" data-target="#total_amount_${$uid}" data-into="#quantity_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">` +
-                    '</div>' +
-                    '<div class="col-md-1 amount-container">' +
-                    `<label for="amount_${$uid}">Sub-Total</label><br/>` +
-                    `<input type="text" name="amount[]" class="form-control total n" id="total_amount_${$uid}">` +
                     '</div>' +
                 '<div class="col-md-1">' +
                     '<label for="unit">&nbsp;</label><br/>' +

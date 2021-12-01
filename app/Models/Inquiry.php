@@ -12,7 +12,7 @@ class Inquiry extends Model
     use SoftDeletes;
 
     protected $table = 'inquiries';
-    protected $fillable = ['user_id','customer_id','discount','total','project_name','inquiry','currency','date','timeline','remarks','created_at','updated_at'];
+    protected $fillable = ['user_id','customer_id','project_name','inquiry','date','timeline','remarks','created_at','updated_at'];
 
     public function customer()
     {

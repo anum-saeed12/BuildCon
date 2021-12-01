@@ -105,14 +105,6 @@
                                     <label for="unit">Unit</label><br/>
                                     <input type="text" name="unit[]" class="form-control" id="unit" value="{{ $inquiry->items[0]->unit }}">
                                 </div>
-                                <div class="col-md-1 rate-container">
-                                    <label for="rate">Rate</label><br/>
-                                    <input type="text" name="rate[]" value="{{ $inquiry->items[0]->rate }}" class="form-control with_out" id="rate" data-target="#total_amount" data-into="#quantity" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
-                                </div>
-                                <div class="col-md-2 amount-container">
-                                    <label for="amount">Sub-Total</label><br/>
-                                    <input type="text" name="amount[]" value="{!! floatval($inquiry->items[0]->rate) * intval($inquiry->items[0]->quantity) !!}" class="form-control total n" id="amount">
-                                </div>
                                 <div class="col-md-1">
                                     <label for="unit">&nbsp;</label><br/>
                                     <button type="button" class="add_form_field btn btn-info"><span><i class="fas fa-plus-circle" aria-hidden="false"></i></span></button>
@@ -155,21 +147,13 @@
                                                 @endforeach--}}
                                             </select>
                                         </div>
-                                        <div class="col-md-1 quantity-container">
+                                        <div class="col-md-2 quantity-container">
                                             <label for="quantity_{{ $loop->iteration }}">Quantity</label><br/>
                                             <input type="text" name="quantity[]" value="{{ $inquiry_item->quantity }}" class="form-control common quantity" id="quantity_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#rate_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
                                         </div>
                                         <div class="col-md-1 unit-container">
                                             <label for="unit_{{ $loop->iteration }}">Unit</label><br/>
                                             <input type="text" name="unit[]" value="{{ $inquiry_item->unit }}" class="form-control" id="unit_{{ $loop->iteration }}" >
-                                        </div>
-                                        <div class="col-md-1 rate-container">
-                                            <label for="rate_{{ $loop->iteration }}">Rate</label><br/>
-                                            <input type="text" name="rate[]" value="{{ $inquiry_item->rate }}" class="form-control common" id="rate_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#quantity_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
-                                        </div>
-                                        <div class="col-md-2 amount-container">
-                                            <label for="amount_{{ $loop->iteration }}">Sub-Total</label><br/>
-                                            <input type="text" name="amount[]" value="{!! floatval($inquiry_item->rate) * intval($inquiry_item->quantity) !!}" class="form-control total n" id="total_amount_{{ $loop->iteration }}">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="unit">&nbsp;</label><br/>
@@ -180,16 +164,6 @@
                             </div>
                             <br/>
                             <div class="row">
-                                <div class="col-md-2 ">
-                                    <label for="discount">Discount</label><br/>
-                                    <input type="text" name="discount" class="form-control" id="discount"
-                                           value="{{ $inquiry->discount }}">
-                                </div>
-                                <div class="col-md-2 ">
-                                    <label for="total">Total Amount</label><br/>
-                                    <input type="text" name="total" class="form-control" id="total"
-                                           value="{{ $inquiry->total }}">
-                                </div>
                                 <div class="col-md-6">
                                     <label for="remarks">Remarks</label><br/>
                                     <textarea class="form-control" name="remarks" id="remarks">{{ $inquiry->remarks }}</textarea>
@@ -267,21 +241,13 @@
                     @endforeach
                         '</select>' +
                     '</div>' +
-                    '<div class="col-md-1 quantity-container">' +
+                    '<div class="col-md-2 quantity-container">' +
                     `<label for="quantity_${$uid}">Quantity</label><br/>` +
                     `<input type="text" name="quantity[]" class="form-control common quantity" id="quantity_${$uid}" data-target="#total_amount_${$uid}" data-into="#rate_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">`+
                     '</div>' +
-                    '<div class="col-md-1 unit-container">' +
+                    '<div class="col-md-2 unit-container">' +
                     `<label for="unit_${$uid}">Unit</label><br/>` +
                     `<input type="text" name="unit[]" class="form-control" id="unit_${$uid}" >` +
-                    '</div>' +
-                    '<div class="col-md-1 rate-container">' +
-                    `<label for="rate_${$uid}">Rate</label><br/>` +
-                    `<input type="text" name="rate[]" class="form-control common" id="rate_${$uid}" data-target="#total_amount_${$uid}" data-into="#quantity_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">` +
-                    '</div>' +
-                    '<div class="col-md-2 amount-container">' +
-                    `<label for="amount_${$uid}">Sub-Total</label><br/>` +
-                    `<input type="text" name="amount[]" class="form-control total n" id="total_amount_${$uid}">` +
                     '</div>' +
                     '<div class="col-md-1">' +
                     '<label for="unit">&nbsp;</label><br/>' +
