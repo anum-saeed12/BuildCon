@@ -68,9 +68,9 @@ class ItemController extends Controller
     {
         $request->validate([
             'item_name'       => 'required',
-            'category_id'     => 'required|exists:App/Models/Category,id',
+            'category_id'     => 'required|exists:App\Models\Category,id',
             'item_description'=> 'required',
-            'brand_id'        => 'required|exists:App/Models/Brand,id',
+            'brand_id'        => 'required|exists:App\Models\Brand,id',
             'weight'          => 'required',
             'height'          => 'required',
             'price'           => 'required',
