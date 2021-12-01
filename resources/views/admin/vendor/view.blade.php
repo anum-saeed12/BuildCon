@@ -82,7 +82,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ ucfirst($vendor->vendor_name) }}</td>
-                                        <td>{{ ucfirst($vendor->attention_person) }}</td>
+                                        <td>{{ ucfirst($vendor->attended_person) }}</td>
                                         <td>{{ ucfirst($vendor->address) }}</td>
                                         <td>{{ ucfirst($vendor->country) }}</td>
                                         <td class="text-right p-0">

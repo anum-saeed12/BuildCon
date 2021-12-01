@@ -12,5 +12,5 @@ class Vendor extends Model
     use SoftDeletes;
 
     protected $table = 'vendors';
-    protected $fillable = ['vendor_name','attention_person','address','country','created_at','updated_at'];
+    protected $fillable = ['vendor_name','attended_person','address','country','created_at','updated_at'];
 }

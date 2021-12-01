@@ -47,17 +47,17 @@ class VendorController extends Controller
     {
         $request->validate([
             'vendor_name'       => 'required',
-            'attention_person'  => 'required',
+            'attended_person'  => 'required',
             'address'           => 'required',
             'country'           => 'required',
         ], [
                 'vendor_name.required'      => 'The vendor name field is required.',
-                'attention_person.required' => 'The attention person name field is required.'
+                'attended_person.required' => 'The attention person name field is required.'
             ]
         );
 
         $exist = Vendor::where('vendor_name',$request->vendor_name)
-            ->where('attention_person',$request->attention_person)
+            ->where('attended_person',$request->attended_person)
             ->where('country',$request->country)
             ->where('address',$request->address)
             ->first();
