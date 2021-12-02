@@ -74,7 +74,6 @@
                                     <th class="pl-0">Client</th>
                                     <th class="pl-0">Project</th>
                                     <th class="pl-0"># of Items</th>
-                                    <th class="pl-0">Amount</th>
                                     <th class="pl-0">Created By</th>
                                     <th class="pl-0">Date</th>
                                     <th class="pl-0">Submission Timeline</th>
@@ -88,7 +87,6 @@
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</a></td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</a></td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}"><b>{{ $inquiry->item_count }}</b> Item(s)</a></td>
-                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ number_format($inquiry->amount) }} {{ strtoupper($inquiry->currency) }}</a></td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ $inquiry->name }}{!! $inquiry->id == auth()->id() ? ' (me)':'' !!}</a></td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->date) }}</a></td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->timeline) }}</a></td>

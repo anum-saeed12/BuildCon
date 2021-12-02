@@ -51,18 +51,18 @@
     <thead style="background-color: #eae8e4;">
     <tr>
         <th>Sr.no</th>
+        <th>Item Name</th>
         <th>Item Description</th>
         <th>Brand</th>
         <th>Quantity</th>
         <th>Unit</th>
-        <th>Unit Price</th>
-        <th>Total</th>
     </tr>
     </thead>
     <tbody>
     @foreach($inquiry as $item)
         <tr>
             <td>{{ $loop->iteration }}</td>
+            <td>{{ ucwords($item->item_name) }}</td>
             <td>{{ ucwords($item->item_description) }}</td>
             <td>{{ ucwords($item->brand_name) }}</td>
             <td>{{ ucwords($item->quantity) }}</td>
@@ -72,13 +72,6 @@
         </tr>
     @endforeach
     </tbody>
-    <tfoot>
-    <tr>
-        <td  colspan="3"></td>
-        <th align="right">Total:</th>
-        <td align="right">{{ $inquiry[0]->currency }}{{number_format($inquiry[0]->total )}}</td>
-    </tr>
-    </tfoot>
 </table>
 <br><br><br>
 <hr class="hr1" />

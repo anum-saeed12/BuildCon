@@ -27,7 +27,6 @@ class InquiryController extends Controller
             'customers.customer_name',
             'inquiries.id',
             'inquiries.project_name',
-            'inquiries.total',
             'inquiries.date',
             'inquiries.timeline',
             'users.name',
@@ -66,7 +65,6 @@ class InquiryController extends Controller
             'customers.customer_name',
             'inquiries.id as ids',
             'inquiries.project_name',
-            'inquiries.total',
             'inquiries.date',
             'inquiries.timeline',
             'users.name',
@@ -148,10 +146,7 @@ class InquiryController extends Controller
             'project_name'   => 'required',
             'date'           => 'required',
             'timeline'       => 'required',
-            'total'          => 'required',
             'remarks'        => 'sometimes',
-            'rate'           => 'required|array',
-            'rate.*'         => 'required',
             'category_id'    => 'required|array',
             'category_id.*'  => 'required',
             'item_id'        => 'required|array',
@@ -162,8 +157,6 @@ class InquiryController extends Controller
             'quantity.*'     => 'required',
             'unit'           => 'required|array',
             'unit.*'         => 'required',
-            'amount'         => 'required|array',
-            'amount.*'       => 'required',
             'inquiry_file'   => 'required|array',
             'inquiry_file.*' => 'required|',
         ],[
@@ -177,8 +170,6 @@ class InquiryController extends Controller
         $brands     = $request->brand_id;
         $quantities = $request->quantity;
         $units      = $request->unit;
-        $rates      = $request->rate;
-        $amounts    = $request->amount;
 
         $data = $request->all();
         $id=Auth::user()->id;
@@ -212,9 +203,7 @@ class InquiryController extends Controller
                 'item_id'      => $item_detail->id,
                 'brand_id'     => $brands[$index],
                 'quantity'     => $quantities[$index],
-                'unit'         => $units[$index],
-                'rate'         => $rates[$index],
-                'amount'       => $amounts[$index],
+                'unit'         => $units[$index]
             ];
             $save[] = (new InquiryOrder($inquiry_item))->save();
         }
@@ -238,13 +227,8 @@ class InquiryController extends Controller
             'customer_id'    => 'required',
             'project_name'   => 'required',
             'date'           => 'required',
-            'currency'       => 'required',
-            'discount'       => 'sometimes',
             'timeline'       => 'required',
-            'total'          => 'required',
             'remarks'        => 'sometimes',
-            'rate'           => 'required|array',
-            'rate.*'         => 'required',
             'item_id'        => 'required|array',
             'item_id.*'      => 'required',
             'brand_id'       => 'required|array',
@@ -252,9 +236,7 @@ class InquiryController extends Controller
             'quantity'       => 'required|array',
             'quantity.*'     => 'required',
             'unit'           => 'required|array',
-            'unit.*'         => 'required',
-            'amount'         => 'required|array',
-            'amount.*'       => 'required',
+            'unit.*'         => 'required'
         ],[
             'customer_id.required'     => 'The customer field is required.',
             'project_name.required'    => 'The project name field is required.'
@@ -263,10 +245,7 @@ class InquiryController extends Controller
         $inquiry->customer_id = $request->customer_id;
         $inquiry->project_name = $request->project_name;
         $inquiry->date = $request->date;
-        $inquiry->currency = $request->currency;
-        $inquiry->discount = $request->discount;
         $inquiry->remarks = $request->remarks;
-        $inquiry->total = $request->total;
         $inquiry->save();
 
         $inquiry_item = InquiryOrder::where('inquiry_id',$inquiry->id)->delete();
@@ -276,8 +255,6 @@ class InquiryController extends Controller
         $brands     = $request->brand_id;
         $quantities = $request->quantity;
         $units      = $request->unit;
-        $rates      = $request->rate;
-        $amounts    = $request->amount;
 
         $save = [];
 
@@ -292,9 +269,7 @@ class InquiryController extends Controller
                 'item_id'      => $item_detail->id,
                 'brand_id'     => $brands[$index],
                 'quantity'     => $quantities[$index],
-                'unit'         => $units[$index],
-                'rate'         => $rates[$index],
-                'amount'       => $amounts[$index],
+                'unit'         => $units[$index]
             ];
             $save[] = (new InquiryOrder($inquiry_item))->save();
         }

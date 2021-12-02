@@ -76,41 +76,25 @@
                                         <tr>
                                             <th>Sr.no</th>
                                             <th>Item Description</th>
+                                            <th>Item Item</th>
                                             <th>Brand</th>
                                             <th>Quantity</th>
                                             <th>Unit</th>
-                                            <th>Unit Price</th>
-                                            <th>Total</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @foreach($inquiry as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
+                                            <td>{{ ucwords($item->item_name) }}</td>
                                             <td>{{ ucwords($item->item_description) }}</td>
                                             <td>{{ ucwords($item->brand_name) }}</td>
                                             <td>{{ ucwords($item->quantity) }}</td>
                                             <td>{{ ucwords($item->unit) }}</td>
-                                            <td>{{ ucwords($item->rate) }}</td>
-                                            <td>{{ ucwords($item->amount) }}</td>
                                         </tr>
                                         @endforeach
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6"></div>
-                                <div class="col-6">
-                                    <p class="lead"></p>
-                                    <div class="table-responsive table-sm">
-                                        <table class="table">
-                                           <tr>
-                                                <th style="width:50%">Total Amount:</th>
-                                                <td>{{ $item->total }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                         </div>

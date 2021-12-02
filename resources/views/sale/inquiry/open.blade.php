@@ -73,7 +73,6 @@
                                     <th>Sr.No.</th>
                                     <th class="pl-0">Client</th>
                                     <th class="pl-0">Project</th>
-                                    <th class="pl-0">Amount</th>
                                     <th class="pl-0">Sales Person</th>
                                     <th class="pl-0">Date</th>
                                     <th class="pl-0">Submission Timeline</th>
@@ -86,7 +85,6 @@
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ $loop->iteration }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->customer_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->project_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ $inquiry->total }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ $inquiry->name }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->date) }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->timeline) }}</td>
