@@ -126,6 +126,13 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
         Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\VendorQuotationController@pdfinquiry')->name('vendorquotation.pdfinquiry.admin');
 
     });
+    Route::get('/report/vendorwise', '\App\Http\Controllers\Admin\ReportController@vendorQuotes')->name('vendorQuotes.report.admin');
+    Route::get('/report/itemwise', '\App\Http\Controllers\Admin\ReportController@itemWise')->name('report.itemwise.admin');
+    Route::get('/report/inquiry-datewise', '\App\Http\Controllers\Admin\ReportController@inquiryDate')->name('inquiry.datewise.admin');
+    Route::get('/report/inquiry-salepersonwise', '\App\Http\Controllers\Admin\ReportController@inquirySalePerson')->name('inquiry.salewise.admin');
+    Route::get('/report/quotationwise', '\App\Http\Controllers\Admin\ReportController@quotationWise')->name('report.quotationwise.admin');
+
+    Route::get('/report/vendor/{id}', '\App\Http\Controllers\Admin\ReportController@vendorQuotesPdf')->name('vendorQuotes.reportPDF.admin');
 });
 
 Route::prefix('/sourcing_team')->middleware('team')->group(function() {

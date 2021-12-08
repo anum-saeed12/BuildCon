@@ -24,18 +24,20 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                    @include('admin.quotation.components.filters')
-                <div class="col-12">
-                    @if(session()->has('success'))
-                        <div class="callout callout-success" style="color:green">
-                            {{ session()->get('success') }}
-                        </div>
-                    @endif
-                    @if(session()->has('error'))
-                        <div class="callout callout-danger" style="color:red">
-                            {{ session()->get('error') }}
-                        </div>
-                    @endif
+                <div class="col-md-3">
+                    <form class="form-horizontal" action="{{ route('vendorQuotes.report.admin') }}" method="GET" id="itemSelect">
+                        <label>Item Name</label>
+                        <select name="item_id" class="form-control mb-3" id="item_id" onchange="$('#itemSelect').submit()">
+                            <option selected="selected" value>Select</option>
+                            @foreach ($items as $item)
+                                <option value="{{ $item->id }}"{!! $item->id==request('item_id')?' selected':'' !!}>{{ ucfirst($item->item_name) }}</option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div class="card">
                         <div class="row mb-3 mt-3 ml-3">
                             <div class="col-md-6">
@@ -62,8 +64,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{ route('quotation.add.admin') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add New</a>
-
+                                @if(request('item_id'))
+                                <a href="{{ route('vendorQuotes.reportPDF.admin',request('item_id')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
+                                @endif
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -71,39 +74,33 @@
                                 <thead>
                                 <tr>
                                     <th>Sr.No.</th>
-                                    <th class="pl-0">Customer Name</th>
-                                    <th class="pl-0">Project Name</th>
-                                    <th class="pl-0">Date</th>
-                                    <th class="pl-0">Amount</th>
-                                    <th class="pl-0">Terms & Condition</th>
+                                    <th class="pl-0">Vendor Name</th>
+                                    <th class="pl-0">Item Name</th>
+                                    <th class="pl-0">Category Name</th>
+                                    <th class="pl-0">Brand Name</th>
+                                    <th class="pl-0">Rate</th>
+                                    <th class="pl-0">Total Amount</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
-                                @forelse($quotations as $quotation)
-                                    <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('quotation.view.admin',$quotation->id) }}">
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->date }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
-                                        <td class="text-right p-0">
-                                            <a class="bg-primary list-btn" href="{{ route('quotation.edit.admin',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('quotation.delete.admin',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
-                                        </td>
+                                @forelse($data as $quote)
+                                    <tr style="cursor:pointer" class="no-select" data-toggle="modal">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ ucfirst($quote->vendor_name) }}</td>
+                                        <td>{{ ucfirst($quote->item_name) }}</td>
+                                        <td>{{ ucfirst($quote->category_name) }}</td>
+                                        <td>{{ ucfirst($quote->brand_name) }}</td>
+                                        <td>{{ $quote->rate }}</td>
+                                        <td>{{ $quote->amount }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-3 text-center">No quotations found</td>
+                                        <td colspan="7" class="py-3 text-center">No quotes found</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div class="d-flex flex-row-reverse">
-                      {!! $quotations->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

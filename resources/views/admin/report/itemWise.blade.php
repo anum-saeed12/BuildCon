@@ -10,7 +10,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard.admin') }}">Home</a></li>
-                        <li class="breadcrumb-item">Quotation</li>
+                        <li class="breadcrumb-item">Item Wise</li>
                         <li class="breadcrumb-item active">{{$title}}</li>
                     </ol>
                 </div>
@@ -24,18 +24,20 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                    @include('admin.quotation.components.filters')
-                <div class="col-12">
-                    @if(session()->has('success'))
-                        <div class="callout callout-success" style="color:green">
-                            {{ session()->get('success') }}
-                        </div>
-                    @endif
-                    @if(session()->has('error'))
-                        <div class="callout callout-danger" style="color:red">
-                            {{ session()->get('error') }}
-                        </div>
-                    @endif
+                <div class="col-md-3">
+                    <form class="form-horizontal" action="{{ route('report.itemwise.admin') }}" method="GET" id="categorySelect">
+                        <label>Category Name</label>
+                        <select name="category_id" class="form-control mb-3" id="category_id" onchange="$('#categorySelect').submit()">
+                            <option selected="selected" value>Select</option>
+                            @foreach ($categorys as $category)
+                                <option value="{{ $category->id }}"{!! $category->id==request('category_id')?' selected':'' !!}>{{ ucfirst($category->category_name) }}</option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div class="card">
                         <div class="row mb-3 mt-3 ml-3">
                             <div class="col-md-6">
@@ -49,6 +51,7 @@
                                         <option value="100"{{ request('count')=='100'?' selected':'' }}>100 rows</option>
                                     </select>
                                 </form>
+                                <div>Total Items: <b>{{ $data->total() }}</b></div>
                             </div>
                             <div class="col-md-6 text-right pr-md-4">
                                 <div class="mr-2" style="display:inline-block;vertical-align:top;">
@@ -62,8 +65,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{ route('quotation.add.admin') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add New</a>
-
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -71,39 +72,31 @@
                                 <thead>
                                 <tr>
                                     <th>Sr.No.</th>
-                                    <th class="pl-0">Customer Name</th>
-                                    <th class="pl-0">Project Name</th>
-                                    <th class="pl-0">Date</th>
-                                    <th class="pl-0">Amount</th>
-                                    <th class="pl-0">Terms & Condition</th>
+                                    <th class="pl-0">Category Name</th>
+                                    <th class="pl-0">Item Name</th>
+                                    <th class="pl-0">Brand Name</th>
+                                    <th class="pl-0">Price</th>
+                                    <th class="pl-0">Unit</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
-                                @forelse($quotations as $quotation)
-                                    <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('quotation.view.admin',$quotation->id) }}">
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->date }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
-                                        <td class="text-right p-0">
-                                            <a class="bg-primary list-btn" href="{{ route('quotation.edit.admin',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('quotation.delete.admin',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
-                                        </td>
+                                @forelse($data as $item)
+                                    <tr style="cursor:pointer" class="no-select" data-toggle="modal">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ ucfirst($item->category_name) }}</td>
+                                        <td>{{ ucfirst($item->item_name) }}</td>
+                                        <td>{{ ucfirst($item->brand_name) }}</td>
+                                        <td>{{ $item->price }}</td>
+                                        <td>{{ $item->unit }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-3 text-center">No quotations found</td>
+                                        <td colspan="7" class="py-3 text-center">No items found</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div class="d-flex flex-row-reverse">
-                      {!! $quotations->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

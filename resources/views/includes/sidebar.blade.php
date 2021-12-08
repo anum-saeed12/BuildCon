@@ -14,6 +14,47 @@
                 </li>
                 @admin()
                 <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-file-pdf nav-icon"></i>
+                        <p>
+                            Report
+                            <i class="right fas fa-angle-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('vendorQuotes.report.' . auth()->user()->user_role) }}" class="nav-link">
+                                <i class="fa fa-minus"></i>
+                                <p>VendorWise</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('inquiry.salewise.' . auth()->user()->user_role) }}" class="nav-link">
+                                <i class="fa fa-minus"></i>
+                                <p>Inquiry SalePerson Wise </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('inquiry.datewise.' . auth()->user()->user_role) }}" class="nav-link">
+                                <i class="fa fa-minus"></i>
+                                <p>Inquiry DateWise </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('report.itemwise.' . auth()->user()->user_role) }}" class="nav-link">
+                                <i class="fa fa-minus"></i>
+                                <p>ItemWise </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('report.quotationwise.' . auth()->user()->user_role) }}" class="nav-link">
+                                <i class="fa fa-minus"></i>
+                                <p>QuotationWise </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview">
                     <a href="{{ route('user.list.' . auth()->user()->user_role) }}" class="nav-link">
                         <i class="fas fa-users nav-icon"></i>
                         <p>

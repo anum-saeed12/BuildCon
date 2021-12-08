@@ -31,8 +31,6 @@ class QuotationController extends Controller
             'quotations.terms_condition',
             'users.name'
         ];
-
-
         $quotations = Quotation::select($select)
             ->leftJoin('quotation_item', 'quotation_item.quotation_id', '=', 'quotations.id')
             ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
