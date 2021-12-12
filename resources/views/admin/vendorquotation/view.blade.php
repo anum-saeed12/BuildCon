@@ -74,6 +74,7 @@
                                     <th class="pl-0">Client</th>
                                     <th class="pl-0">Project</th>
                                     <th class="pl-0">Amount</th>
+                                    <th class="pl-0">Date</th>
                                     <th class="pl-0">Sales Person</th>
                                 </tr>
                                 </thead>
@@ -84,7 +85,8 @@
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $loop->iteration }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ucfirst($quotation->vendor_name) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->total) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $quotation->date }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->name) }}</a></td>
                                         <td class="text-right p-0">
                                             <a class="bg-warning list-btn"  href="{{ asset('storage/file/'.$quotation->quotation_pdf) }}" title="Quotation PDF" target="_blank"><i class="fas fa-file-pdf" aria-hidden="false"></i></a>

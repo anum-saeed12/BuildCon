@@ -24,6 +24,7 @@ class VendorQuotationController extends Controller
         $select = [
             'vendor_quotation.quotation_pdf',
             'vendor_quotation.id',
+            'vendor_quotation.date',
             'vendors.vendor_name',
             'vendor_quotation.project_name',
             'vendor_quotation.total',
@@ -69,6 +70,7 @@ class VendorQuotationController extends Controller
             'quotation_ref'      => 'required',
             'quotation_pdf'      => 'required|file',
             'project_name'       => 'required',
+            'date'               => 'required',
             'total'              => 'required',
             'category_id'        => 'required|array',
             'category_id.*'      => 'required',
@@ -213,6 +215,7 @@ class VendorQuotationController extends Controller
             'vendor_id'          => 'required',
             'quotation_ref'      => 'required',
             'project_name'       => 'required',
+            'date'               => 'required',
             'total'              => 'required',
             'category_id'        => 'required|array',
             'category_id.*'      => 'required',
