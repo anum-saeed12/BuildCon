@@ -112,11 +112,6 @@ class UserController extends Controller
             }
         }
 
-        $data             =  $request->all();
-        $user             =  new User($data);
-        $user['password'] =  Hash::make($request->password);
-        $user->save();
-
         return redirect(
             route('user.list.admin')
         )->with('success', 'User was added successfully!');
