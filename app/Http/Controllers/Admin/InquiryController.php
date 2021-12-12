@@ -356,9 +356,7 @@ class InquiryController extends Controller
             ->leftJoin('categories', 'categories.id' ,'=', 'inquiry_order.category_id')
             ->leftJoin('users', 'users.id' ,'=', 'inquiries.user_id')
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
-            ->groupBy('inquiries.id','inquiry_order.inquiry_id')
             ->get();
-
 
         $data = [
             'title'   => 'View Inquires',
