@@ -49,15 +49,26 @@
                                                value="{{ $vendor_quotation->project_name }}">
                                         <div class="text-danger">@error('project_name'){{ $message }}@enderror</div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label for="quotation_ref">Quotation Ref#</label><br/>
                                         <input type="text" name="quotation_ref" class="form-control" id="quotation_ref"
                                                value="{{ $vendor_quotation->quotation_ref }}">
                                         <div class="text-danger">@error('quotation_ref'){{ $message }}@enderror</div>
                                     </div>
+                                    <div class="col-md-2">
+                                        <label for="date">Date</label><br/>
+                                        <input type="date" name="date" class="form-control" id="date"
+                                               value="{{ $vendor_quotation->date }}">
+                                        <div class="text-danger">@error('date'){{ $message }}@enderror</div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label for="currency">Currency</label><br/>
+                                        <input type="text" name="currency" class="form-control" id="currency"
+                                               value="{{ $vendor_quotation->currency }}">
+                                        <div class="text-danger">@error('currency'){{ $message }}@enderror</div>
+                                    </div>
 
-
-                                    <div class="offset-1 col-md-2">
+                                    <div class="col-md-2">
                                         <a href="{{ route('vendor.add.admin') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add Vendor</a>
                                     </div>
 

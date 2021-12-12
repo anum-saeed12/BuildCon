@@ -12,7 +12,7 @@ class VendorQuotation extends Model
     use SoftDeletes;
 
     protected $table = 'vendor_quotation';
-    protected $fillable = ['user_id','vendor_id','project_name','vendor_quotation','total','date','quotation_ref','quotation_pdf','created_at','updated_at'];
+    protected $fillable = ['user_id','vendor_id','project_name','vendor_quotation','total','date','currency','quotation_ref','quotation_pdf','created_at','updated_at'];
 
     public function vendor()
     {
