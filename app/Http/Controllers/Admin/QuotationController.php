@@ -318,8 +318,6 @@ class QuotationController extends Controller
         ])->orderBy('id','DESC')->get();
 
         $inquiry = Inquiry::select('*')
-            ->join('customers','customers.id','=','inquiries.customer_id')
-            ->join('inquiry_order','inquiry_order.inquiry_id','=','inquiries.id')
             ->where('inquiries.id', $inquiry_id)
             ->first();
 

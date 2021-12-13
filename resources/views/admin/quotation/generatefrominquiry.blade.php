@@ -106,18 +106,18 @@
                                     @php if (isset($loop) && $loop->iteration <= 1) continue; @endphp
                                     <div class="row mt-3">
                                         <div class="col-md-3 item-container">
-                                            <label for="item_id_${$uid}">Select Item </label><br/>
-                                            <select name="item_id[]" class="form-control" id="item_id_${$uid}" data-target="#brand_id_${$uid}" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner_${$uid}" onchange="itemSelect($(this))">
+                                            <label for="item_id_{{ $loop->iteration }}">Select Item </label><br/>
+                                            <select name="item_id[]" class="form-control" id="item_id_{{ $loop->iteration }}" data-target="#brand_id_{{ $loop->iteration }}" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner_{{ $loop->iteration }}" onchange="itemSelect($(this))">
                                                 <option selected="selected" value>Select</option>
                                                 @foreach ($items as $item)
                                                     <option value="{{ $item->item_name }}"{{ $inquiry_item->item_name == $item->item_name ? " selected":'' }}>{{ ucfirst($item->item_name) }}</option>
                                                 @endforeach
                                             </select>
-                                            <span id="item_spinner_${$uid}"></span>
+                                            <span id="item_spinner_{{ $loop->iteration }}"></span>
                                         </div>
                                         <div class="col-md-3 brand-container">
-                                            <label for="brand_id_${$uid}">Select Brand</label><br/>
-                                            <select name="brand_id[]" class="form-control" id="brand_id_${$uid}">
+                                            <label for="brand_id_{{ $loop->iteration }}">Select Brand</label><br/>
+                                            <select name="brand_id[]" class="form-control" id="brand_id_{{ $loop->iteration }}">
                                                 <option selected="selected" value>Select</option>
                                                 @foreach (fetchBrandsForItem($inquiry_item->item_name) as $brand)
                                                     <option value="{{ $brand->id }}"{{ $brand->id == $inquiry_item->brand_id ? ' selected':'' }}>{{ ucfirst($brand->brand_name) }}</option>
@@ -128,20 +128,20 @@
                                             </select>
                                         </div>
                                         <div class="col-md-1 quantity-container">
-                                            <label for="quantity_${$uid}">Quantity</label><br/>
-                                            <input type="text" name="quantity[]" value="{{ $inquiry_item->quantity }}" class="form-control common quantity" id="quantity_${$uid}" data-target="#total_amount_${$uid}" data-into="#rate_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
+                                            <label for="quantity_{{ $loop->iteration }}">Quantity</label><br/>
+                                            <input type="text" name="quantity[]" value="{{ $inquiry_item->quantity }}" class="form-control common quantity" id="quantity_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#rate_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
                                         </div>
                                         <div class="col-md-1 unit-container">
-                                            <label for="unit_${$uid}">Unit</label><br/>
-                                            <input type="text" name="unit[]" value="{{ $inquiry_item->unit }}" class="form-control" id="unit_${$uid}" >
+                                            <label for="unit_{{ $loop->iteration }}">Unit</label><br/>
+                                            <input type="text" name="unit[]" value="{{ $inquiry_item->unit }}" class="form-control" id="unit_{{ $loop->iteration }}" >
                                         </div>
                                         <div class="col-md-1 rate-container">
-                                            <label for="rate_${$uid}">Rate</label><br/>
-                                            <input type="text" name="rate[]" value="{{ $inquiry_item->rate }}" class="form-control common" id="rate_${$uid}" data-target="#total_amount_${$uid}" data-into="#quantity_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
+                                            <label for="rate_{{ $loop->iteration }}">Rate</label><br/>
+                                            <input type="text" name="rate[]" value="{{ $inquiry_item->rate }}" class="form-control common" id="rate_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#quantity_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
                                         </div>
                                         <div class="col-md-2 amount-container">
-                                            <label for="amount_${$uid}">Sub-Total</label><br/>
-                                            <input type="text" name="amount[]" value="{!! floatval($inquiry_item->amount) * intval($inquiry_item->quantity) !!}" class="form-control total n" id="total_amount_${$uid}">
+                                            <label for="amount_{{ $loop->iteration }}">Sub-Total</label><br/>
+                                            <input type="text" name="amount[]" value="{!! floatval($inquiry_item->amount) * intval($inquiry_item->quantity) !!}" class="form-control total n" id="total_amount_{{ $loop->iteration }}">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="unit">&nbsp;</label><br/>
@@ -159,7 +159,7 @@
                                 </div>
                                 <div class="col-md-2 ">
                                     <label for="total">Total Amount</label><br/>
-                                    <input type="text" name="total" class="form-control" id="total"
+                                    <input type="text" name="total" class="form-control" id="total" readonly
                                            value="{{ $inquiry->total }}">
                                 </div>
                                 <div class="col-md-6">
@@ -322,6 +322,17 @@
             sumOfTotal.val(0);
             //$('#total').val(sum_of_sub_total);
         }
+        function applyDiscount() {
+            let sub_total = $('.total'), discount = parseFloat($('#discount').val()) || 0, $total = 0;
+            for(i=0;i<sub_total.length;i++) {
+                $total += parseFloat($(`.total:eq(${i})`).val());
+            }
+            $total = $total - discount;
+            $('#total').val($total);
+        }
+        $('#discount').on('keyup keydown keypress change blur focus', function(){
+            applyDiscount();
+        })
     </script>
 @stop
 
