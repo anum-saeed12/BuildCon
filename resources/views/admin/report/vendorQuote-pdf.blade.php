@@ -37,11 +37,12 @@
     <tr>
         <th>Sr.No.</th>
         <th class="pl-0">Vendor Name</th>
+        <th class="pl-0">Submitted By</th>
         <th class="pl-0">Item Name</th>
-        <th class="pl-0">Category Name</th>
         <th class="pl-0">Brand Name</th>
+        <th class="pl-0">Quotation Ref#</th>
         <th class="pl-0">Rate</th>
-        <th class="pl-0">Total Amount</th>
+        <th class="pl-0">Rate difference</th>
     </tr>
     </thead>
     <tbody>
@@ -49,9 +50,10 @@
         <tr>
             <td>{{ $loop->iteration }}</td>
             <td>{{ ucfirst($quote->vendor_name) }}</td>
+            <td>{{ ucfirst($quote->name) }}</td>
             <td>{{ ucfirst($quote->item_name) }}</td>
-            <td>{{ ucfirst($quote->category_name) }}</td>
             <td>{{ ucfirst($quote->brand_name) }}</td>
+            <td>{{ ucfirst($quote->quotation_ref) }}</td>
             <td>{{ number_format($quote->rate) }}</td>
             <td>{{ number_format($quote->amount) }}</td>
         </tr>

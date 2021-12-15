@@ -179,6 +179,8 @@ class ReportController extends Controller
             'categories.category_name',
             'brands.brand_name',
             'vendor_quotation.project_name',
+            'users.name',
+            'vendor_quotation.quotation_ref',
             'vendor_quotation_item.rate',
             'vendor_quotation_item.amount',
             'vendors.vendor_name',
@@ -189,6 +191,7 @@ class ReportController extends Controller
             ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
             ->leftJoin('vendor_quotation', 'vendor_quotation.id', '=', 'vendor_quotation_item.vendor_quotation_id')
             ->leftJoin('vendors', 'vendors.id', '=', 'vendor_quotation.vendor_id')
+            ->leftJoin('users', 'users.id', '=', 'vendor_quotation.user_id')
             ->where('vendor_quotation_item.item_id',$id)
             ->get();
 

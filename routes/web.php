@@ -100,6 +100,8 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
         Route::post('/store', '\App\Http\Controllers\Admin\QuotationController@store')->name('quotation.store.admin');
         Route::get('/generate/{inquiry_id}', '\App\Http\Controllers\Admin\QuotationController@generateQuotation')->name('quotation.generate.admin');
         Route::get('/edit/{id}', '\App\Http\Controllers\Admin\QuotationController@edit')->name('quotation.edit.admin');
+        Route::get('/comparison/{id}', '\App\Http\Controllers\Admin\QuotationController@comparison')->name('quotation.comparison.admin');
+        Route::post('/comparison/{id}', '\App\Http\Controllers\Admin\QuotationController@compare')->name('quotation.compare.admin');
         Route::post('/update/{id}', '\App\Http\Controllers\Admin\QuotationController@update')->name('quotation.update.admin');
         Route::get('/delete/{id}', '\App\Http\Controllers\Admin\QuotationController@delete')->name('quotation.delete.admin');
         Route::get('/view/{id}', '\App\Http\Controllers\Admin\QuotationController@view')->name('quotation.view.admin');

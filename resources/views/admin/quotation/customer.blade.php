@@ -89,6 +89,7 @@
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</td>
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
                                         <td class="text-right p-0">
+                                            <a class="bg-success list-btn"  href="{{ route('quotation.comparison.admin',$quotation->id) }}" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
                                             <a class="bg-primary list-btn" href="{{ route('quotation.edit.admin',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
                                             <a class="bg-danger list-btn"  href="{{ route('quotation.delete.admin',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
