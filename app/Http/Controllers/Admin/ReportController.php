@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Inquiry;
 use App\Models\Item;
+use App\Models\QuotationItem;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\VendorQuotationItem;
@@ -72,7 +74,7 @@ class ReportController extends Controller
             ->paginate($this->count);
 
         $data = [
-            'title' =>'Reports',
+            'title' =>'Item',
             'categorys' =>$categorys,
             'data' => $dataItem
         ];
@@ -81,30 +83,26 @@ class ReportController extends Controller
 
     public function quotationWise(Request $request)
     {
-        $item_id = $request->input('item_id');
-        $items = Item::all();
+        $customer_id = $request->input('customer_id');
+        $customers = Customer::all();
         $select = [
             'items.item_name',
-            'categories.category_name',
             'brands.brand_name',
-            'vendor_quotation.project_name',
-            'vendor_quotation_item.rate',
-            'vendor_quotation_item.amount',
-            'vendors.vendor_name',
+            'customers.customer_name',
+            'quotation_item.rate',
+            'quotation_item.amount',
         ];
-        $datavendor = VendorQuotationItem::select($select)
-            ->leftJoin('items', 'items.id', '=', 'vendor_quotation_item.item_id')
-            ->leftJoin('categories', 'categories.id', '=', 'vendor_quotation_item.category_id')
-            ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
-            ->leftJoin('vendor_quotation', 'vendor_quotation.id', '=', 'vendor_quotation_item.vendor_quotation_id')
-            ->leftJoin('vendors', 'vendors.id', '=', 'vendor_quotation.vendor_id')
-            ->where('vendor_quotation_item.item_id',$item_id)
+        $dataquotation = QuotationItem::select($select)
+            ->join('quotations', 'quotations.id', '=', 'quotation_item.quotation_id')
+            ->join('customers', 'customers.id', '=', 'quotations.customer_id')
+            ->join('items', 'items.id', '=', 'quotation_item.item_id')
+            ->join('brands', 'brands.id', '=', 'quotation_item.brand_id')
+            ->where('quotations.customer_id',$customer_id)
             ->get();
-
         $data = [
-            'title' =>'Reports',
-            'items' =>$items,
-            'data' => $datavendor
+            'title' =>'Quotation',
+            'customers' =>$customers,
+            'data' => $dataquotation
         ];
         return view('admin.report.quotationWise',$data);
     }
@@ -132,7 +130,7 @@ class ReportController extends Controller
             ->get();
 
         $data = [
-            'title' =>'Reports',
+            'title' =>'Inquiries Date Wise',
             'items' =>$items,
             'data' => $datavendor
         ];
@@ -172,6 +170,37 @@ class ReportController extends Controller
         return view('admin.report.inquirySale',$data);
     }
 
+    public function inquirySalePersonPdf($id)
+    {
+        $select = [
+            'users.name as username',
+            'users.user_role',
+            'customers.customer_name',
+            'inquiries.project_name',
+            'inquiries.inquiry',
+            'inquiries.id as inquiry_id',
+            'inquiries.created_at',
+            'inquiries.date',
+            'inquiries.timeline',
+            DB::raw("COUNT(inquiry_order.item_id) as total_items")
+        ];
+        $dataSale = Inquiry::select($select)
+            ->join('inquiry_order', 'inquiry_order.inquiry_id','=','inquiries.id')
+            ->join('items', 'items.id','=','inquiry_order.item_id')
+            ->leftJoin('customers','customers.id','=','inquiries.customer_id')
+            ->leftJoin('users','users.id','=','inquiries.user_id')
+            ->where('users.id',$id)
+            ->groupBy('inquiries.id')
+            ->paginate($this->count);
+
+        $data = [
+            'title'      => 'Sales Person Inquiries',
+            'data'       => $dataSale
+        ];
+        $date = "Inquiry-SalePerson-Report-". Carbon::now()->format('d-M-Y')  .".pdf";
+        $pdf = PDF::loadView('admin.report.inquirySale-pdf', $data);
+        return $pdf->download($date);
+    }
     public function vendorQuotesPdf($id)
     {
         $select = [
@@ -201,6 +230,55 @@ class ReportController extends Controller
         ];
         $date = "Vendor-Report-". Carbon::now()->format('d-M-Y')  .".pdf";
         $pdf = PDF::loadView('admin.report.vendorQuote-pdf', $data);
+        return $pdf->download($date);
+    }
+    public function quotationWisePdf($id)
+    {
+        $select = [
+            'items.item_name',
+            'brands.brand_name',
+            'customers.customer_name',
+            'quotation_item.rate',
+            'quotation_item.amount',
+        ];
+        $dataquotation = QuotationItem::select($select)
+            ->join('quotations', 'quotations.id', '=', 'quotation_item.quotation_id')
+            ->join('customers', 'customers.id', '=', 'quotations.customer_id')
+            ->join('items', 'items.id', '=', 'quotation_item.item_id')
+            ->join('brands', 'brands.id', '=', 'quotation_item.brand_id')
+            ->where('quotations.customer_id',$id)
+            ->get();
+
+        $data = [
+            'title' =>'Quotation',
+            'data' => $dataquotation
+        ];
+        $date = "Quotation-Report-". Carbon::now()->format('d-M-Y')  .".pdf";
+        $pdf = PDF::loadView('admin.report.quotationWise-pdf', $data);
+        return $pdf->download($date);
+    }
+    public function itemWisePdf($id)
+    {
+
+        $select = [
+            'items.item_name',
+            'categories.category_name',
+            'items.price',
+            'items.unit',
+            'brands.brand_name',
+        ];
+        $dataItem = Item::select($select)
+            ->leftJoin('brands', 'brands.id', '=', 'items.brand_id')
+            ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
+            ->where('items.category_id',$id)
+            ->paginate($this->count);
+
+        $data = [
+            'title' =>'Reports',
+            'data' => $dataItem
+        ];
+        $date = "Item-Report-". Carbon::now()->format('d-M-Y')  .".pdf";
+        $pdf = PDF::loadView('admin.report.itemWise-pdf', $data);
         return $pdf->download($date);
     }
 

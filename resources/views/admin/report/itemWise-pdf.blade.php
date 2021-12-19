@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Vendor Report</title>
+    <title>Item Report</title>
     <style type="text/css">
         * {
             font-family:  Verdana, Arial, Helvetica, sans-serif;
@@ -25,37 +25,33 @@
     <tr>
         <td align="center">
             <h1><b>Build Con</b></h1>
-            <h2><b>Vendor Report</b></h2>
+            <h2><b>Item Report</b></h2>
         </td>
     </tr>
 </table>
 
 <br />
 
-<table style="text-align: center">
+<table width="100%" style="text-align: center">
     <thead style="background-color: #eae8e4;">
     <tr>
-        <th>#</th>
-        <th class="pl-0">Vendor Name</th>
-        <th class="pl-0">Submitted By</th>
+        <th>Sr.No.</th>
+        <th class="pl-0">Category Name</th>
         <th class="pl-0">Item Name</th>
         <th class="pl-0">Brand Name</th>
-        <th class="pl-0">Quotation Ref#</th>
-        <th class="pl-0">Rate</th>
-        <th class="pl-0">Rate difference</th>
+        <th class="pl-0">Price</th>
+        <th class="pl-0">Unit</th>
     </tr>
     </thead>
     <tbody>
-    @foreach($data as $quote)
-        <tr>
+    @foreach($data as $item)
+        <tr style="cursor:pointer" class="no-select" data-toggle="modal">
             <td>{{ $loop->iteration }}</td>
-            <td>{{ ucfirst($quote->vendor_name) }}</td>
-            <td>{{ ucfirst($quote->name) }}</td>
-            <td>{{ ucfirst($quote->item_name) }}</td>
-            <td>{{ ucfirst($quote->brand_name) }}</td>
-            <td>{{ ucfirst($quote->quotation_ref) }}</td>
-            <td>{{ number_format($quote->rate) }}</td>
-            <td>{{ number_format($quote->amount) }}</td>
+            <td>{{ ucfirst($item->category_name) }}</td>
+            <td>{{ ucfirst($item->item_name) }}</td>
+            <td>{{ ucfirst($item->brand_name) }}</td>
+            <td>{{ $item->price }}</td>
+            <td>{{ $item->unit }}</td>
         </tr>
     @endforeach
     </tbody>

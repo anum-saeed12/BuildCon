@@ -106,6 +106,19 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
         Route::get('/delete/{id}', '\App\Http\Controllers\Admin\QuotationController@delete')->name('quotation.delete.admin');
         Route::get('/view/{id}', '\App\Http\Controllers\Admin\QuotationController@view')->name('quotation.view.admin');
         Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\QuotationController@pdfinquiry')->name('quotation.pdfinquiry.admin');
+        Route::prefix('/cmd/comparison')->group(function() {
+            Route::get('/customer', '\App\Http\Controllers\Admin\QuotationComparisonController@customer')->name('comparison.list.admin');
+            Route::get('/add/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@add')->name('comparison.add.admin');
+            Route::post('/store/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@store')->name('comparison.store.admin');
+            Route::get('/generate/{inquiry_id}', '\App\Http\Controllers\Admin\QuotationComparisonController@generateQuotation')->name('comparison.generate.admin');
+            Route::get('/edit/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@edit')->name('comparison.edit.admin');
+            Route::post('/update/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@update')->name('comparison.update.admin');
+            Route::get('/delete/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@delete')->name('comparison.delete.admin');
+            Route::get('/view/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@view')->name('comparison.view.admin');
+            Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@pdfinquiry')->name('comparison.pdfinquiry.admin');
+            Route::get('/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@comparison')->name('comparison.comparison.admin');
+            Route::post('/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@compare')->name('comparison.compare.admin');
+        });
     });
     Route::prefix('/vendor')->group(function() {
         Route::get('/', '\App\Http\Controllers\Admin\VendorController@index')->name('vendor.index.admin');
@@ -135,6 +148,10 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
     Route::get('/report/quotationwise', '\App\Http\Controllers\Admin\ReportController@quotationWise')->name('report.quotationwise.admin');
 
     Route::get('/report/vendor/{id}', '\App\Http\Controllers\Admin\ReportController@vendorQuotesPdf')->name('vendorQuotes.reportPDF.admin');
+    Route::get('/report/quotationwise/{id}', '\App\Http\Controllers\Admin\ReportController@quotationWisePdf')->name('quotationwise.reportPDF.admin');
+    Route::get('/report/inquiry-salepersonwise/{id}', '\App\Http\Controllers\Admin\ReportController@inquirySalePersonPdf')->name('salewise.reportPDF.admin');
+    Route::get('/report/inquiry-datewise/{id}', '\App\Http\Controllers\Admin\ReportController@inquiryDatenPdf')->name('datewise.reportPDF.admin');
+    Route::get('/report/itemwise/{id}', '\App\Http\Controllers\Admin\ReportController@itemWisePdf')->name('itemwise.reportPDF.admin');
 });
 
 Route::prefix('/sourcing_team')->middleware('team')->group(function() {

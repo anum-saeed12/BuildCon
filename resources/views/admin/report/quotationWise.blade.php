@@ -25,12 +25,12 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <form class="form-horizontal" action="{{ route('vendorQuotes.report.admin') }}" method="GET" id="itemSelect">
-                        <label>Item Name</label>
-                        <select name="item_id" class="form-control mb-3" id="item_id" onchange="$('#itemSelect').submit()">
+                    <form class="form-horizontal" action="{{ route('report.quotationwise.admin') }}" method="GET" id="CustomerSelect">
+                        <label>Customer Name</label>
+                        <select name="customer_id" class="form-control mb-3" id="customer_id" onchange="$('#CustomerSelect').submit()">
                             <option selected="selected" value>Select</option>
-                            @foreach ($items as $item)
-                                <option value="{{ $item->id }}"{!! $item->id==request('item_id')?' selected':'' !!}>{{ ucfirst($item->item_name) }}</option>
+                            @foreach ($customers as $customer)
+                                <option value="{{ $customer->id }}"{!! $customer->id==request('customer_id')?' selected':'' !!}>{{ ucfirst($customer->customer_name) }}</option>
                             @endforeach
                         </select>
                     </form>
@@ -51,6 +51,8 @@
                                         <option value="100"{{ request('count')=='100'?' selected':'' }}>100 rows</option>
                                     </select>
                                 </form>
+
+                                <div>Total Amount: <b>{!!  $data->sum('amount') !!}</b></div>
                             </div>
                             <div class="col-md-6 text-right pr-md-4">
                                 <div class="mr-2" style="display:inline-block;vertical-align:top;">
@@ -64,8 +66,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if(request('item_id'))
-                                <a href="{{ route('vendorQuotes.reportPDF.admin',request('item_id')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
+                                @if(request('customer_id'))
+                                <a href="{{ route('quotationwise.reportPDF.admin',request('customer_id')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
                                 @endif
                             </div>
                         </div>
@@ -74,9 +76,8 @@
                                 <thead>
                                 <tr>
                                     <th>Sr.No.</th>
-                                    <th class="pl-0">Vendor Name</th>
+                                    <th class="pl-0">Customer Name</th>
                                     <th class="pl-0">Item Name</th>
-                                    <th class="pl-0">Category Name</th>
                                     <th class="pl-0">Brand Name</th>
                                     <th class="pl-0">Rate</th>
                                     <th class="pl-0">Total Amount</th>
@@ -86,9 +87,8 @@
                                 @forelse($data as $quote)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ ucfirst($quote->vendor_name) }}</td>
+                                        <td>{{ ucfirst($quote->customer_name) }}</td>
                                         <td>{{ ucfirst($quote->item_name) }}</td>
-                                        <td>{{ ucfirst($quote->category_name) }}</td>
                                         <td>{{ ucfirst($quote->brand_name) }}</td>
                                         <td>{{ $quote->rate }}</td>
                                         <td>{{ $quote->amount }}</td>

@@ -119,6 +119,14 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
+                    <a href="{{ route('comparison.list.' . auth()->user()->user_role) }}" class="nav-link">
+                        <i class="fas fa-compress-arrows-alt nav-icon"></i>
+                        <p>
+                            Comparison Quotation
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
                     <a href="{{ route('vendorquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
                         <i class="fas fa-paste nav-icon"></i>
                         <p>
@@ -128,7 +136,7 @@
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="{{ route('vendor.add.' . auth()->user()->user_role) }}" class="nav-link">
-                        <i class="fas fa-paste nav-icon"></i>
+                        <i class="fas fa-warehouse nav-icon"></i>
                         <p>
                             Vendor
                         </p>

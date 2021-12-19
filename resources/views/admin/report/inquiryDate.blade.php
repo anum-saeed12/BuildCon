@@ -25,14 +25,16 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <form class="form-horizontal" action="{{ route('vendorQuotes.report.admin') }}" method="GET" id="itemSelect">
-                        <label>Item Name</label>
-                        <select name="item_id" class="form-control mb-3" id="item_id" onchange="$('#itemSelect').submit()">
-                            <option selected="selected" value>Select</option>
-                            @foreach ($items as $item)
-                                <option value="{{ $item->id }}"{!! $item->id==request('item_id')?' selected':'' !!}>{{ ucfirst($item->item_name) }}</option>
-                            @endforeach
-                        </select>
+                    <form class="form-horizontal" action="{{ route('vendorQuotes.report.admin') }}" method="GET" id="date_range">
+                        <label for="date_range" class="normal">Dates</label>
+                        <div class="input-group input-group-sm date" data-target-input="nearest">
+                            <input type="text" id="date_range" name="dates"
+                                   class="form-control datetimepicker-input" placeholder="From date" autocomplete="off" aria-autocomplete="off" value="{{ request('dates') }}"/>
+                            <div class="input-group-append" data-target="#date_range"
+                                 data-toggle="daterangepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

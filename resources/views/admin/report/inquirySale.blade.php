@@ -65,8 +65,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if(request('item_id'))
-                                <a href="{{ route('vendorQuotes.reportPDF.admin',request('item_id')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
+                                @if(request('sale_id'))
+                                <a href="{{ route('salewise.reportPDF.admin',request('sale_id')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
                                 @endif
                             </div>
                         </div>
@@ -89,15 +89,15 @@
                                 @forelse($data as $item)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal">
                                         <td>{{ $loop->iteration }}</td>
-                                        {{--<td>{{ str_pad($item->inquiry_id, 5, '0', STR_PAD_LEFT) }}</td>--}}
-                                        <td>{{ $item->inquiry }}</td>
+                                        <td>{{ substr($item->inquiry,0,7) }}</td>
+                                  {{--      <td>{{ $item->inquiry }}</td>--}}
                                         <td>{{ ucfirst($item->username) }} ({{ $item->user_role }})</td>
                                         <td>{{ ucfirst($item->customer_name) }}</td>
                                         <td>{{ ucfirst($item->project_name) }}</td>
                                         <td><b>{{ $item->total_items }}</b> items</td>
                                         <td>{{ \Carbon\Carbon::createFromDate($item->date)->format('d M Y') }}</td>
                                         <td>{{ \Carbon\Carbon::createFromDate($item->timeline)->format('d M Y') }}</td>
-                                        <td>{{ $item->created_at->diffForHumans() }}</td>
+                                        <td>{{ $item->created_at->format('d M Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr>

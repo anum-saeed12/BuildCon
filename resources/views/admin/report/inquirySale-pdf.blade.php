@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Vendor Report</title>
+    <title>Inquiry Sale Person Report</title>
     <style type="text/css">
         * {
             font-family:  Verdana, Arial, Helvetica, sans-serif;
@@ -25,37 +25,39 @@
     <tr>
         <td align="center">
             <h1><b>Build Con</b></h1>
-            <h2><b>Vendor Report</b></h2>
+            <h2><b>Inquiry Sale Person Report</b></h2>
         </td>
     </tr>
 </table>
 
 <br />
-
 <table style="text-align: center">
     <thead style="background-color: #eae8e4;">
     <tr>
         <th>#</th>
-        <th class="pl-0">Vendor Name</th>
-        <th class="pl-0">Submitted By</th>
-        <th class="pl-0">Item Name</th>
-        <th class="pl-0">Brand Name</th>
-        <th class="pl-0">Quotation Ref#</th>
-        <th class="pl-0">Rate</th>
-        <th class="pl-0">Rate difference</th>
+        <th class="pl-0">Inquiry</th>
+        <th class="pl-0">User</th>
+        <th class="pl-0">Customer</th>
+        <th class="pl-0">Project</th>
+        <th class="pl-0">Total Items</th>
+        <th class="pl-0">Start</th>
+        <th class="pl-0">Timeline</th>
+        <th class="pl-0">Created</th>
     </tr>
     </thead>
     <tbody>
-    @foreach($data as $quote)
-        <tr>
+    @forelse($data as $item)
+
+        <tr style="cursor:pointer" class="no-select" data-toggle="modal">
             <td>{{ $loop->iteration }}</td>
-            <td>{{ ucfirst($quote->vendor_name) }}</td>
-            <td>{{ ucfirst($quote->name) }}</td>
-            <td>{{ ucfirst($quote->item_name) }}</td>
-            <td>{{ ucfirst($quote->brand_name) }}</td>
-            <td>{{ ucfirst($quote->quotation_ref) }}</td>
-            <td>{{ number_format($quote->rate) }}</td>
-            <td>{{ number_format($quote->amount) }}</td>
+            <td>{{ substr($item->inquiry,0,7) }}</td>
+            <td>{{ ucfirst($item->username) }} ({{ $item->user_role }})</td>
+            <td>{{ ucfirst($item->customer_name) }}</td>
+            <td>{{ ucfirst($item->project_name) }}</td>
+            <td><b>{{ $item->total_items }}</b> items</td>
+            <td>{{ \Carbon\Carbon::createFromDate($item->date)->format('d M Y') }}</td>
+            <td>{{ \Carbon\Carbon::createFromDate($item->timeline)->format('d M Y') }}</td>
+            <td>{{ $item->created_at->format('d M Y') }}</td>
         </tr>
     @endforeach
     </tbody>
