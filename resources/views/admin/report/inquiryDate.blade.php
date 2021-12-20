@@ -23,21 +23,25 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3">
-                    <form class="form-horizontal" action="{{ route('vendorQuotes.report.admin') }}" method="GET" id="date_range">
-                        <label for="date_range" class="normal">Dates</label>
-                        <div class="input-group input-group-sm date" data-target-input="nearest">
-                            <input type="text" id="date_range" name="dates"
-                                   class="form-control datetimepicker-input" placeholder="From date" autocomplete="off" aria-autocomplete="off" value="{{ request('dates') }}"/>
-                            <div class="input-group-append" data-target="#date_range"
-                                 data-toggle="daterangepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                        </div>
-                    </form>
+            <form action="{{ route('inquiry.datewise.admin') }}" method="GET">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="date_start" class="normal">From</label><br/>
+                        <input type="date" class="form-control" name="date_start" value="{{ request('date_start') ?? date('Y-m-d') }}"/>
+                    </div>
+                    <div class="col-md-3">
+                        <form class="form-horizontal" action="{{ route('vendorQuotes.report.admin') }}" method="GET" id="date_range">
+                            <label for="date_end" class="normal">To</label><br/>
+                            <input type="date" class="form-control" name="date_end" value="{{ request('date_end') ?? date('Y-m-d') }}"/>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <label for="" class="normal">&nbsp;</label><br/>
+                        <button type="submit" class="btn btn-info">Search</button>
+                    </div>
                 </div>
-            </div>
+            </form>
+
             <div class="row">
                 <div class="col">
                     <div class="card">

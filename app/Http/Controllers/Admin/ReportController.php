@@ -110,6 +110,10 @@ class ReportController extends Controller
     public function inquiryDate(Request $request)
     {
         $item_id = $request->input('item_id');
+
+        $start_date = $request->input('date_start', false);
+        $end_date = $request->input('date_end', false);
+
         $items = Item::all();
         $select = [
             'items.item_name',
@@ -126,8 +130,13 @@ class ReportController extends Controller
             ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
             ->leftJoin('vendor_quotation', 'vendor_quotation.id', '=', 'vendor_quotation_item.vendor_quotation_id')
             ->leftJoin('vendors', 'vendors.id', '=', 'vendor_quotation.vendor_id')
-            ->where('vendor_quotation_item.item_id',$item_id)
-            ->get();
+            ->where('vendor_quotation_item.item_id',$item_id);
+            #->get();
+
+        if ($request->has('date_start') && !empty($request->input('date_start'))) $datavendor = $datavendor->where('vendor_quotation.created_at', '>=', $start_date);
+        if ($request->has('date_end') && !empty($request->input('data_end'))) $datavendor = $datavendor->where('vendor_quotation.created_at', '<=', $end_date);
+
+        $datavendor = $datavendor->paginate($this->count);
 
         $data = [
             'title' =>'Inquiries Date Wise',

@@ -4,9 +4,10 @@ namespace App\Imports;
 
 use App\Models\ImportedItem;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Ramsey\Uuid\Uuid;
 
-class ItemsImport implements ToModel
+class ItemsImport implements ToModel, WithHeadingRow
 {
     public $batch_id;
 
@@ -23,16 +24,16 @@ class ItemsImport implements ToModel
     public function model(array $row)
     {
         return new ImportedItem([
-            'item_name'         => $row[0],
-            'brand_name'        => $row[1],
-            'category_name'     => $row[2],
-            'item_description'  => $row[3],
-            'price'             => $row[4],
-            'weight'            => $row[5],
-            'unit'              => $row[6],
-            'width'             => $row[7],
-            'dimension'         => $row[8],
-            'height'            => $row[9],
+            'item_name'         => $row['item_name'],
+            'brand_name'        => $row['brand_name'],
+            'category_name'     => $row['category_name'],
+            'item_description'  => $row['item_description'],
+            'price'             => $row['price'],
+            'weight'            => $row['weight'],
+            'unit'              => $row['unit'],
+            'width'             => $row['width'],
+            'dimension'         => $row['dimension'],
+            'height'            => $row['height'],
             'batch_id'          => $this->batch_id,
         ]);
     }
