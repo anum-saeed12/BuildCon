@@ -74,6 +74,7 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
         Route::get('/delete/{id}', '\App\Http\Controllers\Admin\ItemController@delete')->name('item.delete.admin');
         Route::get('/ajax-fetch/', '\App\Http\Controllers\Admin\ItemController@ajaxFetch')->name('item.fetch.ajax.admin');
         Route::get('/view/{id}', '\App\Http\Controllers\Admin\ItemController@view')->name('item.view.admin');
+        Route::get('/export', '\App\Http\Controllers\Admin\ItemController@export')->name('item.export.admin');
     });
     Route::prefix('/brand')->group(function() {
         Route::get('/', '\App\Http\Controllers\Admin\BrandController@index')->name('brand.index.admin');

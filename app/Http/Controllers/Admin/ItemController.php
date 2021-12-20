@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ItemsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ItemController extends Controller
 {
@@ -126,4 +128,9 @@ class ItemController extends Controller
         return $picturename;
     }
 
+    public function export()
+    {
+        $filename = "Items_" . date('M_d_Y') . ".xlsx";
+        return Excel::download(new ItemsExport(), $filename);
+    }
 }
