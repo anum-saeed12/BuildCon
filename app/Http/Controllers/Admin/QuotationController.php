@@ -471,28 +471,54 @@ class QuotationController extends Controller
     public function pdfinquiry($id)
     {
         $select=[
-            'quotations.*',
-            'quotations.created_at as creationdate',
-            'quotations.id as unique',
-            'items.*',
-            'brands.*',
-            'customers.*',
-            'quotation_item.*',
+            'items.item_name',
+            'items.item_description',
+            'items.category_id',
+            'brands.brand_name',
+            'quotation_item.quantity',
+            'quotation_item.amount',
+            'quotation_item.unit',
+            'quotation_item.rate',
+            'categories.category_name',
         ];
-        $quotation = Quotation::select($select)
-            ->where('quotations.id',$id)
+
+        /*$quotation = Quotation::select($select)
             ->leftJoin('quotation_item', 'quotation_item.quotation_id', '=', 'quotations.id')
             ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
+            ->leftJoin('categories', 'category.id', '=', 'items.category_id')
             ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
+            ->orderBy('items.category_id','ASC')
+            ->where('quotations.id',$id)
+            ->groupBy('items.id')
+            ->get();*/
+        $quotation_select = [
+            'quotations.*',
+            'customers.customer_name',
+            'customers.attention_person',
+        ];
+        $quotation = Quotation::select($quotation_select)
+            ->join('customers', 'customers.id','=','quotations.customer_id')
+            ->where('quotations.id', $id)
+            ->first();
+
+        if (!isset($quotation->id)) return redirect()->back()->with('error', 'Quotation not found');
+
+        $quotation->items = QuotationItem::select($select)
+            ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
+            ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
+            ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
+            ->orderBy('items.category_id','ASC')
+            ->where('quotation_item.quotation_id',$quotation->id)
+            ->groupBy('items.id')
             ->get();
-        $quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation[0]->creationdate))->format('d-M-Y');
+        $quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('d-M-Y');
 
         $data = [
             'title'      => 'Quotation Pdf',
             'base_url'   => env('APP_URL', 'http://omnibiz.local'),
             'user'       => Auth::user(),
-            'quotation'=> $quotation
+            'quotation'  => $quotation
         ];
         $date = "Quotation-Invoice-". Carbon::now()->format('d-M-Y')  .".pdf";
         $pdf = PDF::loadView('admin.quotation.pdf-invoice', $data);
