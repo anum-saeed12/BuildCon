@@ -100,12 +100,22 @@ class ItemController extends Controller
             'item' => 'required'
         ]);
         $item_name = $request->item;
-        $item_categories = Item::select(['brands.brand_name', 'brands.id'])
-            ->join('brands', 'brands.id', '=', 'items.brand_id')
-            ->where('items.item_name','like',"%{$item_name}%")
-            ->groupBy('brands.id')
-            ->get();
-        return response($item_categories, 200);
+        if (!$request->has('brand')) {
+            $item_categories = Item::select(['brands.brand_name', 'brands.id'])
+                ->join('brands', 'brands.id', '=', 'items.brand_id')
+                #OLD: ->where('items.item_name', 'like', "%{$item_name}%")
+                ->where('items.item_name', 'like', "{$item_name}")
+                ->groupBy('brands.id')
+                ->get();
+            return response($item_categories, 200);
+        }
+
+        $brand = $request->brand;
+        $item_info = Item::select(['items.unit', 'items.price'])
+            ->where('items.item_name', 'like', "{$item_name}")
+            ->where('items.brand_id', $brand)
+            ->first();
+        return response($item_info, 200);
     }
 
     private function uploadPicture($picture)

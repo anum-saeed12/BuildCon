@@ -72,13 +72,17 @@
                                 </div>
                                 <div class="col-md-3 item-container">
                                     <label for="brand_id">Select Brand</label><br/>
-                                    <select name="brand_id[]" class="form-control" id="brand_id" data-price="#rate" data-unit="#unit" data-item="#item_id" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner" onchange="fetchItemInfo($(this))">
+                                    <select name="brand_id[]" class="form-control" id="brand_id"
+                                            data-unit="#unit" data-rate="#rate" data-item="#item_id"
+                                            data-href="{{ route('item.fetch.ajax.admin') }}"
+                                            data-spinner="#brand_spinner"
+                                            onchange="fetchPrice($(this))">
                                         <option selected="selected" value>Select</option>
                                         @foreach ($brands as $brand)
                                             <option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>
                                         @endforeach
                                     </select>
-                                    <div id="item_spinner"></div>
+                                    <div id="brand_spinner"></div>
                                 </div>
                                 <div class="col-md-1 quantity-container">
                                     <label for="quantity">Quantity</label><br/>
@@ -198,12 +202,18 @@
                     '</div>' +
                 '<div class="col-md-3 brand-container">' +
                     `<label for="brand_id_${$uid}">Select Brand</label><br/>` +
-                    `<select name="brand_id[]" class="form-control" id="brand_id_${$uid}">` +
+                    `<select name="brand_id[]" class="form-control" id="brand_id_${$uid}"
+                        data-unit="#unit_${$uid}" data-rate="#rate_${$uid}"
+                        data-item="#item_id_${$uid}"
+                        data-href="{{ route('item.fetch.ajax.admin') }}"
+                        data-spinner="#brand_spinner_${$uid}"
+                        onchange="fetchPrice($(this))">` +
                         '<option selected="selected" value>Select</option>' +
                         @foreach ($brands as $brand)
                             '<option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>' +
                         @endforeach
                     '</select>' +
+                    `<span id="brand_spinner_${$uid}"></span>` +
                 '</div>' +
                 '<div class="col-md-1 quantity-container">' +
                     `<label for="quantity_${$uid}">Quantity</label><br/>` +
