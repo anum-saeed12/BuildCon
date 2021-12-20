@@ -115,9 +115,9 @@
                                             }
                                             $oldRate = isset($data[$k]->rate)?floatval($data[$k]->rate):0.00;
                                             @endphp
-                                            <span class="{{ $class }} pr-2">{{ $item->rate }} {{ $currency }}</span>
+                                            <span class="{{ $class }} pr-2">{{ $item->rate }} {{ $item->currency }}</span>
                                         </td>
-                                        <td>{{ $item->amount }} {{ $currency }}</td>
+                                        <td>{{ $item->amount }} {{ $item->currency }}</td>
                                         <td>{{ $item->created_at->diffForHumans() }}</td>
                                     </tr>
                                 @empty

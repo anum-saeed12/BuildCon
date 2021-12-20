@@ -28,6 +28,7 @@ class ReportController extends Controller
             'brands.brand_name',
             'vendor_quotation.project_name',
             'vendor_quotation.created_at',
+            'vendor_quotation.currency',
             'vendor_quotation.id as quotation_id',
             'vendor_quotation.vendor_quotation',
             'vendor_quotation_item.rate',
@@ -50,8 +51,7 @@ class ReportController extends Controller
         $data = [
             'title' =>'Vendor Quotations',
             'items' =>$items,
-            'data' => $datavendor,
-            'currency' => 'PKR'
+            'data' => $datavendor
         ];
         return view('admin.report.vendorQuote',$data);
     }
@@ -208,20 +208,25 @@ class ReportController extends Controller
             'categories.category_name',
             'brands.brand_name',
             'vendor_quotation.project_name',
-            'users.name',
-            'vendor_quotation.quotation_ref',
+            'vendor_quotation.created_at',
+            'vendor_quotation.currency',
+            'vendor_quotation.id as quotation_id',
+            'vendor_quotation.vendor_quotation',
             'vendor_quotation_item.rate',
             'vendor_quotation_item.amount',
             'vendors.vendor_name',
+            'users.name as username',
+            'users.user_role',
         ];
         $datavendor = VendorQuotationItem::select($select)
             ->leftJoin('items', 'items.id', '=', 'vendor_quotation_item.item_id')
             ->leftJoin('categories', 'categories.id', '=', 'vendor_quotation_item.category_id')
             ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
             ->leftJoin('vendor_quotation', 'vendor_quotation.id', '=', 'vendor_quotation_item.vendor_quotation_id')
-            ->leftJoin('vendors', 'vendors.id', '=', 'vendor_quotation.vendor_id')
             ->leftJoin('users', 'users.id', '=', 'vendor_quotation.user_id')
+            ->leftJoin('vendors', 'vendors.id', '=', 'vendor_quotation.vendor_id')
             ->where('vendor_quotation_item.item_id',$id)
+            ->orderBy('vendor_quotation.created_at','DESC')
             ->get();
 
         $data = [

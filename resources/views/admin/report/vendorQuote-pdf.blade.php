@@ -8,7 +8,7 @@
             font-family:  Verdana, Arial, Helvetica, sans-serif;
         }
         table {
-            font-size: small;
+            font-size: 12px;
         }
         tfoot tr td {
             font-weight: bold;
@@ -32,32 +32,59 @@
 
 <br />
 
-<table style="text-align: center">
+<table width="100%" style="text-align: center">
     <thead style="background-color: #eae8e4;">
     <tr>
         <th>#</th>
-        <th class="pl-0">Vendor Name</th>
-        <th class="pl-0">Submitted By</th>
-        <th class="pl-0">Item Name</th>
-        <th class="pl-0">Brand Name</th>
-        <th class="pl-0">Quotation Ref#</th>
+        <th class="pl-0">Vendor</th>
+        <th class="pl-0">User</th>
+        <th class="pl-0">Project</th>
+        <th class="pl-0">Category</th>
+        <th class="pl-0">Brand</th>
+        <th class="pl-0">Quotation#</th>
         <th class="pl-0">Rate</th>
-        <th class="pl-0">Rate difference</th>
+        <th class="pl-0">Total Amount</th>
+        <th class="pl-0">Created</th>
     </tr>
     </thead>
-    <tbody>
-    @foreach($data as $quote)
-        <tr>
+    <tbody id="myTable">
+    @forelse($data as $k => $item)
+        <tr style="cursor:pointer" class="no-select" data-toggle="modal">
             <td>{{ $loop->iteration }}</td>
-            <td>{{ ucfirst($quote->vendor_name) }}</td>
-            <td>{{ ucfirst($quote->name) }}</td>
-            <td>{{ ucfirst($quote->item_name) }}</td>
-            <td>{{ ucfirst($quote->brand_name) }}</td>
-            <td>{{ ucfirst($quote->quotation_ref) }}</td>
-            <td>{{ number_format($quote->rate) }}</td>
-            <td>{{ number_format($quote->amount) }}</td>
+            <td>{{ ucfirst($item->vendor_name) }}</td>
+            <td>{{ ucfirst($item->username) }} ({{ $item->user_role }})</td>
+            <td>{{ ucfirst($item->project_name) }}</td>
+            <td>{{ ucfirst($item->category_name) }}</td>
+            <td>{{ ucfirst($item->brand_name) }}</td>
+            <td>{{ str_pad($item->quotation_id, 5, '0', STR_PAD_LEFT) }}</td>
+            @php
+                $k = isset($k)?$k:0;
+                $currentRate = isset($item->rate)?floatval($item->rate):0.00;
+                if (!isset($oldRate)) $oldRate = isset($data[$k+1]->rate)?floatval($data[$k+1]->rate):0.00;
+                $pre = '';
+                if($oldRate<$currentRate){
+                    $style = "color:red;";
+                    $pre = "+";
+                }
+                if($oldRate == $currentRate){
+                    $style = "color:#000;";
+                    echo "";
+                }
+                if($oldRate > $currentRate){
+                    $style = "color:green;";
+                    $pre = "-";
+                }
+                $oldRate = isset($data[$k]->rate)?floatval($data[$k]->rate):0.00;
+            @endphp
+            <td style="{{ $style }}">{{$pre}}{{ $item->rate }} {{ $item->currency }}</td>
+            <td>{{ $item->amount }} {{ $item->currency }}</td>
+            <td>{{ $item->created_at->format('d M Y') }}</td>
         </tr>
-    @endforeach
+    @empty
+        <tr>
+            <td colspan="99" class="py-3 text-center">No quotes found</td>
+        </tr>
+    @endforelse
     </tbody>
 
 </table>
