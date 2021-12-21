@@ -45,7 +45,7 @@ class QuotationController extends Controller
             'user'      => Auth::user(),
             'quotations' => $quotations
         ];
-        return view('sale.quotation.view',$data);
+        return view('sale.quotation.customer',$data);
     }
 
     public function add()

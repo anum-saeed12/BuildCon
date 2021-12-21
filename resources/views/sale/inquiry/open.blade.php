@@ -24,7 +24,6 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                @include('sale.inquiry.components.filters')
                 <div class="col-12">
                     @if(session()->has('success'))
                         <div class="callout callout-success" style="color:green">
@@ -62,8 +61,6 @@
                                         </div>
                                     </div>
                                 </form>
-                                <a href="{{ route('inquiry.add.sale') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add New</a>
-
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -73,6 +70,7 @@
                                     <th>Sr.No.</th>
                                     <th class="pl-0">Client</th>
                                     <th class="pl-0">Project</th>
+                                    <th class="pl-0">Items Description</th>
                                     <th class="pl-0">Sales Person</th>
                                     <th class="pl-0">Date</th>
                                     <th class="pl-0">Submission Timeline</th>
@@ -85,17 +83,14 @@
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ $loop->iteration }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->customer_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->project_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->item_description) }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ $inquiry->name }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->date) }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->timeline) }}</td>
-                                        <td class="text-right p-0">
-                                            <a class="bg-primary list-btn"  href="{{ route('inquiry.edit.sale',$inquiry->ids) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('inquiry.delete.sale',$inquiry->ids) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
-                                        </td>
                                     </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="py-3 text-center">No inquiries found</td>
+                                            <td colspan="7" class="py-3 text-center">No open inquiries found</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

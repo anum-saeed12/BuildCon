@@ -61,8 +61,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{ route('quotation.add.admin') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add New</a>
-
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -80,13 +78,13 @@
                                 <tbody id="myTable">
                                 @forelse($quotations as $quotation)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('quotation.item.sale',$quotation->id) }}">
-                                        <td><a href="{{ route('quotation.item.sale',$quotation->id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('quotation.item.sale',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td><a href="{{ route('quotation.item.sale',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('quotation.item.sale',$quotation->id) }}">{{ $quotation->date }}</td>
-                                        <td><a href="{{ route('quotation.item.sale',$quotation->id) }}">{{ $quotation->total }}</td>
-                                        <td><a href="{{ route('quotation.item.sale',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
+                                        data-href="#">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ ucfirst($quotation->customer_name) }}</td>
+                                        <td>{{ ucfirst($quotation->project_name) }}</td>
+                                        <td>{{ $quotation->date }}</td>
+                                        <td>{{ $quotation->total }}</td>
+                                        <td>{{ ucfirst($quotation->terms_condition) }}</td>
                                     </tr>
                                 @empty
                                     <tr>

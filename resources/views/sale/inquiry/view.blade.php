@@ -24,7 +24,6 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-
                 <div class="col-12">
                     @if(session()->has('success'))
                         <div class="callout callout-success" style="color:green">
@@ -35,6 +34,9 @@
                         <div class="callout callout-danger" style="color:red">
                             {{ session()->get('error') }}
                         </div>
+                    @endif
+                    @if($errors->any())
+                        {{ implode('', $errors->all('<div>:message</div>')) }}
                     @endif
                     <div class="card">
                         <div class="row mb-3 mt-3 ml-3">
@@ -62,8 +64,6 @@
                                         </div>
                                     </div>
                                 </form>
-                                <a href="{{ route('inquiry.add.sale') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add New</a>
-
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -82,30 +82,42 @@
                                 <tbody id="myTable">
                                 @forelse($inquires as $inquiry)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('inquiry.view.sale',$inquiry->ids) }}">
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->customer_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->project_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ $inquiry->username }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->date) }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->ids) }}">{{ ucfirst($inquiry->timeline) }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ ucfirst($inquiry->inquiry_status) }}</td>
+                                        data-href="{{ route('inquiry.view.sale',$inquiry->id) }}">
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ $loop->iteration }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ $inquiry->username }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->date) }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->timeline) }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->inquiry_status) }}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-primary list-btn"  href="{{ route('inquiry.edit.sale',$inquiry->ids) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('inquiry.delete.sale',$inquiry->ids) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-warning list-btn" href="{{ route('inquiry.documents.sale', $inquiry->id) }}"
+                                               data-doc="Documents for {{ ucfirst($inquiry->customer_name) }} - {{ ucfirst($inquiry->project_name) }}"
+                                               onclick="$('#downloadableFilesTitle').html($(this).data('doc'));$('#downloadableFilesHolder').html('Loading wait please...');$('#downloadableFilesHolder').load($(this).attr('href'));"
+                                               title="Download Files" data-toggle="modal" data-target="#downloadable-files">
+                                                <i class="fas fa-download" aria-hidden="false"></i>
+                                            </a>
                                         </td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="py-3 text-center">No inquiries found</td>
-                                    </tr>
-                                @endforelse
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="py-3 text-center">No inquiries found</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
                       {!! $inquires->links('pagination::bootstrap-4') !!}
+                    </div>
+                    <div class="modal" id="downloadable-files" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-title" id="downloadableFilesTitle"></div>
+                            <div class="modal-content p-3" id="downloadableFilesHolder">
+                                Something here
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -116,6 +128,15 @@
 @section('extras')
     <script>
         $(document).ready(function(){
+            $('#downloadable-files').on('show.bs.modal show', function (event) {
+                alert(10)
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var title = button.data('title')
+                var modal = $(this)
+                alert(10)
+                modal.find('.modal-title').text(title)
+                $('#downloadableFilesHolder').load(button.attr('href'))
+            })
             $("#myInput").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#myTable tr").filter(function() {

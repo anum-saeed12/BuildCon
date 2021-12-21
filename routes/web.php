@@ -300,6 +300,8 @@ Route::prefix('/sale_person')->middleware('sale')->group(function() {
         Route::get('/invoice/{id}', '\App\Http\Controllers\Sales\InquiryController@pdfinquiry')->name('inquiry.pdfinquiry.sale');
         Route::get('/ajax-fetch-category/', '\App\Http\Controllers\Sales\InquiryController@ajaxFetchCategory')->name('category.fetch.ajax.sale');
         Route::get('/ajax-fetch-item/', '\App\Http\Controllers\Sales\InquiryController@ajaxFetchItem')->name('item.fetch.ajax.sale');
+        Route::get('/invoice-documents/{id}', '\App\Http\Controllers\Sales\InquiryController@fetchDocuments')->name('inquiry.documents.sale');
+        Route::get('/invoice-documents/download/{document_id}', '\App\Http\Controllers\Sales\InquiryController@downloadDocument')->name('inquiry.documents.download.sale');
     });
 });
 

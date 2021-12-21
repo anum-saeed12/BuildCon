@@ -1,6 +1,6 @@
 <div class="omni-filters col ml-2 mr-2">
     <h2>Filters</h2>
-    <form action="{{ route('inquiry.open.sale') }}" method="get">
+    <form action="{{ route('customerquotation.list.sale') }}" method="get">
         <input type="hidden" name="filters" value="go"/>
         <div class="row">
             <div class="col-md">
