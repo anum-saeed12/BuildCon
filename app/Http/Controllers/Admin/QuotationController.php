@@ -154,7 +154,6 @@ class QuotationController extends Controller
     public function edit($id)
     {
         $customers = Customer::orderBy('id','DESC')->get();
-        $brands    = Brand::orderBy('id','DESC')->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name,id"),
         ])->orderBy('id','DESC')->get();
@@ -188,7 +187,6 @@ class QuotationController extends Controller
             'base_url'  => env('APP_URL', 'http://omnibiz.local'),
             'user'      => Auth::user(),
             'quotation' => $quotation,
-            'brands'    => $brands,
             'customers' => $customers,
             'items'     => $items
         ];

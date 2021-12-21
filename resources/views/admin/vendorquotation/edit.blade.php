@@ -101,7 +101,7 @@
                                         <label for="brand_id">Select Brand</label><br/>
                                         <select name="brand_id[]" class="form-control" id="brand_id">
                                             <option selected="selected" value>Select Brand</option>
-                                            @foreach ($brands as $brand)
+                                            @foreach (fetchBrandsForItem($vendor_quotation->items[0]->item_name) as $brand)
                                                 <option value="{{ $brand->id }}"{{ $vendor_quotation->items[0]->brand_id==$brand->id  ? ' selected':'' }}>{{ ucfirst($brand->brand_name  ) }}</option>
                                             @endforeach
                                         </select>

@@ -20,6 +20,8 @@
     function fetchPrice(ele) {
         let unit = $(ele.data('unit')),
             rate = $(ele.data('rate')),
+            quantity = $(ele.data('quantity')),
+            amount = $(ele.data('amount')),
             href = ele.data('href'),
             item_id = $(ele.data('item')).val(),
             brand_id = ele.val(),
@@ -34,6 +36,9 @@
                 $(spinner).html('');
                 unit.val(data.unit);
                 rate.val(data.price);
+                quantity.val(0);
+                amount.val(0);
+                calculateTotal();
             }
         });
     }

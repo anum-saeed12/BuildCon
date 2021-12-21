@@ -204,6 +204,7 @@
                     `<label for="brand_id_${$uid}">Select Brand</label><br/>` +
                     `<select name="brand_id[]" class="form-control" id="brand_id_${$uid}"
                         data-unit="#unit_${$uid}" data-rate="#rate_${$uid}"
+                        data-quantity="#quantity_${$uid}" data-amount="#total_amount_${$uid}"
                         data-item="#item_id_${$uid}"
                         data-href="{{ route('item.fetch.ajax.admin') }}"
                         data-spinner="#brand_spinner_${$uid}"
@@ -243,6 +244,7 @@
             $(wrapper).on("click", ".delete", function(e) {
                 e.preventDefault()
                 $(this).parent().parent().remove();
+                calculateTotal();
                 x--;
             })
             $('.with_out').keyup(function() {
