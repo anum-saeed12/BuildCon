@@ -47,7 +47,7 @@ class VendorController extends Controller
     {
         $request->validate([
             'vendor_name'       => 'required',
-            'attended_person'  => 'required',
+            'attended_person'   => 'required',
             'address'           => 'required',
             'country'           => 'required',
         ], [
@@ -83,12 +83,12 @@ class VendorController extends Controller
 
         $request->validate([
             'vendor_name'       => 'required',
-            'attention_person'  => 'required',
+            'attended_person'  => 'required',
             'address'           => 'required',
             'country'           => 'required',
         ], [
             'vendor_name.required'      => 'The vendor name field is required.',
-            'attention_person.required' => 'The attention person name field is required.'
+            'attended_person.required' => 'The attention person name field is required.'
         ]);
         $exist = Vendor::where('vendor_name',$request->vendor_name)
             ->where('attended_person',$request->attended_person)
@@ -104,7 +104,7 @@ class VendorController extends Controller
         }
 
         $request->input('vendor_name')      &&  $vendor->vendor_name     = $request->input('vendor_name');
-        $request->input('attention_person') &&  $vendor->attention_person   = $request->input('attention_person');
+        $request->input('attended_person') &&  $vendor->attended_person   = $request->input('attended_person');
         $request->input('address')          &&  $vendor->address           = $request->input('address');
         $request->input('country')          &&  $vendor->country           = $request->input('country');
         $vendor->save();

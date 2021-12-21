@@ -183,6 +183,7 @@
             var x = 1;
             $(add_button).click(function(e) {
                 e.preventDefault();
+                $uid = $('.quantity').length;
 
                 let $categorySelector = //'<div class="row hello">' +
                     '<div class="col-md-3 mt-3">' +

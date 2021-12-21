@@ -25,7 +25,7 @@
     <tr>
         <td align="center">
             <h1><b>Build Con</b></h1>
-            <h2><b>Quotation Invoice</b></h2>
+            <h2><b>Vendor Quotation Invoice</b></h2>
         </td>
     </tr>
 </table>
@@ -34,14 +34,17 @@
     <tr>
         <td>
             <address>
-                <p><b>Ref: </b>{{ strtoupper(substr($quotation[0]->inquiry,0,4)) }}-{{ strtoupper(substr($quotation[0]->inquiry,4,4)) }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('dm') }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('Y') }}</p>
-                <p><b>Attention: </b>{{ ucwords($quotation[0]->attention_person) }}</p>
-                <p><b>Customer Name: </b>{{ ucwords($quotation[0]->customer_name) }}</p>
+                <p><b>Ref: </b>{{ strtoupper(substr($quotation[0]->vendor_quotation,0,4)) }}-{{ strtoupper(substr($quotation[0]->vendor_quotation,4,4)) }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('dm') }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('Y') }}</p>
+                <p><b>Attention: </b>{{ ucwords($quotation[0]->attended_person) }}</p>
+                <p><b>Vendor Name: </b>{{ ucwords($quotation[0]->vendor_name) }}</p>
                 <p><b>Project Name: </b>{{ ucwords($quotation[0]->project_name) }}</p>
             </address>
         </td>
         <td><p style="color:white"> hello</p></td>
-        <td colspan="4" align="top"><strong>Date #{{ $quotation->creation }}</strong></td>
+        <td>
+            <p><b>Date: </b>{{ ucwords(\Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->date))->format('Y-m-d')) }}</p>
+            <p><b>Quotation Ref# </b>{{ $quotation[0]->quotation_ref }}</p>
+        </td>
     </tr>
 </table>
 
@@ -67,18 +70,17 @@
             <td>{{ ucwords($item->item_name) }}</td>
             <td>{{ ucwords($item->item_description) }}</td>
             <td>{{ ucwords($item->brand_name) }}</td>
-            <td>{{ ucwords($item->quantity) }}</td>
+            <td>{{ $item->quantity }}</td>
             <td>{{ ucwords($item->unit) }}</td>
-            <td>{{ ucwords($item->rate) }}</td>
-            <td>{{ ucwords($item->amount) }}</td>
+            <td>{{ $item->rate }}</td>
+            <td>{{$item->amount}}</td>
         </tr>
     @endforeach
     </tbody>
     <tfoot>
     <tr>
-        <td  colspan="3"></td>
-        <th align="right">Total:</th>
-        <td align="right">{{ $quotation[0]->currency }}{{number_format($quotation[0]->total )}}</td>
+        <th colspan="5" style="text-align:right;">Total:</th>
+        <td colspan="2" style="text-align:right;"><b>{{ ucwords($quotation[0]->currency) }}{{number_format($quotation[0]->total )}}</td>
     </tr>
     </tfoot>
 </table>

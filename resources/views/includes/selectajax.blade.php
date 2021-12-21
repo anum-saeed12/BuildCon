@@ -55,4 +55,13 @@
             }
         });
     }
+    function calculateTotal() {
+        var total = 0, val;
+        $('.total').each(function() {
+            val = $(this).val()
+            val = isNaN(val) || $.trim(val) === "" ? 0 : parseFloat(val);
+            total += val;
+        });
+        $('#total').val(Math.round(total));
+    }
 </script>

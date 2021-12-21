@@ -33,7 +33,7 @@ class BrandController extends Controller
 
     public function edit($id)
     {
-        $brand = Brand::find($id)->first();
+        $brand = Brand::find($id);
         $data = [
             'title'    => 'Update Brand',
             'base_url' => env('APP_URL', 'http://127.0.0.1:8000'),

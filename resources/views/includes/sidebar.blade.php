@@ -135,7 +135,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('vendor.add.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('vendor.list.' . auth()->user()->user_role) }}" class="nav-link">
                         <i class="fas fa-warehouse nav-icon"></i>
                         <p>
                             Vendor

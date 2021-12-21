@@ -280,16 +280,24 @@ class VendorQuotationController extends Controller
     public function view($id)
     {
         $select=[
-            'vendor_quotation.*',
+            'vendor_quotation.vendor_quotation',
+            'vendor_quotation.project_name',
+            'vendor_quotation.quotation_ref',
             'vendor_quotation.created_at as creationdate',
             'vendor_quotation.id as unique',
             'vendor_quotation.total as totals',
-            'items.*',
-            'vendors.*',
-            'categories.*',
-            'brands.*',
-            'users.*',
-            'vendor_quotation_item.*',
+            'vendor_quotation.currency',
+            'items.item_name',
+            'items.item_description',
+            'vendors.vendor_name',
+            'vendors.attended_person',
+            'categories.category_name',
+            'brands.brand_name',
+            'vendor_quotation_item.unit',
+            'vendor_quotation_item.quantity',
+            'vendor_quotation_item.amount',
+            'vendor_quotation.total',
+            'vendor_quotation_item.rate',
         ];
         $vendors_quotation = VendorQuotation::select($select)
             ->where('vendor_quotation.id',$id)
@@ -312,15 +320,24 @@ class VendorQuotationController extends Controller
     {
 
         $select=[
-            'vendor_quotation.*',
+            'vendor_quotation.vendor_quotation',
+            'vendor_quotation.project_name',
+            'vendor_quotation.currency',
+            'vendor_quotation.quotation_ref',
             'vendor_quotation.created_at as creationdate',
             'vendor_quotation.id as unique',
-            'items.*',
-            'vendors.*',
-            'categories.*',
-            'brands.*',
-            'users.*',
-            'vendor_quotation_item.*',
+            'vendor_quotation.total as totals',
+            'items.item_name',
+            'items.item_description',
+            'vendors.vendor_name',
+            'vendors.attended_person',
+            'categories.category_name',
+            'brands.brand_name',
+            'vendor_quotation_item.unit',
+            'vendor_quotation_item.quantity',
+            'vendor_quotation_item.amount',
+            'vendor_quotation.total',
+            'vendor_quotation_item.rate',
         ];
         $vendors_quotation = VendorQuotation::select($select)
             ->where('vendor_quotation.id',$id)
@@ -335,11 +352,10 @@ class VendorQuotationController extends Controller
 
         $data = [
             'title'      => 'Vendor Quotation Pdf',
-            'base_url'   => env('APP_URL', 'http://omnibiz.local'),
             'user'       => Auth::user(),
             'quotation'  => $vendors_quotation
         ];
-        $date = "Quotation-Invoice-". Carbon::now()->format('d-M-Y')  .".pdf";
+        $date = "Vendor-Quotation-Invoice-". Carbon::now()->format('d-M-Y')  .".pdf";
         $pdf = PDF::loadView('admin.vendorquotation.pdf-invoice', $data);
         return $pdf->download($date);
     }
