@@ -60,14 +60,10 @@
                                            value="{{ $inquiry->timeline }}">
                                     <div class="text-danger">@error('timeline'){{ $message }}@enderror</div>
                                 </div>
-                                <div class="col-md-2 ">
-                                    <label for="currency">Currency</label><br/>
-                                    <input type="text" name="currency" class="form-control" id="currency" value="{{ $inquiry->currency }}">
-                                </div>
                             </div>
                             <br/>
                             <div class="row">
-                                <div class="col-md-2 category-container">
+                                <div class="col-md-3 category-container">
                                     <label for="category_id">Select Category</label><br/>
                                     <select name="category_id[]" class="form-control categories" id="category_id" data-target="#item_id" data-href="{{ route('category.fetch.ajax.admin') }}" data-spinner="#category_spinner" onchange="categorySelect($(this))">
                                         <option selected="selected" value>Select</option>
@@ -78,7 +74,7 @@
                                     <div id="category_spinner"></div>
                                     <div class="text-danger">@error('category_id'){{ $message }}@enderror</div>
                                 </div>
-                                <div class="col-md-2 item-container">
+                                <div class="col-md-3 item-container">
                                     <label for="item_id">Select Item </label><br/>
                                     <select name="item_id[]" class="form-control trigger" id="item_id" data-target="#brand_id" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner" onchange="itemSelect($(this))">
                                         <option selected="selected" value>Select</option>
@@ -97,7 +93,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-1 quantity-container">
+                                <div class="col-md-2 quantity-container">
                                     <label for="quantity">Quantity</label><br/>
                                     <input type="text" name="quantity[]" class="form-control with_out" id="quantity" data-target="#total_amount" data-into="#rate" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))" value="{{ $inquiry->items[0]->quantity }}">
                                 </div>
@@ -106,7 +102,7 @@
                                     <input type="text" name="unit[]" class="form-control" id="unit" value="{{ $inquiry->items[0]->unit }}">
                                 </div>
                                 <div class="col-md-1">
-                                    <label for="unit">&nbsp;</label><br/>
+                                    <label for="button">&nbsp;</label><br/>
                                     <button type="button" class="add_form_field btn btn-info"><span><i class="fas fa-plus-circle" aria-hidden="false"></i></span></button>
                                 </div>
                             </div>
@@ -114,7 +110,7 @@
                                 @foreach($inquiry->items as $inquiry_item)
                                     @php if (isset($loop) && $loop->iteration <= 1) continue; @endphp
                                     <div class="row mt-3">
-                                        <div class="col-md-2 category-container">
+                                        <div class="col-md-3 category-container">
                                             <label for="category_id">Select Category</label><br/>
                                             <select name="category_id[]" class="form-control" id="category_id_{{ $loop->iteration }}" data-target="#item_id_{{ $loop->iteration }}" data-href="{{ route('category.fetch.ajax.admin') }}" data-spinner="#item_spinner_{{ $loop->iteration }}" onchange="categorySelect($(this))">
                                                 <option selected="selected" value>Select</option>
@@ -125,7 +121,7 @@
                                             <div id="category_spinner"></div>
                                             <div class="text-danger">@error('category_id'){{ $message }}@enderror</div>
                                         </div>
-                                        <div class="col-md-2 item-container">
+                                        <div class="col-md-3 item-container">
                                             <label for="item_id_${$uid}">Select Item </label><br/>
                                             <select name="item_id[]" class="form-control" id="item_id_{{ $loop->iteration }}" data-target="#brand_id_{{ $loop->iteration }}" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner_{{ $loop->iteration }}" onchange="itemSelect($(this))">
                                                 <option selected="selected" value>Select</option>
@@ -212,7 +208,7 @@
                 $uid = $('.category').length;
 
                 let $itemRow = '<div class="row mt-3 ">' +
-                    '<div class="col-md-2 category-container">' +
+                    '<div class="col-md-3 category-container">' +
                     '<label for="category_id">Select Category</label><br/>' +
                     `<select name="category_id[]" class="form-control categories" id="category_id_${$uid}" data-target="#item_id_${$uid}" data-href="{{ route('category.fetch.ajax.admin') }}" data-spinner="#category_spinner_${$uid}" onchange="categorySelect($(this))">` +
                     '<option selected="selected" value>Select</option>' +
@@ -222,7 +218,7 @@
                         '</select>' +
                     `<div id="category_spinner_${$uid}"></div>` +
                     '</div>' +
-                    '<div class="col-md-2 item-container">' +
+                    '<div class="col-md-3 item-container">' +
                     '<label for="item_id">Select Item</label><br/>' +
                     `<select name="item_id[]" class="form-control " id="item_id_${$uid}" data-target="#brand_id_${$uid}" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner_${$uid}" onchange="itemSelect($(this))">` +
                     '<option selected="selected" value>Select</option>' +
@@ -245,7 +241,7 @@
                     `<label for="quantity_${$uid}">Quantity</label><br/>` +
                     `<input type="text" name="quantity[]" class="form-control common quantity" id="quantity_${$uid}" data-target="#total_amount_${$uid}" data-into="#rate_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">`+
                     '</div>' +
-                    '<div class="col-md-2 unit-container">' +
+                    '<div class="col-md-1 unit-container">' +
                     `<label for="unit_${$uid}">Unit</label><br/>` +
                     `<input type="text" name="unit[]" class="form-control" id="unit_${$uid}" >` +
                     '</div>' +

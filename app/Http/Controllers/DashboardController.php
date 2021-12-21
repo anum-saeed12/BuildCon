@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inquiry;
+use App\Models\Item;
 use App\Models\Quotation;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class  DashboardController extends Controller
         $total_user = User::select(DB::raw('COUNT(*) as total'))
             ->where('user_role','!=','admin')
             ->first();
-        $total_items = User::select(DB::raw('COUNT(*) as total'))->first();
+        $total_items = Item::select(DB::raw('COUNT(*) as total'))->first();
         $total_open = Inquiry::select(DB::raw('COUNT(inquiries.id) as total'))
             ->leftJoin('quotations','quotations.inquiry_id','inquiries.id')
             ->whereNull('quotations.id')

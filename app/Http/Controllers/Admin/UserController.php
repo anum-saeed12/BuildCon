@@ -43,13 +43,10 @@ class UserController extends Controller
             'users.name',
             'users.username',
             'users.email',
-            #'users.password',
             'users.user_role',
         ];
         $user = User::select($select)
             ->where('users.id',$id)
-            #->leftJoin('usercategory','usercategory.user_id','=','users.id')
-            #->leftJoin('categories','usercategory.category_id','=','categories.id')
             ->first();
 
         $data = [

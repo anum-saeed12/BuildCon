@@ -74,7 +74,6 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
         Route::get('/delete/{id}', '\App\Http\Controllers\Admin\ItemController@delete')->name('item.delete.admin');
         Route::get('/ajax-fetch/', '\App\Http\Controllers\Admin\ItemController@ajaxFetch')->name('item.fetch.ajax.admin');
         Route::get('/view/{id}', '\App\Http\Controllers\Admin\ItemController@view')->name('item.view.admin');
-        Route::get('/export', '\App\Http\Controllers\Admin\ItemController@export')->name('item.export.admin');
     });
     Route::prefix('/brand')->group(function() {
         Route::get('/', '\App\Http\Controllers\Admin\BrandController@index')->name('brand.index.admin');
@@ -305,6 +304,7 @@ Route::prefix('/sale_person')->middleware('sale')->group(function() {
 });
 
 Route::post('/import-items', '\App\Http\Controllers\ImportController@importItem')->middleware('auth')->name('item.import');
+Route::get('/export-items', '\App\Http\Controllers\ImportController@exportItem')->middleware('auth')->name('item.export');
 Route::post('/import-items/approve', '\App\Http\Controllers\ImportController@approve')->middleware('auth')->name('item.import.approve');
 Route::get('/import-items/{id}', '\App\Http\Controllers\ImportController@viewImport')->middleware('auth')->name('import.report');
 

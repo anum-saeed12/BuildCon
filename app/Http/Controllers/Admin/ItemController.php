@@ -128,9 +128,4 @@ class ItemController extends Controller
         return $picturename;
     }
 
-    public function export()
-    {
-        $filename = "Items_" . date('M_d_Y') . ".xlsx";
-        return Excel::download(new ItemsExport(), $filename);
-    }
 }

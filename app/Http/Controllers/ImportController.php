@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ItemsExport;
 use App\Imports\ItemsImport;
 use App\Models\Brand;
 use App\Models\Category;
@@ -166,5 +167,11 @@ class ImportController extends Controller
         ];
 
         return redirect(route('item.list.admin'))->with('success', 'Import successful!')->with('stats', $data);
+    }
+
+    public function exportItem()
+    {
+        $filename = "Items_" . date('M_d_Y') . ".xlsx";
+        return Excel::download(new ItemsExport(), $filename);
     }
 }

@@ -48,7 +48,8 @@ class InquiryController extends Controller
             ->leftJoin('users', 'users.id' ,'=', 'inquiries.user_id')
             ->leftJoin('items', 'items.id' ,'=', 'inquiry_order.item_id')
             ->leftJoin('quotations', 'quotations.inquiry_id' ,'=', 'inquiries.id')
-            ->groupBy('inquiries.id','inquiry_order.inquiry_id')->paginate($this->count);
+            ->groupBy('inquiries.id','inquiry_order.inquiry_id')
+            ->paginate($this->count);
 
 
         $data = [
@@ -122,10 +123,10 @@ class InquiryController extends Controller
 
     public function add()
     {
-        $customers  = Customer::orderBy('id','DESC')->paginate($this->count);
-        $categories = Category::orderBy('id','DESC')->paginate($this->count);
-        $brands     = Brand::orderBy('id','DESC')->paginate($this->count);
-        $items      = Item::orderBy('id','DESC')->paginate($this->count);
+        $customers  = Customer::orderBy('id','DESC')->get();
+        $categories = Category::orderBy('id','DESC')->get();
+        $brands     = Brand::orderBy('id','DESC')->get();
+        $items      = Item::orderBy('id','DESC')->get();
 
         $data = [
             'title'      => 'Submit Inquiry',
@@ -215,38 +216,34 @@ class InquiryController extends Controller
     public function update(Request $request,$id)
     {
         $inquiry = Inquiry::find($id);
-
         if(!$inquiry)
         {
             return redirect(
                 route('inquiry.list.admin')
             )->with('error', 'Inquiry doesn\'t exists!');
         }
-
         $request->validate([
             'customer_id'    => 'required',
             'project_name'   => 'required',
             'date'           => 'required',
-            'currency'       => 'required',
             'timeline'       => 'required',
             'remarks'        => 'sometimes',
             'item_id'        => 'required|array',
             'item_id.*'      => 'required',
+            'category_id'    => 'required|array',
+            'category_id.*'  => 'required',
             'brand_id'       => 'required|array',
             'brand_id.*'     => 'required',
             'quantity'       => 'required|array',
             'quantity.*'     => 'required',
             'unit'           => 'required|array',
             'unit.*'         => 'required'
-        ],[
-            'customer_id.required'     => 'The customer field is required.',
-            'project_name.required'    => 'The project name field is required.'
         ]);
 
         $inquiry->customer_id = $request->customer_id;
         $inquiry->project_name = $request->project_name;
         $inquiry->date = $request->date;
-        $inquiry->currency = $request->currency;
+        $inquiry->timeline = $request->timeline;
         $inquiry->remarks = $request->remarks;
         $inquiry->save();
 
@@ -339,23 +336,25 @@ class InquiryController extends Controller
     public function view($id)
     {
         $select=[
-            'inquiries.*',
             'inquiries.id as unique',
-            'items.*',
-            'categories.*',
-            'brands.*',
-            'inquiry_order.*',
-            'customers.*',
+            'inquiries.inquiry',
+            'inquiries.project_name',
+            'customers.attention_person',
+            'customers.customer_name',
+            'items.item_name',
+            'items.item_description',
+            'brands.brand_name',
+            'categories.category_name',
+            'inquiry_order.quantity',
+            'inquiry_order.unit',
         ];
         $inquires = Inquiry::select($select)
-            ->where('inquiries.id',$id)
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
-            ->leftJoin('inquiry_documents','inquiry_documents.inquiry_id','=','inquiries.id')
             ->leftJoin('inquiry_order','inquiry_order.inquiry_id', '=', 'inquiries.id')
             ->leftJoin('brands','brands.id' ,'=', 'inquiry_order.brand_id')
             ->leftJoin('categories', 'categories.id' ,'=', 'inquiry_order.category_id')
-            ->leftJoin('users', 'users.id' ,'=', 'inquiries.user_id')
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
+            ->where('inquiries.id',$id)
             ->get();
 
         $data = [
@@ -379,25 +378,26 @@ class InquiryController extends Controller
     public function pdfinquiry($id)
     {
         $select=[
-            'inquiries.*',
             'inquiries.created_at as creationdate',
             'inquiries.id as unique',
-            'items.*',
-            'categories.*',
-            'brands.*',
-            'inquiry_order.*',
-            'customers.*',
-        ];
+            'inquiries.inquiry',
+            'inquiries.project_name',
+            'customers.attention_person',
+            'customers.customer_name',
+            'items.item_name',
+            'items.item_description',
+            'brands.brand_name',
+            'categories.category_name',
+            'inquiry_order.quantity',
+            'inquiry_order.unit'
+            ];
         $inquires = Inquiry::select($select)
-            ->where('inquiries.id',$id)
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
-            ->leftJoin('inquiry_documents','inquiry_documents.inquiry_id','=','inquiries.id')
             ->leftJoin('inquiry_order','inquiry_order.inquiry_id', '=', 'inquiries.id')
             ->leftJoin('brands','brands.id' ,'=', 'inquiry_order.brand_id')
             ->leftJoin('categories', 'categories.id' ,'=', 'inquiry_order.category_id')
-            ->leftJoin('users', 'users.id' ,'=', 'inquiries.user_id')
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
-            ->groupBy('inquiries.id','inquiry_order.inquiry_id')
+            ->where('inquiries.id',$id)
             ->get();
 
         $inquires->creation = Carbon::createFromTimeStamp(strtotime($inquires[0]->creationdate))->format('d-M-Y');
