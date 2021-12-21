@@ -74,13 +74,21 @@ class  DashboardController extends Controller
     {
         $user = Auth::user();
         $total_inquiries = Inquiry::select(DB::raw('COUNT(*) as total'))->where('user_id',$user->id)->first();
+        $total_quotation = Quotation::select(DB::raw('COUNT(*) as total'))->where('user_id',$user->id)->first();
+        $total_open_inquiries = Inquiry::select(DB::raw('COUNT(inquiries.id) as total'))
+            ->leftJoin('quotations','quotations.inquiry_id','inquiries.id')
+            ->whereNull('quotations.id')
+            ->where('inquiries.user_id',$user->id)
+            ->first();
         $data = [
             'class' => [
                 'body' => ' sidebar-mini layout-fixed'
             ],
-            'title'         => 'Dashboard',
-            'user'          => $user,
-            'total_inquiries'    => $total_inquiries,
+            'title'          => 'Dashboard',
+            'user'           => $user,
+            'total_inquiries'=> $total_inquiries,
+            'total_quotation'=> $total_quotation,
+            'total_open_inquiries'=> $total_open_inquiries,
         ];
         return view("sale.dashboard", $data);
     }

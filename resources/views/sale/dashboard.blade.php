@@ -27,10 +27,22 @@
                     <div class="small-box bg-white">
                         <div class="inner">
                             <h3>{{ $total_inquiries->total }}</h3>
-                            <p>Open Inquiries</p>
+                            <p>Total Inquiries</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-file nav-icon text-gray"></i>
+                        </div>
+                        <a href="{{ route('inquiry.list.sale') }}" class="small-box-footer bg-gray" style="color:white!important;">View Inquiries <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-white">
+                        <div class="inner">
+                            <h3>{{ $total_open_inquiries->total }}</h3>
+                            <p>Open Inquiries</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-pen-square nav-icon text-gray"></i>
                         </div>
                         <a href="{{ route('inquiry.list.sale') }}" class="small-box-footer bg-gray" style="color:white!important;">View Inquiries <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -39,13 +51,13 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-white">
                         <div class="inner">
-                            <h3>#</h3>
-                            <p>Submitted Inquiries</p>
+                            <h3>{{ $total_quotation->total }}</h3>
+                            <p>Submitted Quotation</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-receipt  nav-icon text-info"></i>
                         </div>
-                        <a href="{{ route('inquiry.list.sale') }}" class="small-box-footer bg-info" style="color:white!important;">View Inquiries <i class="fas"></i></a>
+                        <a href="{{ route('quotation.list.sale') }}" class="small-box-footer bg-info" style="color:white!important;">View Submitted Quotation <i class="fas"></i></a>
                     </div>
                 </div>
             </div>
