@@ -151,7 +151,7 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
     Route::get('/report/vendor/{id}', '\App\Http\Controllers\Admin\ReportController@vendorQuotesPdf')->name('vendorQuotes.reportPDF.admin');
     Route::get('/report/quotationwise/{id}', '\App\Http\Controllers\Admin\ReportController@quotationWisePdf')->name('quotationwise.reportPDF.admin');
     Route::get('/report/inquiry-salepersonwise/{id}', '\App\Http\Controllers\Admin\ReportController@inquirySalePersonPdf')->name('salewise.reportPDF.admin');
-    Route::get('/report/inquiry-datewise/{id}', '\App\Http\Controllers\Admin\ReportController@inquiryDatenPdf')->name('datewise.reportPDF.admin');
+    Route::get('/report/inquiry-datewise/{id}', '\App\Http\Controllers\Admin\ReportController@inquiryDatePdf')->name('datewise.reportPDF.admin');
     Route::get('/report/itemwise/{id}', '\App\Http\Controllers\Admin\ReportController@itemWisePdf')->name('itemwise.reportPDF.admin');
 });
 

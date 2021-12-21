@@ -24,7 +24,7 @@
 <table width="100%">
     <tr>
         <td align="center">
-            <h1><b>Build Con</b></h1>
+            <h1><b>BuildCon</b></h1>
             <h2><b>Vendor Report</b></h2>
         </td>
     </tr>

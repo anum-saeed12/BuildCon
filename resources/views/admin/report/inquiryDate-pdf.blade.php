@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Inquiry Sale Person Report</title>
+    <title>Inquiry DateWise Report</title>
     <style type="text/css">
         * {
             font-family:  Verdana, Arial, Helvetica, sans-serif;
@@ -25,13 +25,13 @@
     <tr>
         <td align="center">
             <h1><b>BuildCon</b></h1>
-            <h2><b>Inquiry Sale Person Report</b></h2>
+            <h2><b>Inquiry DateWise Report</b></h2>
         </td>
     </tr>
 </table>
 
 <br />
-<table width="100%"style="text-align: center">
+<table width="100%" style="text-align: center">
     <thead style="background-color: #eae8e4;">
     <tr>
         <th>#</th>

@@ -30,7 +30,7 @@
                         <input type="date" class="form-control" name="date_start" value="{{ request('date_start') ?? date('Y-m-d') }}"/>
                     </div>
                     <div class="col-md-3">
-                        <form class="form-horizontal" action="{{ route('vendorQuotes.report.admin') }}" method="GET" id="date_range">
+                        <form class="form-horizontal" action="{{ route('inquiry.datewise.admin') }}" method="GET" id="date_range">
                             <label for="date_end" class="normal">To</label><br/>
                             <input type="date" class="form-control" name="date_end" value="{{ request('date_end') ?? date('Y-m-d') }}"/>
                         </form>
@@ -70,8 +70,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if(request('item_id'))
-                                <a href="{{ route('vendorQuotes.reportPDF.admin',request('item_id')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
+                                @if(count($data) > 0)
+                                    <a href="{{ route('datewise.reportPDF.admin',[request('date_start') ?? date('Y-m-d'), request('date_end') ?? date('Y-m-d') ]) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
                                 @endif
                             </div>
                         </div>
@@ -79,29 +79,34 @@
                             <table class="table table-hover text-nowrap table-compact">
                                 <thead>
                                 <tr>
-                                    <th>Sr.No.</th>
-                                    <th class="pl-0">Vendor Name</th>
-                                    <th class="pl-0">Item Name</th>
-                                    <th class="pl-0">Category Name</th>
-                                    <th class="pl-0">Brand Name</th>
-                                    <th class="pl-0">Rate</th>
-                                    <th class="pl-0">Total Amount</th>
+                                    <th>#</th>
+                                    <th class="pl-0">Inquiry Id</th>
+                                    <th class="pl-0">User</th>
+                                    <th class="pl-0">Customer</th>
+                                    <th class="pl-0">Project</th>
+                                    <th class="pl-0">Total Items</th>
+                                    <th class="pl-0">Start</th>
+                                    <th class="pl-0">Timeline</th>
+                                    <th class="pl-0">Created</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
-                                @forelse($data as $quote)
+                                @forelse($data as $item)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ ucfirst($quote->vendor_name) }}</td>
-                                        <td>{{ ucfirst($quote->item_name) }}</td>
-                                        <td>{{ ucfirst($quote->category_name) }}</td>
-                                        <td>{{ ucfirst($quote->brand_name) }}</td>
-                                        <td>{{ $quote->rate }}</td>
-                                        <td>{{ $quote->amount }}</td>
+                                        <td>{{ substr($item->inquiry,0,7) }}</td>
+                                        {{--      <td>{{ $item->inquiry }}</td>--}}
+                                        <td>{{ ucfirst($item->username) }} ({{ $item->user_role }})</td>
+                                        <td>{{ ucfirst($item->customer_name) }}</td>
+                                        <td>{{ ucfirst($item->project_name) }}</td>
+                                        <td><b>{{ $item->total_items }}</b> items</td>
+                                        <td>{{ \Carbon\Carbon::createFromDate($item->date)->format('d M Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromDate($item->timeline)->format('d M Y') }}</td>
+                                        <td>{{ $item->created_at->format('d M Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-3 text-center">No quotes found</td>
+                                        <td colspan="99" class="py-3 text-center">No quotes found</td>
                                     </tr>
                                 @endforelse
                                 </tbody>

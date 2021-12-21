@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Inquiry;
+use App\Models\InquiryOrder;
 use App\Models\Item;
 use App\Models\QuotationItem;
 use App\Models\User;
@@ -97,8 +98,9 @@ class ReportController extends Controller
             ->join('customers', 'customers.id', '=', 'quotations.customer_id')
             ->join('items', 'items.id', '=', 'quotation_item.item_id')
             ->join('brands', 'brands.id', '=', 'quotation_item.brand_id')
-            ->where('quotations.customer_id',$customer_id)
-            ->get();
+            ->where('quotations.customer_id',$customer_id);
+        $dataquotation = $dataquotation->paginate($this->count);
+
         $data = [
             'title' =>'Quotation',
             'customers' =>$customers,
@@ -109,39 +111,38 @@ class ReportController extends Controller
 
     public function inquiryDate(Request $request)
     {
-        $item_id = $request->input('item_id');
-
         $start_date = $request->input('date_start', false);
         $end_date = $request->input('date_end', false);
 
         $items = Item::all();
         $select = [
-            'items.item_name',
-            'categories.category_name',
-            'brands.brand_name',
-            'vendor_quotation.project_name',
-            'vendor_quotation_item.rate',
-            'vendor_quotation_item.amount',
-            'vendors.vendor_name',
+            'users.name as username',
+            'users.user_role',
+            'customers.customer_name',
+            'inquiries.project_name',
+            'inquiries.inquiry',
+            'inquiries.id as inquiry_id',
+            'inquiries.created_at',
+            'inquiries.date',
+            'inquiries.timeline',
+            DB::raw("COUNT(inquiry_order.item_id) as total_items")
         ];
-        $datavendor = VendorQuotationItem::select($select)
-            ->leftJoin('items', 'items.id', '=', 'vendor_quotation_item.item_id')
-            ->leftJoin('categories', 'categories.id', '=', 'vendor_quotation_item.category_id')
-            ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
-            ->leftJoin('vendor_quotation', 'vendor_quotation.id', '=', 'vendor_quotation_item.vendor_quotation_id')
-            ->leftJoin('vendors', 'vendors.id', '=', 'vendor_quotation.vendor_id')
-            ->where('vendor_quotation_item.item_id',$item_id);
+        $datainquiry = Inquiry::select($select)
+            ->join('inquiry_order', 'inquiry_order.inquiry_id','=','inquiries.id')
+            ->join('items', 'items.id','=','inquiry_order.item_id')
+            ->leftJoin('customers','customers.id','=','inquiries.customer_id')
+            ->leftJoin('users','users.id','=','inquiries.user_id');
             #->get();
 
-        if ($request->has('date_start') && !empty($request->input('date_start'))) $datavendor = $datavendor->where('vendor_quotation.created_at', '>=', $start_date);
-        if ($request->has('date_end') && !empty($request->input('data_end'))) $datavendor = $datavendor->where('vendor_quotation.created_at', '<=', $end_date);
+        if ($request->has('date_start') && !empty($request->input('date_start'))) $datainquiry = $datainquiry->where('inquiries.created_at', '>=', $start_date);
+        if ($request->has('date_end') && !empty($request->input('data_end'))) $datainquiry = $datainquiry->where('inquiries.created_at', '<=', $end_date);
 
-        $datavendor = $datavendor->paginate($this->count);
+        $datainquiry = $datainquiry->paginate($this->count);
 
         $data = [
             'title' =>'Inquiries Date Wise',
             'items' =>$items,
-            'data' => $datavendor
+            'data' => $datainquiry
         ];
         return view('admin.report.inquiryDate',$data);
     }
@@ -210,6 +211,7 @@ class ReportController extends Controller
         $pdf = PDF::loadView('admin.report.inquirySale-pdf', $data);
         return $pdf->download($date);
     }
+
     public function vendorQuotesPdf($id)
     {
         $select = [
@@ -246,6 +248,7 @@ class ReportController extends Controller
         $pdf = PDF::loadView('admin.report.vendorQuote-pdf', $data);
         return $pdf->download($date);
     }
+
     public function quotationWisePdf($id)
     {
         $select = [
@@ -271,6 +274,7 @@ class ReportController extends Controller
         $pdf = PDF::loadView('admin.report.quotationWise-pdf', $data);
         return $pdf->download($date);
     }
+
     public function itemWisePdf($id)
     {
 
@@ -296,4 +300,42 @@ class ReportController extends Controller
         return $pdf->download($date);
     }
 
+    public function inquiryDatePdf(Request $request)
+    {
+        $start_date = $request->input('date_start', false);
+        $end_date = $request->input('date_end', false);
+
+        $items = Item::all();
+        $select = [
+            'users.name as username',
+            'users.user_role',
+            'customers.customer_name',
+            'inquiries.project_name',
+            'inquiries.inquiry',
+            'inquiries.id as inquiry_id',
+            'inquiries.created_at',
+            'inquiries.date',
+            'inquiries.timeline',
+            DB::raw("COUNT(inquiry_order.item_id) as total_items")
+        ];
+        $datainquiry = Inquiry::select($select)
+            ->join('inquiry_order', 'inquiry_order.inquiry_id','=','inquiries.id')
+            ->join('items', 'items.id','=','inquiry_order.item_id')
+            ->leftJoin('customers','customers.id','=','inquiries.customer_id')
+            ->leftJoin('users','users.id','=','inquiries.user_id');
+
+        if ($request->has('date_start') && !empty($request->input('date_start'))) $datainquiry = $datainquiry->where('inquiries.created_at', '>=', $start_date);
+        if ($request->has('date_end') && !empty($request->input('data_end'))) $datainquiry = $datainquiry->where('inquiries.created_at', '<=', $end_date);
+
+        $datainquiry = $datainquiry->get();
+
+        $data = [
+            'title' =>'Inquiries Date Wise',
+            'items' =>$items,
+            'data' => $datainquiry
+        ];
+        $date = "Inquiry-Date-Report-". Carbon::now()->format('d-M-Y')  .".pdf";
+        $pdf = PDF::loadView('admin.report.inquiryDate-pdf', $data);
+        return $pdf->download($date);
+    }
 }

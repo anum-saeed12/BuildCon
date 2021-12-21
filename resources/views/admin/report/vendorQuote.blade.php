@@ -118,7 +118,7 @@
                                             <span class="{{ $class }} pr-2">{{ $item->rate }} {{ $item->currency }}</span>
                                         </td>
                                         <td>{{ $item->amount }} {{ $item->currency }}</td>
-                                        <td>{{ $item->created_at->diffForHumans() }}</td>
+                                        <td>{{ $item->created_at->format('d M Y')  }}</td>
                                     </tr>
                                 @empty
                                     <tr>

@@ -24,14 +24,14 @@
 <table width="100%">
     <tr>
         <td align="center">
-            <h1><b>Build Con</b></h1>
+            <h1><b>BuildCon</b></h1>
             <h2><b>Quotation Report</b></h2>
         </td>
     </tr>
 </table>
 
 <br />
-<table style="text-align: center">
+<table width="100%" style="text-align: center">
     <thead style="background-color: #eae8e4;">
     <tr>
         <th>#</th>

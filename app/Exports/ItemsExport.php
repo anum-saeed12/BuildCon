@@ -3,15 +3,18 @@
 namespace App\Exports;
 
 use App\Models\Item;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class ItemsExport implements FromCollection
+class ItemsExport implements FromView
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function collection()
+    public function view(): View
     {
-        return Item::all();
+        return view('admin.export.items', [
+            'items' => Item::with('category')->with('brand')->get()
+        ]);
     }
 }
