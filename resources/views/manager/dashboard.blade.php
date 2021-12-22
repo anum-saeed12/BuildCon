@@ -23,36 +23,38 @@
         <div class="container-fluid">
             <div class="row">
 
+                {{--CLIENT BOX--}}
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-white">
                         <div class="inner">
                             <h3>{{ $total_items->total }}</h3>
-                            <p>Items</p>
+                            <p>Inventory</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-boxes nav-icon text-success"></i>
                         </div>
-                        <a href="{{ route('item.list.manager') }}" class="small-box-footer bg-success" style="color:white!important;">View Items <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('item.list.manager') }}" class="small-box-footer bg-success" style="color:white!important;">View Inventory <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
+                {{--CLIENT BOX--}}
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-white">
                         <div class="inner">
-                            <h3>#</h3>
+                            <h3>{{ $total_open->total }}</h3>
                             <p>Open Inquiries</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-file nav-icon text-gray"></i>
                         </div>
-                        <a href="#" class="small-box-footer bg-gray" style="color:white!important;">View Open Inquiries <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('inquiry.list.manager') }}" class="small-box-footer bg-gray" style="color:white!important;">View Open Inquirires <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-white">
                         <div class="inner">
-                            <h3>{{ $total_quotations->total }}</h3>
+                            <h3>{{ $total_quotation->total }}</h3>
                             <p>Submitted Quotation</p>
                         </div>
                         <div class="icon">

@@ -68,5 +68,6 @@
             total += val;
         });
         $('#total').val(Math.round(total));
+        applyDiscount();
     }
 </script>

@@ -4,10 +4,10 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>{{$title}}</h1>
+                <div class="col-sm-8">
+                    <h1>{{$title}} <a href="{{ route('item.export') }}" class="btn btn-info"><i class="fas fa-file-export mr-1"></i>Export</a></h1>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard.team') }}">Home</a></li>
                         <li class="breadcrumb-item">Item</li>
@@ -24,7 +24,6 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-
                 <div class="col-12">
                     @if(session()->has('success'))
                         <div class="callout callout-success" style="color:green">
@@ -63,6 +62,14 @@
                                     </div>
                                 </form>
                                 <a href="{{ route('item.add.team') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add New</a>
+                                <form action="{{ route('item.import') }}" method="post" enctype="multipart/form-data" style="display:inline;" id="importItemForm">
+                                    @csrf
+                                    <label href="{{ route('item.add.team') }}" class="btn btn-primary ml-2 mb-0" for="importItemsFile">
+                                        <input style="display:none;" type="file" id="importItemsFile" name="itemsFile" onchange="$('#importItemForm').submit()"/>
+                                        <i class="fas fa-file-import"></i>
+                                        Import
+                                    </label>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -85,21 +92,25 @@
                                 <tbody id="myTable">
                                 @forelse($items as $item)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('item.view.team',$item->id) }}">
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{ucfirst($item->item_name)}}</td>
+                                        data-href="{{ route('item.edit.team',$item->id) }}">
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{ $loop->iteration + intval(($items->currentPage() - 1) * $items->count()) }}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{ucfirst($item->item_name)}}</td>
                                         <td><a href="{{ asset('storage/images/'.$item->picture) }}" target="_blank">
                                                 <div class="list-img-thumbnail" style="background-image:url('{{ asset('storage/images/'.$item->picture) }}');"></div>
                                             </a>
                                         </td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{ucfirst($item->brand_name)}}</td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{ucfirst($item->category_name)}}</td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{ucfirst($item->item_description)}}</td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{ucfirst($item->unit)}}</td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{$item->price}}</td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{$item->weight}}</td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{$item->height}}</td>
-                                        <td><a href="{{ route('item.view.team',$item->id) }}">{{$item->width}}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{ucfirst($item->brand_name)}}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{ucfirst($item->category_name)}}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{ucfirst($item->item_description)}}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{ucfirst($item->unit)}}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{$item->price}}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{$item->weight}}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{$item->height}}</td>
+                                        <td><a href="{{ route('item.edit.team',$item->id) }}">{{$item->width}}</td>
+                                        <td class="text-right p-0">
+                                            <a class="bg-primary list-btn"  href="{{ route('item.edit.team',$item->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn"  href="{{ route('item.delete.team',$item->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -111,7 +122,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                      {!! $items->links('pagination::bootstrap-4') !!}
+                      {!! $items->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

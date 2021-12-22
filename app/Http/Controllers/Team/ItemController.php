@@ -32,7 +32,15 @@ class ItemController extends Controller
 
     public function add()
     {
-        $categories = Category::orderBy('id','DESC')->paginate($this->count);
+        $category_select = [
+            'categories.category_name',
+            'categories.id',
+        ];
+        $categories = Category::select($category_select)
+            ->join('items', 'items.category_id','=','categories.id')->orderBy('id','DESC')
+            ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::id())->get())
+            ->groupBy('categories.category_name')
+            ->get();
         $brands     = Brand::orderBy('id','DESC')->paginate($this->count);
 
         $data = [

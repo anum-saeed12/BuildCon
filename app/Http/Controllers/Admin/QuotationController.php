@@ -194,50 +194,6 @@ class QuotationController extends Controller
         return view('admin.quotation.edit', $data);
     }
 
-    public function comparison($id)
-    {
-        $customers = Customer::orderBy('id','DESC')->get();
-        $brands    = Brand::orderBy('id','DESC')->get();
-        $items     = Item::select([
-            DB::raw("DISTINCT item_name,id"),
-        ])->orderBy('id','DESC')->get();
-
-        $select = [
-            "quotations.*",
-            # "quotation_item.*",
-            "customers.*"
-        ];
-        $quotation = Quotation::select($select)
-            ->join('customers','customers.id','=','quotations.customer_id')
-            #->join('quotation_item','quotation_item.quotation_id','=','quotations.id')
-            ->where('quotations.id', $id)
-            ->first();
-
-        # If quotation was not found
-        if (!$quotation) return redirect()->back()->with('error', 'Quotation not found');
-
-        $select = [
-            "quotation_item.*",
-            "items.item_name"
-        ];
-
-        $quotation->items = QuotationItem::select($select)
-            ->join('items', 'items.id', '=', 'quotation_item.item_id')
-            ->where('quotation_id', $id)
-            ->get();
-
-        $data = [
-            'title'     => 'Edit Quotation',
-            'base_url'  => env('APP_URL', 'http://omnibiz.local'),
-            'user'      => Auth::user(),
-            'quotation' => $quotation,
-            'brands'    => $brands,
-            'customers' => $customers,
-            'items'     => $items
-        ];
-
-        return view('admin.quotation.comparison', $data);
-    }
     public function update(Request $request,$id)
     {
         $quotation = Quotation::find($id);
@@ -312,83 +268,6 @@ class QuotationController extends Controller
 
         return redirect(
             route('customerquotation.list.admin')
-        )->with('success', 'Quotation was added successfully!');
-    }
-
-    public function compare(Request $request,$id)
-    {
-        $quotation = Quotation::find($id);
-
-        if(!$quotation)
-        {
-            return redirect(
-                route('customerquotation.list.admin')
-            )->with('error', 'Quotation doesn\'t exists!');
-        }
-
-        $request->validate([
-            'currency'       =>'required',
-            'customer_id'    => 'required',
-            'inquiry_id'     => 'sometimes|required',
-            'project_name'   => 'required',
-            'date'           => 'required',
-            'discount'       => 'sometimes',
-            'terms_condition'=> 'sometimes',
-            'item_id'        => 'required|array',
-            'item_id.*'      => 'required',
-            'brand_id'       => 'required|array',
-            'brand_id.*'     => 'required',
-            'quantity'       => 'required|array',
-            'quantity.*'     => 'required',
-            'unit'           => 'required|array',
-            'unit.*'         => 'required',
-            'rate'           => 'required|array',
-            'rate.*'         => 'required',
-            'amount'         => 'required|array',
-            'amount.*'       => 'required',
-            'total'          => 'required'
-        ],[
-            'customer_id.required'     => 'The customer field is required.',
-            'project_name.required'    => 'The project name field is required.',
-            'terms_condition.required' => 'The terms and condition field is required.'
-        ]);
-
-        $quotation->customer_id = $request->customer_id;
-        $quotation->project_name = $request->project_name;
-        $quotation->date = $request->date;
-        $quotation->currency = $request->currency;
-        $quotation->discount = $request->discount;
-        $quotation->terms_condition = $request->terms_condition;
-        $quotation->total = $request->total;
-        $quotation->save();
-
-        $quotation_item = QuotationItem::where('quotation_id',$quotation->id)->delete();
-
-        $items = $request->item_id;
-        $brands = $request->brand_id;
-        $quantities = $request->quantity;
-        $units = $request->unit;
-        $rates = $request->rate;
-        $amounts = $request->amount;
-
-        $save = [];
-
-        foreach($items as $index => $item) {
-            $item_detail = Item::where('item_name',$item)->where('brand_id', $brands[$index])->first();
-            $quotation_item = [
-                'quotation_id' => $quotation->id,
-                'item_id'  => $item_detail->id,
-                'brand_id' => $brands[$index],
-                'quantity' => $quantities[$index],
-                'unit'     => $units[$index],
-                'rate'     => $rates[$index],
-                'amount'   => $amounts[$index]
-            ];
-            $save[] = (new QuotationItem($quotation_item))->save();
-        }
-
-        return redirect(
-            route('quotation.comparison.admin')
         )->with('success', 'Quotation was added successfully!');
     }
 

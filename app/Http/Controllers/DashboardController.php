@@ -55,9 +55,13 @@ class  DashboardController extends Controller
     public function manager()
     {
         $user = Auth::user();
-        $total_items = User::select(DB::raw('COUNT(*) as total'))->first();
-        $total_inquiries = Inquiry::select(DB::raw('COUNT(*) as total'))->first();
-        $total_quotations = Quotation::select(DB::raw('COUNT(*) as total'))->first();
+        $total_items = Item::select(DB::raw('COUNT(*) as total'))->first();
+        $total_open = Inquiry::select(DB::raw('COUNT(inquiries.id) as total'))
+            ->leftJoin('quotations','quotations.inquiry_id','inquiries.id')
+            ->whereNull('quotations.id')
+            ->first();
+
+        $total_quotation= Quotation::select(DB::raw('COUNT(*) as total'))->first();
         $data = [
             'class' => [
                 'body' => ' sidebar-mini layout-fixed'
@@ -65,8 +69,8 @@ class  DashboardController extends Controller
             'title'         => 'Dashboard',
             'user'          => $user,
             'total_items'   => $total_items,
-            'total_quotations' => $total_quotations,
-            'total_inquiries' => $total_inquiries
+            'total_open'    => $total_open,
+            'total_quotation' => $total_quotation
         ];
         return view("manager.dashboard", $data);
     }
@@ -96,14 +100,22 @@ class  DashboardController extends Controller
     {
         $user = Auth::user();
         # Fetch User
-        $total_user = User::select(DB::raw('COUNT(*) as total'))->first();
+        $total_items = Item::select(DB::raw('COUNT(*) as total'))->first();
+        $total_open = Inquiry::select(DB::raw('COUNT(inquiries.id) as total'))
+            ->leftJoin('quotations','quotations.inquiry_id','inquiries.id')
+            ->whereNull('quotations.id')
+            ->first();
+
+        $total_quotation= Quotation::select(DB::raw('COUNT(*) as total'))->first();
         $data = [
             'class' => [
                 'body' => ' sidebar-mini layout-fixed'
             ],
             'title'         => 'Dashboard',
             'user'          => $user,
-            'total_user'    => $total_user,
+            'total_items'   => $total_items,
+            'total_open'    => $total_open,
+            'total_quotation' => $total_quotation
         ];
         return view("team.dashboard", $data);
     }

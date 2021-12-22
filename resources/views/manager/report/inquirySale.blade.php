@@ -10,7 +10,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard.manager') }}">Home</a></li>
-                        <li class="breadcrumb-item">Quotation</li>
+                        <li class="breadcrumb-item">Inquiry SalePerson</li>
                         <li class="breadcrumb-item active">{{$title}}</li>
                     </ol>
                 </div>
@@ -24,18 +24,20 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                    @include('manager.quotation.components.filters')
-                <div class="col-12">
-                    @if(session()->has('success'))
-                        <div class="callout callout-success" style="color:green">
-                            {{ session()->get('success') }}
-                        </div>
-                    @endif
-                    @if(session()->has('error'))
-                        <div class="callout callout-danger" style="color:red">
-                            {{ session()->get('error') }}
-                        </div>
-                    @endif
+                <div class="col-md-3">
+                    <form class="form-horizontal" action="{{ route('inquiry.salewise.manager') }}" method="GET" id="itemSelect">
+                        <label>Sale Person Name</label>
+                        <select name="sale_id" class="form-control mb-3" id="sale_id" onchange="$('#itemSelect').submit()">
+                            <option selected="selected" value>Select</option>
+                            @foreach ($salePeople as $user)
+                                <option value="{{ $user->id }}"{!! $user->id==request('sale_id')?' selected':'' !!}>{{ ucfirst($user->name) }}</option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div class="card">
                         <div class="row mb-3 mt-3 ml-3">
                             <div class="col-md-6">
@@ -49,6 +51,7 @@
                                         <option value="100"{{ request('count')=='100'?' selected':'' }}>100 rows</option>
                                     </select>
                                 </form>
+                                <div>Total Inquiries: <b>{{ $data->total() }}</b></div>
                             </div>
                             <div class="col-md-6 text-right pr-md-4">
                                 <div class="mr-2" style="display:inline-block;vertical-align:top;">
@@ -62,49 +65,48 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{ route('quotation.add.manager') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add New</a>
-
+                                @if(request('sale_id'))
+                                <a href="{{ route('salewise.reportPDF.manager',request('sale_id')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
+                                @endif
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-nowrap table-compact">
                                 <thead>
                                 <tr>
-                                    <th>Sr.No.</th>
-                                    <th class="pl-0">Customer Name</th>
-                                    <th class="pl-0">Project Name</th>
-                                    <th class="pl-0">Date</th>
-                                    <th class="pl-0">Amount</th>
-                                    <th class="pl-0">Terms & Condition</th>
+                                    <th>#</th>
+                                    <th class="pl-0">Inquiry Id</th>
+                                    <th class="pl-0">User</th>
+                                    <th class="pl-0">Customer</th>
+                                    <th class="pl-0">Project</th>
+                                    <th class="pl-0">Total Items</th>
+                                    <th class="pl-0">Start</th>
+                                    <th class="pl-0">Timeline</th>
+                                    <th class="pl-0">Created</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
-                                @forelse($quotations as $quotation)
-                                    <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('quotation.view.manager',$quotation->id) }}">
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ $quotation->date }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ $quotation->total }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
-                                        <td class="text-right p-0">
-                                            <a class="bg-success list-btn"  href="{{ route('quotation.comparison.manager',$quotation->id) }}" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
-                                            <a class="bg-primary list-btn" href="{{ route('quotation.edit.manager',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('quotation.delete.manager',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
-                                        </td>
+                                @forelse($data as $item)
+                                    <tr style="cursor:pointer" class="no-select" data-toggle="modal">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ substr($item->inquiry,0,7) }}</td>
+                                  {{--      <td>{{ $item->inquiry }}</td>--}}
+                                        <td>{{ ucfirst($item->username) }} ({{ $item->user_role }})</td>
+                                        <td>{{ ucfirst($item->customer_name) }}</td>
+                                        <td>{{ ucfirst($item->project_name) }}</td>
+                                        <td><b>{{ $item->total_items }}</b> items</td>
+                                        <td>{{ \Carbon\Carbon::createFromDate($item->date)->format('d M Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromDate($item->timeline)->format('d M Y') }}</td>
+                                        <td>{{ $item->created_at->format('d M Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-3 text-center">No quotations found</td>
+                                        <td colspan="99" class="py-3 text-center">No quotes found</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div class="d-flex flex-row-reverse">
-                      {!! $quotations->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

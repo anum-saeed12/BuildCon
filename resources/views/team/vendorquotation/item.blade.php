@@ -82,7 +82,7 @@
                                             <th>Category</th>
                                             <th>Quantity</th>
                                             <th>Unit</th>
-                                            <th>Unit Price</th>
+                                            <th>Unit Price ({{ ucwords($quotation[0]->currency) }})</th>
                                             <th>Total</th>
                                         </tr>
                                         </thead>
@@ -93,10 +93,10 @@
                                             <td>{{ ucwords($item['item_name']) }}</td>
                                             <td>{{ ucwords($item['item_description']) }}</td>
                                             <td>{{ ucwords($item['category_name']) }}</td>
-                                            <td>{{ ucwords($item['quantity']) }}</td>
+                                            <td>{{ $item['quantity'] }}</td>
                                             <td>{{ ucwords($item['unit']) }}</td>
-                                            <td>{{ ucwords($item['rate']) }}</td>
-                                            <td>{{ ucwords($item['amount']) }}</td>
+                                            <td>{{ $item['rate'] }}</td>
+                                            <td>{{ $item['amount'] }}</td>
                                         </tr>
                                         @endforeach
                                         </tbody>
@@ -111,7 +111,7 @@
                                         <table class="table">
                                            <tr>
                                                 <th style="width:50%">Total Amount:</th>
-                                                <td>{{ $item['totals'] }}</td>
+                                                <td>{{ $item['totals'] }} ({{ ucwords($quotation[0]->currency) }})</td>
                                             </tr>
                                         </table>
                                     </div>

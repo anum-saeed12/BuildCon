@@ -75,8 +75,8 @@
                                         <thead>
                                         <tr>
                                             <th>Sr.no</th>
+                                            <th>Item Name</th>
                                             <th>Item Description</th>
-                                            <th>Item Item</th>
                                             <th>Brand</th>
                                             <th>Quantity</th>
                                             <th>Unit</th>

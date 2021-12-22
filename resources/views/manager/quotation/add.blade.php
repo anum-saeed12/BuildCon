@@ -50,7 +50,7 @@
                                 <div class="col-md-3">
                                     <label for="date">Date</label><br/>
                                     <input type="date" name="date" class="form-control" id="date"
-                                           value="{{ old('date') }}">
+                                           value="{{ old('date') ?? date('Y-m-d') }}">
                                     <div class="text-danger">@error('date'){{ $message }}@enderror</div>
                                 </div>
                                 <div class="col-md-2 ">
@@ -72,12 +72,17 @@
                                 </div>
                                 <div class="col-md-3 item-container">
                                     <label for="brand_id">Select Brand</label><br/>
-                                    <select name="brand_id[]" class="form-control" id="brand_id">
+                                    <select name="brand_id[]" class="form-control" id="brand_id"
+                                            data-unit="#unit" data-rate="#rate" data-item="#item_id"
+                                            data-href="{{ route('item.fetch.ajax.manager') }}"
+                                            data-spinner="#brand_spinner"
+                                            onchange="fetchPrice($(this))">
                                         <option selected="selected" value>Select</option>
                                         @foreach ($brands as $brand)
                                             <option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>
                                         @endforeach
                                     </select>
+                                    <div id="brand_spinner"></div>
                                 </div>
                                 <div class="col-md-1 quantity-container">
                                     <label for="quantity">Quantity</label><br/>
@@ -197,12 +202,19 @@
                     '</div>' +
                 '<div class="col-md-3 brand-container">' +
                     `<label for="brand_id_${$uid}">Select Brand</label><br/>` +
-                    `<select name="brand_id[]" class="form-control" id="brand_id_${$uid}">` +
+                    `<select name="brand_id[]" class="form-control" id="brand_id_${$uid}"
+                        data-unit="#unit_${$uid}" data-rate="#rate_${$uid}"
+                        data-quantity="#quantity_${$uid}" data-amount="#total_amount_${$uid}"
+                        data-item="#item_id_${$uid}"
+                        data-href="{{ route('item.fetch.ajax.manager') }}"
+                        data-spinner="#brand_spinner_${$uid}"
+                        onchange="fetchPrice($(this))">` +
                         '<option selected="selected" value>Select</option>' +
                         @foreach ($brands as $brand)
                             '<option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>' +
                         @endforeach
                     '</select>' +
+                    `<span id="brand_spinner_${$uid}"></span>` +
                 '</div>' +
                 '<div class="col-md-1 quantity-container">' +
                     `<label for="quantity_${$uid}">Quantity</label><br/>` +
@@ -232,6 +244,7 @@
             $(wrapper).on("click", ".delete", function(e) {
                 e.preventDefault()
                 $(this).parent().parent().remove();
+                calculateTotal();
                 x--;
             })
             $('.with_out').keyup(function() {
@@ -274,6 +287,20 @@
             $(target).val(0);
             sumOfTotal.val(0);
             //$('#total').val(sum_of_sub_total);
+        }
+        function applyDiscount() {
+            let sub_total = $('.total'), discount = parseFloat($('#discount').val()) || 0, $total = 0;
+            for(i=0;i<sub_total.length;i++) {
+                $total += parseFloat($(`.total:eq(${i})`).val());
+            }
+            $total = $total - discount;
+            $('#total').val($total);
+        }
+        $('#discount').on('keyup keydown keypress change blur focus', function(){
+            applyDiscount();
+        });
+        function fetchItemInfo(ele) {
+
         }
     </script>
 @stop

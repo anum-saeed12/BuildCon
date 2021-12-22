@@ -91,7 +91,12 @@
                                         <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ ucfirst($inquiry->date) }}</td>
                                         <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ ucfirst($inquiry->timeline) }}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-warning list-btn"  href="{{ route('quotation.generate.admin',$inquiry->ids) }}" title="Download Files"><i class="fas fa-download" aria-hidden="false"></i></a>
+                                            <a class="bg-warning list-btn" href="{{ route('inquiry.documents.admin', $inquiry->id) }}"
+                                               data-doc="Documents for {{ ucfirst($inquiry->customer_name) }} - {{ ucfirst($inquiry->project_name) }}"
+                                               onclick="$('#downloadableFilesTitle').html($(this).data('doc'));$('#downloadableFilesHolder').html('Loading wait please...');$('#downloadableFilesHolder').load($(this).attr('href'));"
+                                               title="Download Files" data-toggle="modal" data-target="#downloadable-files">
+                                                <i class="fas fa-download" aria-hidden="false"></i>
+                                            </a>
                                             @if($inquiry->inquiry_status=='open')<a class="bg-success list-btn"  href="{{ route('quotation.generate.admin',$inquiry->ids) }}" title="Generate Quotation"><i class="fas fa-file" aria-hidden="false"></i></a>@endif
                                             <a class="bg-primary list-btn"  href="{{ route('inquiry.edit.admin',$inquiry->ids) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
                                             <a class="bg-danger list-btn"  href="{{ route('inquiry.delete.admin',$inquiry->ids) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>

@@ -49,7 +49,20 @@ class VendorQuotationController extends Controller
     public function add()
     {
         $vendors = Vendor::orderBy('id','DESC')->get();
-        $categories = Category::orderBy('id','DESC')->get();
+        /*$categories = Category::
+            join('items', 'items.')
+            orderBy('id','DESC')
+            ->whereIn('items.category_id', UserCategory::select('category_id as id')->get())
+                ->get();*/
+        $category_select = [
+            'categories.category_name',
+            'categories.id',
+        ];
+        $categories = Category::select($category_select)
+            ->join('items', 'items.category_id','=','categories.id')->orderBy('id','DESC')
+            ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::id())->get())
+            ->groupBy('categories.category_name')
+            ->get();
         $items = Item::orderBy('id','DESC') ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())->get();
         $brands = Brand::orderBy('id','DESC')->get();
         $data = [
@@ -71,6 +84,8 @@ class VendorQuotationController extends Controller
             'quotation_ref'      => 'required',
             'quotation_pdf'      => 'required|file',
             'project_name'       => 'required',
+            'date'               => 'required',
+            'currency'           => 'required',
             'total'              => 'required',
             'category_id'        => 'required|array',
             'category_id.*'      => 'required',
@@ -152,7 +167,15 @@ class VendorQuotationController extends Controller
     {
         $vendors = Vendor::orderBy('id','DESC')->get();
         $brands    = Brand::orderBy('id','DESC')->get();
-        $categories  = Category::orderBy('id','DESC')->get();
+        $category_select = [
+            'categories.category_name',
+            'categories.id',
+        ];
+        $categories = Category::select($category_select)
+            ->join('items', 'items.category_id','=','categories.id')->orderBy('id','DESC')
+            ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::id())->get())
+            ->groupBy('categories.category_name')
+            ->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name,id"),
         ]) ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())->orderBy('id','DESC')->get();
@@ -208,7 +231,7 @@ class VendorQuotationController extends Controller
         if(!$vendor_quotation)
         {
             return redirect(
-                route('vendorquotation.list.team')
+                route('vendorquotation.list.admin')
             )->with('error', 'Vendor Quotation doesn\'t exists!');
         }
 
@@ -216,6 +239,8 @@ class VendorQuotationController extends Controller
             'vendor_id'          => 'required',
             'quotation_ref'      => 'required',
             'project_name'       => 'required',
+            'date'               => 'required',
+            'currency'           => 'required',
             'total'              => 'required',
             'category_id'        => 'required|array',
             'category_id.*'      => 'required',
@@ -278,16 +303,24 @@ class VendorQuotationController extends Controller
     public function view($id)
     {
         $select=[
-            'vendor_quotation.*',
+            'vendor_quotation.vendor_quotation',
+            'vendor_quotation.project_name',
+            'vendor_quotation.quotation_ref',
             'vendor_quotation.created_at as creationdate',
             'vendor_quotation.id as unique',
             'vendor_quotation.total as totals',
-            'items.*',
-            'vendors.*',
-            'categories.*',
-            'brands.*',
-            'users.*',
-            'vendor_quotation_item.*',
+            'vendor_quotation.currency',
+            'items.item_name',
+            'items.item_description',
+            'vendors.vendor_name',
+            'vendors.attended_person',
+            'categories.category_name',
+            'brands.brand_name',
+            'vendor_quotation_item.unit',
+            'vendor_quotation_item.quantity',
+            'vendor_quotation_item.amount',
+            'vendor_quotation.total',
+            'vendor_quotation_item.rate',
         ];
         $vendors_quotation = VendorQuotation::select($select)
             ->where('vendor_quotation.id',$id)
@@ -297,7 +330,6 @@ class VendorQuotationController extends Controller
             ->leftJoin('users', 'users.id', '=', 'vendor_quotation.user_id')
             ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
             ->leftJoin('categories', 'categories.id', '=', 'vendor_quotation_item.category_id')
-            ->whereIn('vendor_quotation_item.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
             ->get();
         $data = [
             'title'            => 'Vendor Quotation',
@@ -311,16 +343,24 @@ class VendorQuotationController extends Controller
     {
 
         $select=[
-            'vendor_quotation.*',
+            'vendor_quotation.vendor_quotation',
+            'vendor_quotation.project_name',
+            'vendor_quotation.currency',
+            'vendor_quotation.quotation_ref',
             'vendor_quotation.created_at as creationdate',
             'vendor_quotation.id as unique',
             'vendor_quotation.total as totals',
-            'items.*',
-            'vendors.*',
-            'categories.*',
-            'brands.*',
-            'users.*',
-            'vendor_quotation_item.*',
+            'items.item_name',
+            'items.item_description',
+            'vendors.vendor_name',
+            'vendors.attended_person',
+            'categories.category_name',
+            'brands.brand_name',
+            'vendor_quotation_item.unit',
+            'vendor_quotation_item.quantity',
+            'vendor_quotation_item.amount',
+            'vendor_quotation.total',
+            'vendor_quotation_item.rate',
         ];
         $vendors_quotation = VendorQuotation::select($select)
             ->where('vendor_quotation.id',$id)
@@ -330,7 +370,6 @@ class VendorQuotationController extends Controller
             ->leftJoin('users', 'users.id', '=', 'vendor_quotation.user_id')
             ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
             ->leftJoin('categories', 'categories.id', '=', 'vendor_quotation_item.category_id')
-            ->whereIn('vendor_quotation_item.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
             ->get();
 
         $vendors_quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($vendors_quotation[0]->creationdate))->format('d-M-Y');
