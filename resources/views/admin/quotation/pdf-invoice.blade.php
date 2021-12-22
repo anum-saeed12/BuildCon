@@ -26,7 +26,7 @@
 <table width="100%">
     <tr>
         <td colspan="2">
-            <p><b>Ref: </b>{{ strtoupper(substr($quotation->inquiry,0,4)) }}-{{ strtoupper(substr($quotation->inquiry,4,4)) }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('dm') }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('Y') }}</p>
+            <p><b>Ref: </b>{{ strtoupper(substr($quotation->quotation,0,4)) }}-{{ strtoupper(substr($quotation->quotation,4,4)) }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('dm') }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('Y') }}</p>
             <p><b>Attention: </b>{{ ucwords($quotation->attention_person) }}</p>
             <p><b>Customer Name: </b>{{ ucwords($quotation->customer_name) }}</p>
             <p><b>Project Name: </b>{{ ucwords($quotation->project_name) }}</p>
@@ -44,6 +44,7 @@
             <th>Quantity</th>
             <th>Unit</th>
             <th>Unit Price ({{ ucwords($quotation->currency) }})</th>
+            <th>Dis.Price ({{ ucwords($quotation->currency) }})</th>
             <th>Total</th>
         </tr>
     </thead>
@@ -72,9 +73,14 @@
                 <td>{{ ucwords($item->quantity) }}</td>
                 <td>{{ ucwords($item->unit) }}</td>
                 <td>{{ ucwords($item->rate) }}</td>
+                <td>{{ ucwords($item->discount_rate) }}</td>
                 <td>{{ ucwords($item->amount) }}</td>
             </tr>
         @endforeach
+        <tr style="">
+            <th colspan="5" style="text-align:right;">Discount:</th>
+            <td colspan="2" style="text-align:right;">{{ $quotation->discount }}%</td>
+        </tr>
         <tr style="">
             <th colspan="5" style="text-align:right;">Total:</th>
             <td colspan="2" style="text-align:right;"><b>{{ $quotation->currency }} {{number_format($quotation->total )}}</b></td>

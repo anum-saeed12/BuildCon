@@ -42,7 +42,7 @@ class InquiryController extends Controller
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
             ->leftJoin('users', 'users.id' ,'=', 'inquiries.user_id')
             ->leftJoin('quotations', 'quotations.inquiry_id' ,'=', 'inquiries.id')
-            ->groupBy('inquiries.id','inquiry_order.inquiry_id')
+            ->groupBy('inquiries.id')
             ->paginate($this->count);
 
 
@@ -58,7 +58,7 @@ class InquiryController extends Controller
     {
         $select = [
             'customers.customer_name',
-            'inquiries.id ',
+            'inquiries.id',
             'inquiries.project_name',
             'inquiries.date',
             'inquiries.timeline',
@@ -83,7 +83,7 @@ class InquiryController extends Controller
             ->leftJoin('items', 'items.id' ,'=', 'inquiry_order.item_id')
             ->leftJoin('quotations', 'quotations.inquiry_id' ,'=', 'inquiries.id')
             ->whereNull('quotations.id')
-            ->groupBy('inquiries.id','inquiry_order.inquiry_id');
+            ->groupBy('inquiries.id');
 
         # Applying filters
         # 1. Applying sales person filter

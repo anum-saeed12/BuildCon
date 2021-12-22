@@ -104,13 +104,13 @@
                                            onkeydown="calculate($(this))" onkeypress="calculate($(this))"
                                            onkeyup="calculate($(this))" onchange="calculate($(this))">
                                 </div>
-                                <div class="col-md-1 rate-container">
+                                <div class="col-md-1 discount_rate-container">
                                     <label for="discount_rate"><span id="dc_txt">0</span>% Off</label><br/>
                                     <input type="text" name="discount_rate[]" class="form-control with_out discounted_rate" id="discount_rate" data-id="none" data-target="#total_amount" data-into="#quantity" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))" readonly>
                                 </div>
                                 <div class="col-md-2 amount-container">
                                     <label for="amount">Sub-Total</label><br/>
-                                    <input type="text" name="amount[]" class="form-control total n" id="amount">
+                                    <input type="text" name="amount[]" class="form-control total n" id="total_amount">
                                 </div>
                                 <div class="col-md-1">
                                     <label for="unit">&nbsp;</label><br/>
@@ -276,15 +276,6 @@
                 calculateTotal();
                 x--;
             })
-            $('.with_out').keyup(function() {
-                var txtFirstNumberValue = document.getElementById('quantity').value;
-                var txtSecondNumberValue = document.getElementById('rate').value;
-                var result = parseInt(txtFirstNumberValue) * parseInt(txtSecondNumberValue);
-                if (!isNaN(result)) {
-                    document.getElementById('amount').value = result;
-                }
-            })
-
             function sumIt() {
                 var total = 0, val;
                 $('.common').each(function() {
@@ -319,6 +310,7 @@
                     sum_of_sub_total += parseFloat(sub_total[i].value);
                 }
                 sumOfTotal.val(sum_of_sub_total);
+                applyDiscount();
                 return false;
             }
             $(target).val(0);
@@ -328,14 +320,16 @@
         }
         function applyDiscount() {
             let sub_total = $('.total'),
-                discount = parseFloat($('#discount').val()), discountPercentage=discount, $total = 0;
+                discount = parseFloat($('#discount').val()),
+                discountPercentage=discount, $total = 0;
             discount = discount>0?(100-discount)/100:1;
             discountPercentage = discountPercentage>0?discountPercentage:0;
             $('.discounted_rate').each(function(){
                 let id = $(this).data('id'),
                     rate = id!=='none'?parseFloat($('#rate_' + id).val()):parseFloat($('#rate').val()),
                     discount_price_input = $(this), discounted_price, item_total, discounted_total,
-                    textStr=id!=='none'?$('#dc_txt_' + id):$('#dc_txt'),
+                    discount_text=id!=='none'?$('#dc_txt_' + id):$('#dc_txt'),
+                    sub_total=id!=='none'?$('#total_amount_' + id):$('#total_amount')
                     quantity = id!=='none'?parseFloat($('#quantity_' + id).val()):parseFloat($('#quantity').val());
 
                 // Validate values
@@ -345,7 +339,8 @@
                 discounted_price = rate * discount;
                 discounted_total = item_total * discount;
                 discount_price_input.val(discounted_price);
-                textStr.html(discountPercentage);
+                sub_total.val(discounted_total);
+                discount_text.html(discountPercentage);
                 $total += discounted_total;
             })
             /*for(i=0;i<sub_total.length;i++) {

@@ -82,14 +82,14 @@
                                 <tbody id="myTable">
                                 @forelse($inquires as $inquiry)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('inquiry.view.admin',$inquiry->ids) }}">
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ ucfirst($inquiry->customer_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ ucfirst($inquiry->project_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ ucfirst($inquiry->item_description) }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ $inquiry->name }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ ucfirst($inquiry->date) }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->ids) }}">{{ ucfirst($inquiry->timeline) }}</td>
+                                        data-href="{{ route('inquiry.view.admin',$inquiry->id) }}">
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ $loop->iteration }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->item_description) }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ $inquiry->name }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->date) }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->timeline) }}</td>
                                         <td class="text-right p-0">
                                             <a class="bg-warning list-btn" href="{{ route('inquiry.documents.admin', $inquiry->id) }}"
                                                data-doc="Documents for {{ ucfirst($inquiry->customer_name) }} - {{ ucfirst($inquiry->project_name) }}"
@@ -97,9 +97,9 @@
                                                title="Download Files" data-toggle="modal" data-target="#downloadable-files">
                                                 <i class="fas fa-download" aria-hidden="false"></i>
                                             </a>
-                                            @if($inquiry->inquiry_status=='open')<a class="bg-success list-btn"  href="{{ route('quotation.generate.admin',$inquiry->ids) }}" title="Generate Quotation"><i class="fas fa-file" aria-hidden="false"></i></a>@endif
-                                            <a class="bg-primary list-btn"  href="{{ route('inquiry.edit.admin',$inquiry->ids) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('inquiry.delete.admin',$inquiry->ids) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            @if($inquiry->inquiry_status=='open')<a class="bg-success list-btn"  href="{{ route('quotation.generate.admin',$inquiry->id) }}" title="Generate Quotation"><i class="fas fa-file" aria-hidden="false"></i></a>@endif
+                                            <a class="bg-primary list-btn"  href="{{ route('inquiry.edit.admin',$inquiry->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn"  href="{{ route('inquiry.delete.admin',$inquiry->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                     @empty
@@ -114,15 +114,33 @@
                     <div class="d-flex flex-row-reverse">
                         {!! $inquires->links('pagination::bootstrap-4') !!}
                     </div>
+                    <div class="modal" id="downloadable-files" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-title" id="downloadableFilesTitle"></div>
+                            <div class="modal-content p-3" id="downloadableFilesHolder">
+                                Something here
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 @stop
 
+
 @section('extras')
     <script>
         $(document).ready(function(){
+            $('#downloadable-files').on('show.bs.modal show', function (event) {
+                alert(10)
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var title = button.data('title')
+                var modal = $(this)
+                alert(10)
+                modal.find('.modal-title').text(title)
+                $('#downloadableFilesHolder').load(button.attr('href'))
+            })
             $("#myInput").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#myTable tr").filter(function() {

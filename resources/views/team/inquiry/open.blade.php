@@ -73,18 +73,20 @@
                                     <th>Sr.No.</th>
                                     <th class="pl-0">Client</th>
                                     <th class="pl-0">Project</th>
+                                    <th class="pl-0">Items Description</th>
                                     <th class="pl-0">Sales Person</th>
                                     <th class="pl-0">Date</th>
                                     <th class="pl-0">Submission Timeline</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
-                                @forelse($inquiries as $inquiry)
+                                @forelse($inquires as $inquiry)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('inquiry.view.team',$inquiry->id) }}">
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ $loop->iteration }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->item_description) }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ $inquiry->name }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->date) }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->timeline) }}</td>
@@ -100,17 +102,25 @@
                                             <a class="bg-danger list-btn"  href="{{ route('inquiry.delete.team',$inquiry->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="7" class="py-3 text-center">No open inquiries found</td>
-                                        </tr>
-                                    @endforelse
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="py-3 text-center">No open inquiries found</td>
+                                    </tr>
+                                @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                        {!! $inquiries->links('pagination::bootstrap-4') !!}
+                        {!! $inquires->links('pagination::bootstrap-4') !!}
+                    </div>
+                    <div class="modal" id="downloadable-files" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-title" id="downloadableFilesTitle"></div>
+                            <div class="modal-content p-3" id="downloadableFilesHolder">
+                                Something here
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,6 +131,15 @@
 @section('extras')
     <script>
         $(document).ready(function(){
+            $('#downloadable-files').on('show.bs.modal show', function (event) {
+                alert(10)
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var title = button.data('title')
+                var modal = $(this)
+                alert(10)
+                modal.find('.modal-title').text(title)
+                $('#downloadableFilesHolder').load(button.attr('href'))
+            })
             $("#myInput").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#myTable tr").filter(function() {

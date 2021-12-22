@@ -76,7 +76,7 @@ class QuotationController extends Controller
         $brands    = Brand::orderBy('id','DESC')->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name"),
-        ])->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())->orderBy('id','DESC')->get();
+        ])->orderBy('id','DESC')->get();
 
         $data = [
             'title'    => 'Submit Quotation',
@@ -92,7 +92,7 @@ class QuotationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'currency'       =>'required',
+            'currency'       => 'required',
             'customer_id'    => 'required',
             'inquiry_id'     => 'sometimes|required',
             'project_name'   => 'required',
@@ -109,6 +109,8 @@ class QuotationController extends Controller
             'unit.*'         => 'required',
             'rate'           => 'required|array',
             'rate.*'         => 'required',
+            'discount_rate'  => 'required|array',
+            'discount_rate.*'=> 'required',
             'amount'         => 'required|array',
             'amount.*'       => 'required',
             'total'          => 'required'
@@ -123,6 +125,7 @@ class QuotationController extends Controller
         $quantities = $request->quantity;
         $units = $request->unit;
         $rates = $request->rate;
+        $discount_rates = $request->discount_rate;
         $amounts = $request->amount;
 
         $data = $request->all();
@@ -144,6 +147,7 @@ class QuotationController extends Controller
                 'quantity' => $quantities[$index],
                 'unit'     => $units[$index],
                 'rate'     => $rates[$index],
+                'discount_rate'=> $discount_rates[$index],
                 'amount'   => $amounts[$index]
             ];
             $save[] = (new QuotationItem($quotation_item))->save();
@@ -157,7 +161,6 @@ class QuotationController extends Controller
     public function edit($id)
     {
         $customers = Customer::orderBy('id','DESC')->get();
-        $brands    = Brand::orderBy('id','DESC')->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name,id"),
         ])->orderBy('id','DESC')->get();
@@ -183,7 +186,6 @@ class QuotationController extends Controller
 
         $quotation->items = QuotationItem::select($select)
             ->join('items', 'items.id', '=', 'quotation_item.item_id')
-            ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
             ->where('quotation_id', $id)
             ->get();
 
@@ -192,7 +194,6 @@ class QuotationController extends Controller
             'base_url'  => env('APP_URL', 'http://omnibiz.local'),
             'user'      => Auth::user(),
             'quotation' => $quotation,
-            'brands'    => $brands,
             'customers' => $customers,
             'items'     => $items
         ];
@@ -229,6 +230,8 @@ class QuotationController extends Controller
             'unit.*'         => 'required',
             'rate'           => 'required|array',
             'rate.*'         => 'required',
+            'discount_rate'  => 'required|array',
+            'discount_rate.*'=> 'required',
             'amount'         => 'required|array',
             'amount.*'       => 'required',
             'total'          => 'required'
@@ -254,6 +257,7 @@ class QuotationController extends Controller
         $quantities = $request->quantity;
         $units = $request->unit;
         $rates = $request->rate;
+        $discount_rates = $request->discount_rate;
         $amounts = $request->amount;
 
         $save = [];
@@ -267,6 +271,7 @@ class QuotationController extends Controller
                 'quantity' => $quantities[$index],
                 'unit'     => $units[$index],
                 'rate'     => $rates[$index],
+                'discount_rate'=> $discount_rates[$index],
                 'amount'   => $amounts[$index]
             ];
             $save[] = (new QuotationItem($quotation_item))->save();
@@ -289,15 +294,23 @@ class QuotationController extends Controller
     public function view ($id)
     {
         $select=[
-            'quotations.*',
+            'quotations.quotation',
+            'quotations.project_name',
+            'quotations.total',
+            'quotations.currency',
+            'quotations.discount',
             'quotations.created_at as creationdate',
-            'quotations.date as dated',
-            'quotations.terms_condition as condition',
             'quotations.id as unique',
-            'items.*',
-            'brands.*',
-            'customers.*',
-            'quotation_item.*',
+            'items.item_name',
+            'items.item_description',
+            'brands.brand_name',
+            'customers.customer_name',
+            'customers.attention_person',
+            'quotation_item.quantity',
+            'quotation_item.rate',
+            'quotation_item.unit',
+            'quotation_item.discount_rate',
+            'quotation_item.amount'
         ];
         $quotation = Quotation::select($select)
             ->where('quotations.id',$id)
@@ -305,9 +318,7 @@ class QuotationController extends Controller
             ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
             ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
-            ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
             ->get();
-
         $data = [
             'title'      => 'Quotations',
             'base_url'   => env('APP_URL', 'http://omnibiz.local'),
@@ -326,8 +337,6 @@ class QuotationController extends Controller
         ])->orderBy('id','DESC')->get();
 
         $inquiry = Inquiry::select('*')
-            ->join('customers','customers.id','=','inquiries.customer_id')
-            ->join('inquiry_order','inquiry_order.inquiry_id','=','inquiries.id')
             ->where('inquiries.id', $inquiry_id)
             ->first();
 
@@ -341,7 +350,6 @@ class QuotationController extends Controller
 
         $inquiry->items = InquiryOrder::select()
             ->join('items', 'items.id', '=', 'inquiry_order.item_id')
-            ->whereIn('inquiry_order.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
             ->where('inquiry_id', $inquiry_id)
             ->get();
 
@@ -361,23 +369,54 @@ class QuotationController extends Controller
     public function pdfinquiry($id)
     {
         $select=[
-            'quotations.*',
-            'quotations.created_at as creationdate',
-            'quotations.id as unique',
-            'items.*',
-            'brands.*',
-            'customers.*',
-            'quotation_item.*',
+            'items.item_name',
+            'items.item_description',
+            'items.category_id',
+            'brands.brand_name',
+            'quotation_item.quantity',
+            'quotation_item.amount',
+            'quotation_item.unit',
+            'quotation_item.rate',
+            'quotation_item.discount_rate',
+            'categories.category_name',
         ];
-        $quotation = Quotation::select($select)
-            ->where('quotations.id',$id)
+
+        /*$quotation = Quotation::select($select)
             ->leftJoin('quotation_item', 'quotation_item.quotation_id', '=', 'quotations.id')
             ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
+            ->leftJoin('categories', 'category.id', '=', 'items.category_id')
             ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
-            ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
+            ->orderBy('items.category_id','ASC')
+            ->where('quotations.id',$id)
+            ->groupBy('items.id')
+            ->get();*/
+        $quotation_select = [
+            'quotations.quotation',
+            'quotations.id',
+            'quotations.project_name',
+            'quotations.total',
+            'quotations.currency',
+            'quotations.discount',
+            'customers.customer_name',
+            'customers.attention_person',
+        ];
+        $quotation = Quotation::select($quotation_select)
+            ->join('customers', 'customers.id','=','quotations.customer_id')
+            ->where('quotations.id', $id)
+            ->first();
+
+        if (!isset($quotation->id)) return redirect()->back()->with('error', 'Quotation not found');
+
+        $quotation->items = QuotationItem::select($select)
+            ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
+            ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
+            ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
+            ->orderBy('items.category_id','ASC')
+            ->where('quotation_item.quotation_id',$quotation->id)
+            ->groupBy('items.id')
             ->get();
-        $quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation[0]->creationdate))->format('d-M-Y');
+        $quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('d-M-Y');
 
         $data = [
             'title'      => 'Quotation Pdf',

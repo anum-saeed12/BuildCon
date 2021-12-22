@@ -89,7 +89,7 @@ class QuotationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'currency'       =>'required',
+            'currency'       => 'required',
             'customer_id'    => 'required',
             'inquiry_id'     => 'sometimes|required',
             'project_name'   => 'required',
@@ -106,6 +106,8 @@ class QuotationController extends Controller
             'unit.*'         => 'required',
             'rate'           => 'required|array',
             'rate.*'         => 'required',
+            'discount_rate'  => 'required|array',
+            'discount_rate.*'=> 'required',
             'amount'         => 'required|array',
             'amount.*'       => 'required',
             'total'          => 'required'
@@ -120,6 +122,7 @@ class QuotationController extends Controller
         $quantities = $request->quantity;
         $units = $request->unit;
         $rates = $request->rate;
+        $discount_rates = $request->discount_rate;
         $amounts = $request->amount;
 
         $data = $request->all();
@@ -141,6 +144,7 @@ class QuotationController extends Controller
                 'quantity' => $quantities[$index],
                 'unit'     => $units[$index],
                 'rate'     => $rates[$index],
+                'discount_rate'=> $discount_rates[$index],
                 'amount'   => $amounts[$index]
             ];
             $save[] = (new QuotationItem($quotation_item))->save();
@@ -223,6 +227,8 @@ class QuotationController extends Controller
             'unit.*'         => 'required',
             'rate'           => 'required|array',
             'rate.*'         => 'required',
+            'discount_rate'  => 'required|array',
+            'discount_rate.*'=> 'required',
             'amount'         => 'required|array',
             'amount.*'       => 'required',
             'total'          => 'required'
@@ -248,6 +254,7 @@ class QuotationController extends Controller
         $quantities = $request->quantity;
         $units = $request->unit;
         $rates = $request->rate;
+        $discount_rates = $request->discount_rate;
         $amounts = $request->amount;
 
         $save = [];
@@ -261,6 +268,7 @@ class QuotationController extends Controller
                 'quantity' => $quantities[$index],
                 'unit'     => $units[$index],
                 'rate'     => $rates[$index],
+                'discount_rate'=> $discount_rates[$index],
                 'amount'   => $amounts[$index]
             ];
             $save[] = (new QuotationItem($quotation_item))->save();
@@ -283,13 +291,23 @@ class QuotationController extends Controller
     public function view ($id)
     {
         $select=[
-            'quotations.*',
+            'quotations.quotation',
+            'quotations.project_name',
+            'quotations.total',
+            'quotations.currency',
+            'quotations.discount',
             'quotations.created_at as creationdate',
             'quotations.id as unique',
-            'items.*',
-            'brands.*',
-            'customers.*',
-            'quotation_item.*',
+            'items.item_name',
+            'items.item_description',
+            'brands.brand_name',
+            'customers.customer_name',
+            'customers.attention_person',
+            'quotation_item.quantity',
+            'quotation_item.rate',
+            'quotation_item.unit',
+            'quotation_item.discount_rate',
+            'quotation_item.amount'
         ];
         $quotation = Quotation::select($select)
             ->where('quotations.id',$id)
@@ -356,6 +374,7 @@ class QuotationController extends Controller
             'quotation_item.amount',
             'quotation_item.unit',
             'quotation_item.rate',
+            'quotation_item.discount_rate',
             'categories.category_name',
         ];
 
@@ -370,7 +389,12 @@ class QuotationController extends Controller
             ->groupBy('items.id')
             ->get();*/
         $quotation_select = [
-            'quotations.*',
+            'quotations.quotation',
+            'quotations.id',
+            'quotations.project_name',
+            'quotations.total',
+            'quotations.currency',
+            'quotations.discount',
             'customers.customer_name',
             'customers.attention_person',
         ];

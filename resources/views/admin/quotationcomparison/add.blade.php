@@ -55,10 +55,11 @@
                                                     <div class="col">Category</div>
                                                 </div>
                                             </div>
-                                            <div class="col-2 pb-2 pt-2">Quantity</div>
-                                            <div class="col-2 pb-2 pt-2">Unit</div>
-                                            <div class="col-2 pb-2 pt-2">Rate</div>
-                                            <div class="col-2 pb-2 pt-2">Sub-Total</div>
+                                            <div class="col pb-2 pt-2">Quantity</div>
+                                            <div class="col pb-2 pt-2">Unit</div>
+                                            <div class="col pb-2 pt-2">Rate</div>
+                                            <div class="col pb-2 pt-2">Dis.Rate</div>
+                                            <div class="col pb-2 pt-2">Sub-Total</div>
                                         </div>
                                     </div>
                                     <div class="col-4 pb-2 pt-2 text-center text-bold bg-cyan">
@@ -79,16 +80,19 @@
                                                         <div class="col">{{ ucfirst($quotation_item->brand_name) }}</div>
                                                     </div>
                                                 </div>
-                                                <div class="col-2 quantity-container">
+                                                <div class="col quantity-container">
                                                     <input type="text" name="quantity[]" value="{{ $quotation_item->quantity }}" class="form-control form-control-sm common quantity" id="quantity_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#rate_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
                                                 </div>
-                                                <div class="col-2 unit-container">
+                                                <div class="col unit-container">
                                                     <input type="text" name="unit[]" value="{{ $quotation_item->unit }}" readonly disabled class="form-control form-control-sm" id="unit_{{ $loop->iteration }}" >
                                                 </div>
-                                                <div class="col-2 rate-container">
+                                                <div class="col rate-container">
                                                     <input type="text" name="rate[]" value="{{ $quotation_item->rate }}" class="form-control form-control-sm common" id="rate_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#quantity_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
                                                 </div>
-                                                <div class="col-2 amount-container">
+                                                <div class="col discount_rate-container">
+                                                    <input type="text" name="discount_rate[]" value="{{ $quotation_item->discount_rate }}" class="form-control form-control-sm common" id="rate_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#quantity_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
+                                                </div>
+                                                <div class="col amount-container">
                                                     <input type="text" name="amount[]" value="{!! floatval($quotation_item->rate) * intval($quotation_item->quantity) !!}" class="form-control form-control-sm total n" id="total_amount_{{ $loop->iteration }}">
                                                 </div>
                                             </div>
@@ -112,37 +116,15 @@
                                     <div class="col-8 border-right bg-secondary bold text-bold">
                                         <div class="row">
                                             <div class="col-10 pb-2 pt-2 text-right">
-                                                <div class="pt-1">Quotation Total:</div>
-                                            </div>
-                                            <div class="col-2 pb-2 pt-2">
-                                                <input type="text" name="discount" class="form-control form-control-sm" id="total" value="{{ $quotation->amount }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 pb-2 pt-2 text-center text-bold bg-cyan">
-                                        <div class="row">
-                                            <div class="col-8 text-right">
-                                                <div class="pt-1">Comparison Total:</div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="input-group input-group-sm">
-                                                    <input type="text" name="cp_discount" class="form-control form-control-sm" id="cp_discount" value="0" aria-describedby="basic-addon2">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text" id="basic-addon2">%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-8 border-right bg-secondary bold text-bold">
-                                        <div class="row">
-                                            <div class="col-10 pb-2 pt-2 text-right">
                                                 <div class="pt-1">Applied Discount:</div>
                                             </div>
                                             <div class="col-2 pb-2 pt-2">
-                                                <input type="text" name="discount" class="form-control form-control-sm" id="discount" value="{{ $quotation->discount }}">
+                                                <div class="input-group input-group-sm">
+                                                    <input type="text" name="discount" class="form-control form-control-sm" id="discount" value="{{ $quotation->discount }}">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">%</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -159,6 +141,28 @@
                                                     </div>
                                                 </div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-8 border-right bg-secondary bold text-bold">
+                                        <div class="row">
+                                            <div class="col-10 pb-2 pt-2 text-right">
+                                                <div class="pt-1">Quotation Total:</div>
+                                            </div>
+                                            <div class="col-2 pb-2 pt-2">
+                                                <input type="text" name="discount" class="form-control form-control-sm" id="total" value="{{ $quotation->total }}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pb-2 pt-2 text-center text-bold bg-cyan">
+                                        <div class="row">
+                                            <div class="col-8 text-right">
+                                                <div class="pt-1">Comparison Total:</div>
+                                            </div>
+                                            <div class="col">
+                                                <input type="text" name="cp_discount" class="form-control form-control-sm" id="cp_discount" value="0" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -189,94 +193,13 @@
                 quantity_container = $('.quantity-container'),
                 unit_container = $('.unit-container'),
                 rate_container = $('.rate-container'),
+                discount_rate_container = $('.discount_rate-container'),
                 amount_container = $('.amount-container'),
                 add_button = $(".add_form_field"),
                 max_fields = 1000,
                 wrapper = $('.additional-products'),
                 $uid = $('.quantity').length;
 
-            // data-target="#brand_id" data-href="{{ route('item.fetch.ajax.admin') }}"
-
-
-
-            var x = 1;
-            $(add_button).click(function(e) {
-                e.preventDefault();
-                $uid = $('.quantity').length;
-                if (x >= max_fields) {
-                    alert('You Reached the limits');
-                    return false;
-                }
-
-                let $categorySelector = //'<div class="row hello">' +
-                    '<div class="col-md-3 mt-3">' +
-                    '<label for="item_id">Select Item</label><br/>' +
-                    '<div class="row">' +
-                    '<div class="col-10">' +
-                    '<select name="item_id[]" class="form-control" id="item_id">' +
-                    '<option selected="selected" value>Select</option> <option value="#"></option>' +
-                    '</select>' +
-                    '</div>' +
-                    '<div class="col-2">' +
-                    '<a href="#" class="delete">' +
-                    '<i class="fas fa-trash-alt ml-2" aria-hidden="false"></i>' +
-                    '</a>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>';// +
-                //;// +
-                //'</div>';
-
-                let $itemRow = '<div class="row mt-3">' +
-                    '<div class="col-md-3 item-container">' +
-                    `<label for="item_id_${$uid}">Select Item </label><br/>` +
-                    `<select name="item_id[]" class="form-control" id="item_id_${$uid}" data-target="#brand_id_${$uid}" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner_${$uid}" onchange="itemSelect($(this))">` +
-                    '<option selected="selected" value>Select</option>' +
-                    @foreach ($items as $item)
-                        '<option value="{{ $item->item_name }}">{{ ucfirst($item->item_name) }}</option>' +
-                    @endforeach
-                        '</select>' +
-                    `<span id="item_spinner_${$uid}"></span>` +
-                    '</div>' +
-                    '<div class="col-md-3 brand-container">' +
-                    `<label for="brand_id_${$uid}">Select Brand</label><br/>` +
-                    `<select name="brand_id[]" class="form-control trigger" id="brand_id_${$uid}">` +
-                    '<option selected="selected" value>Select</option>' +
-                    @foreach ($brands as $brand)
-                        '<option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>' +
-                    @endforeach
-                        '</select>' +
-                    '</div>' +
-                    '<div class="col-md-1 quantity-container">' +
-                    `<label for="quantity_${$uid}">Quantity</label><br/>` +
-                    `<input type="text" name="quantity[]" class="form-control common quantity" id="quantity_${$uid}" data-target="#total_amount_${$uid}" data-into="#rate_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">`+
-                    '</div>' +
-                    '<div class="col-md-1 unit-container">' +
-                    `<label for="unit_${$uid}">Unit</label><br/>` +
-                    `<input type="text" name="unit[]" class="form-control" id="unit_${$uid}" >` +
-                    '</div>' +
-                    '<div class="col-md-1 rate-container">' +
-                    `<label for="rate_${$uid}">Rate</label><br/>` +
-                    `<input type="text" name="rate[]" class="form-control common" id="rate_${$uid}" data-target="#total_amount_${$uid}" data-into="#quantity_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">` +
-                    '</div>' +
-                    '<div class="col-md-2 amount-container">' +
-                    `<label for="amount_${$uid}">Sub-Total</label><br/>` +
-                    `<input type="text" name="amount[]" class="form-control total n" id="total_amount_${$uid}">` +
-                    '</div>' +
-                    '<div class="col-md-1">' +
-                    '<label for="unit">&nbsp;</label><br/>' +
-                    '<button class="delete btn btn-danger"><span><i class="fas fa-trash-alt" aria-hidden="false"></i></span></button>' +
-                    '</div>' +
-                    '</div>';
-
-                x++;
-                $(wrapper).append($itemRow); // add input box
-            });
-            $(wrapper).on("click", ".delete", function(e) {
-                e.preventDefault()
-                $(this).parent().parent().remove();
-                x--;
-            })
             $('.with_out').keyup(function() {
                 var txtFirstNumberValue = document.getElementById('quantity').value;
                 var txtSecondNumberValue = document.getElementById('rate').value;

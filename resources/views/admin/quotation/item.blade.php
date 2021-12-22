@@ -81,6 +81,7 @@
                                             <th>Quantity</th>
                                             <th>Unit</th>
                                             <th>Unit Price ( {{ ucwords($quotation[0]->currency) }} )</th>
+                                            <th>Dis.Price ( {{ ucwords($quotation[0]->currency) }} )</th>
                                             <th>Total</th>
                                         </tr>
                                         </thead>
@@ -94,6 +95,7 @@
                                             <td>{{ ucwords($item->quantity) }}</td>
                                             <td>{{ ucwords($item->unit) }}</td>
                                             <td>{{ ucwords($item->rate) }}</td>
+                                            <td>{{ ucwords($item->discount_rate) }}</td>
                                             <td>{{ ucwords($item->amount) }}</td>
                                         </tr>
                                         @endforeach
@@ -108,9 +110,13 @@
                                     <div class="table-responsive table-sm">
                                         <table class="table">
                                            <tr>
+                                                <th style="width:50%">Discount:</th>
+                                               <td>{{ $item->discount }}<b>%</b></td>
+                                           </tr>
+                                            <tr>
                                                 <th style="width:50%">Total Amount:</th>
-                                                <td>{{ $item->total }}</td>
-                                            </tr>
+                                                <td><b>{{ ucwords($item->currency) }}</b> {{ $item->total }}</td>
+                                           </tr>
                                         </table>
                                     </div>
                                 </div>

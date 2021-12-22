@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class QuotationItem extends Model
+class QuotationItemComparison extends Model
 {
-
     use HasFactory;
 
-    protected $table = 'quotation_item';
-    protected $fillable = ['item_id','brand_id','quantity','unit','rate','discount_rate','amount','quotation_id',
+    protected $table = 'quotation_comparison_item';
+    protected $fillable = ['item_id','brand_id','quantity','unit','rate','rate_comparison','discount_rate',
+        'discount_rate_comparison','amount','amount_comparison','quotation_id',
         'created_at','updated_at'];
 
     public function product()
@@ -27,6 +26,6 @@ class QuotationItem extends Model
 
     public function quotation()
     {
-        return $this->hasOne(Quotation::class, 'id', 'quotation_id');
+        return $this->hasOne(QuotationComparison::class, 'id', 'quotation_id');
     }
 }

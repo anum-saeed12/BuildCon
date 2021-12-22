@@ -114,6 +114,14 @@
                     <div class="d-flex flex-row-reverse">
                         {!! $inquires->links('pagination::bootstrap-4') !!}
                     </div>
+                        <div class="modal" id="downloadable-files" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-title" id="downloadableFilesTitle"></div>
+                                <div class="modal-content p-3" id="downloadableFilesHolder">
+                                    Something here
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
@@ -123,6 +131,15 @@
 @section('extras')
     <script>
         $(document).ready(function(){
+            $('#downloadable-files').on('show.bs.modal show', function (event) {
+                alert(10)
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var title = button.data('title')
+                var modal = $(this)
+                alert(10)
+                modal.find('.modal-title').text(title)
+                $('#downloadableFilesHolder').load(button.attr('href'))
+            })
             $("#myInput").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#myTable tr").filter(function() {
