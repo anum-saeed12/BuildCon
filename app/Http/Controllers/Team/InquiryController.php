@@ -31,7 +31,7 @@ class InquiryController extends Controller
             'inquiries.project_name',
             'inquiries.date',
             'inquiries.timeline',
-            'users.name',
+            'users.name as username',
             DB::raw("GROUP_CONCAT(categories.category_name) as category_names"),
             DB::raw("(
                 CASE
@@ -58,7 +58,7 @@ class InquiryController extends Controller
         $data = [
             'title'   => 'View Inquires',
             'user'    => Auth::user(),
-            'inquiries' => $inquiries
+            'inquires' => $inquiries
         ];
         return view('team.inquiry.view', $data);
     }
@@ -71,7 +71,7 @@ class InquiryController extends Controller
             'inquiries.project_name',
             'inquiries.date',
             'inquiries.timeline',
-            'users.name',
+            'users.name as username',
             DB::raw("GROUP_CONCAT(categories.category_name) as category_names"),
             DB::raw("(
                 CASE
@@ -112,7 +112,7 @@ class InquiryController extends Controller
         $data = [
             'title'   => 'Open Inquires',
             'user'    => Auth::user(),
-            'inquiries' => $inquiries,
+            'inquires' => $inquiries,
             'sales_people' => User::where('user_role','sale')->get(),
             'customers' => Customer::all(),
             'request' => $request,
@@ -310,8 +310,11 @@ class InquiryController extends Controller
             'category' => 'required'
         ]);
         $category_id = $request->category;
+        $category_assigned = UserCategory::select('category_id as id')->where('user_id', Auth::id())->get();
+        if (count($category_assigned)<=0) return showError("Category not found");
+
         $category_items = Item::select([DB::raw('DISTINCT item_name')])
-            ->whereIn('category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
+            ->where('category_id', $category_id)
             ->get();
         return response($category_items, 200);
     }

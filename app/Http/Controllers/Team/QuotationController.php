@@ -74,9 +74,17 @@ class QuotationController extends Controller
     {
         $customers = Customer::orderBy('id','DESC')->get();
         $brands    = Brand::orderBy('id','DESC')->get();
-        $items     = Item::select([
-            DB::raw("DISTINCT item_name"),
-        ])->orderBy('id','DESC')->get();
+        $category_assigned = UserCategory::select('category_id as id')->where('user_id', Auth::id())->get();
+        if (count($category_assigned)<=0) return showError("Category not found");
+        /*$items = Item::select([
+                DB::raw("DISTINCT item_name"),
+            ])->where('category_id', $category_id)
+            ->orderBy('id','DESC')
+            ->get();*/
+        $items = Item::select(DB::raw("DISTINCT items.item_name"))
+            ->join('usercategory','usercategory.category_id','=','items.category_id')
+            ->where('usercategory.user_id', Auth::id())
+            ->get();
 
         $data = [
             'title'    => 'Submit Quotation',

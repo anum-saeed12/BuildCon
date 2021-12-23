@@ -82,13 +82,13 @@
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
-                                @forelse($inquiries as $inquiry)
+                                @forelse($inquires as $inquiry)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('inquiry.view.team',$inquiry->id) }}">
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ $loop->iteration }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ $inquiry->name }}</td>
+                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ $inquiry->username }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->date) }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->timeline) }}</td>
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->inquiry_status) }}</td>
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                      {!! $inquiries->links('pagination::bootstrap-4') !!}
+                      {!! $inquires->links('pagination::bootstrap-4') !!}
                     </div>
                     <div class="modal" id="downloadable-files" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog modal-sm">

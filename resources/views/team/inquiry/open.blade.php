@@ -102,11 +102,11 @@
                                             <a class="bg-danger list-btn"  href="{{ route('inquiry.delete.team',$inquiry->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="py-3 text-center">No open inquiries found</td>
-                                    </tr>
-                                @endforelse
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="py-3 text-center">No open inquiries found</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -127,6 +127,7 @@
         </div>
     </section>
 @stop
+
 
 @section('extras')
     <script>
