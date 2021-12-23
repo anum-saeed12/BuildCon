@@ -21,7 +21,7 @@ use Ramsey\Uuid\Uuid;
 
 class InquiryController extends Controller
 {
-    public function index ()
+    public function index()
     {
         $select = [
             'customers.customer_name',
@@ -38,7 +38,6 @@ class InquiryController extends Controller
                 END
             ) as 'inquiry_status'")
         ];
-
         $auth = Auth::user()->id;
         $inquires = Inquiry::select($select)
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
@@ -65,7 +64,7 @@ class InquiryController extends Controller
         $auth = Auth::user()->id;
         $select = [
             'customers.customer_name',
-            'inquiries.id as ids',
+            'inquiries.id',
             'inquiries.project_name',
             'inquiries.date',
             'inquiries.timeline',
@@ -255,7 +254,6 @@ class InquiryController extends Controller
         ];
         return view('sale.inquiry.item',$data);
     }
-
 
     public function pdfinquiry($id)
     {

@@ -64,6 +64,8 @@
                                         </div>
                                     </div>
                                 </form>
+                                <a href="{{ route('inquiry.add.sale') }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i> Add New</a>
+
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -97,7 +99,7 @@
                                                title="Download Files" data-toggle="modal" data-target="#downloadable-files">
                                                 <i class="fas fa-download" aria-hidden="false"></i>
                                             </a>
-                                        </td>
+                                           </td>
                                     </tr>
                                     @empty
                                         <tr>
