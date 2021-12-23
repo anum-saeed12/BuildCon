@@ -46,8 +46,8 @@ class ItemController extends Controller
 
     public function add()
     {
-        $categories = Category::orderBy('id','DESC')->paginate($this->count);
-        $brands     = Brand::orderBy('id','DESC')->paginate($this->count);
+        $categories = Category::orderBy('id','DESC')->get();
+        $brands     = Brand::orderBy('id','DESC')->get();
 
         $data = [
             'title'      => 'Add Item',
@@ -80,8 +80,8 @@ class ItemController extends Controller
             ->leftJoin('brands','brands.id' ,'=', 'items.brand_id')
             ->leftJoin('categories', 'categories.id' ,'=', 'items.category_id')
             ->first();
-        $categories = Category::orderBy('id','DESC')->paginate($this->count);
-        $brands     = Brand::orderBy('id','DESC')->paginate($this->count);
+        $categories = Category::orderBy('id','DESC')->get();
+        $brands     = Brand::orderBy('id','DESC')->get();
 
         $data = [
             'title'      => 'Update Item',
@@ -174,7 +174,6 @@ class ItemController extends Controller
         if (!$request->has('brand')) {
             $item_categories = Item::select(['brands.brand_name', 'brands.id'])
                 ->join('brands', 'brands.id', '=', 'items.brand_id')
-                #OLD: ->where('items.item_name', 'like', "%{$item_name}%")
                 ->where('items.item_name', 'like', "{$item_name}")
                 ->groupBy('brands.id')
                 ->get();

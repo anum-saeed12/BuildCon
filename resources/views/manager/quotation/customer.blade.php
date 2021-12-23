@@ -81,17 +81,17 @@
                                 <tbody id="myTable">
                                 @forelse($quotations as $quotation)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('quotation.view.manager',$quotation->id) }}">
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ $quotation->date }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ $quotation->total }}</td>
-                                        <td><a href="{{ route('quotation.view.manager',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
+                                        data-href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">
+                                        <td><a href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">{{ $loop->iteration + intval(($quotations->currentPage() - 1) * $quotations->count()) }}</td>
+                                        <td><a href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">{{ ucfirst($quotation->customer_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">{{ ucfirst($quotation->project_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">{{ $quotation->date }}</td>
+                                        <td><a href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">{{ $quotation->total }}</td>
+                                        <td><a href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-success list-btn"  href="{{ route('quotation.comparison.manager',$quotation->id) }}" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
-                                            <a class="bg-primary list-btn" href="{{ route('quotation.edit.manager',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('quotation.delete.manager',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-success list-btn"  href="#" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" href="{{ route('quotation.edit.manager',$quotation->quotation_id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn"  href="{{ route('quotation.delete.manager',$quotation->quotation_id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                 @empty
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                      {!! $quotations->links('pagination::bootstrap-4') !!}
+                      {!! $quotations->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

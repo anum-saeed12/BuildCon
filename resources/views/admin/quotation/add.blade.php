@@ -65,7 +65,7 @@
                                     <select name="item_id[]" class="form-control trigger" id="item_id"
                                             data-target="#brand_id" data-href="{{ route('item.fetch.ajax.admin') }}"
                                             data-spinner="#item_spinner" onchange="itemSelect($(this))">
-                                        <option selected="selected" value>Select</option>
+                                        <option selected="selected" value>Select Item</option>
                                         @foreach ($items as $item)
                                             <option value="{{ $item->item_name }}">{{ ucfirst($item->item_name) }}</option>
                                         @endforeach
@@ -79,7 +79,7 @@
                                             data-href="{{ route('item.fetch.ajax.admin') }}"
                                             data-spinner="#brand_spinner"
                                             onchange="fetchPrice($(this))">
-                                        <option selected="selected" value>Select</option>
+                                        <option selected="selected" value>Select Brand</option>
                                         @foreach ($brands as $brand)
                                             <option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>
                                         @endforeach

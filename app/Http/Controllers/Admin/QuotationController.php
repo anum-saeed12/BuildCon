@@ -74,7 +74,6 @@ class QuotationController extends Controller
         $items     = Item::select([
             DB::raw("DISTINCT item_name"),
         ])->orderBy('id','DESC')->get();
-
         $data = [
             'title'    => 'Submit Quotation',
             'base_url' => env('APP_URL', 'http://127.0.0.1:8000'),

@@ -237,7 +237,7 @@ Route::prefix('/manager')->middleware('manager')->group(function() {
         Route::get('/view/{id}', '\App\Http\Controllers\Manager\InquiryController@view')->name('inquiry.view.manager');
         Route::get('/invoice/{id}', '\App\Http\Controllers\Manager\InquiryController@pdfinquiry')->name('inquiry.pdfinquiry.manager');
         Route::get('/ajax-fetch-category/', '\App\Http\Controllers\Manager\InquiryController@ajaxFetchCategory')->name('category.fetch.ajax.manager');
-        Route::get('/ajax-fetch-item/', '\App\Http\Controllers\Manager\InquiryController@ajaxFetchItem')->name('item.fetch.ajax.manager');
+        Route::get('/ajax-fetch-item/', '\App\Http\Controllers\Manager\InquiryController@ajaxFetchItem')->name('inquiry.item.fetch.ajax.manager');
         Route::get('/invoice-documents/{id}', '\App\Http\Controllers\Manager\InquiryController@fetchDocuments')->name('inquiry.documents.manager');
         Route::get('/invoice-documents/download/{document_id}', '\App\Http\Controllers\Manager\InquiryController@downloadDocument')->name('inquiry.documents.download.manager');
     });
