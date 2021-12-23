@@ -80,7 +80,7 @@
                                 <tbody id="myTable">
                                 @forelse($users as $user)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration + intval(($users->currentPage() - 1) * $users->count())}}</td>
                                         <td>{{ ucfirst($user->name) }}</td>
                                         <td>{{ ucfirst($user->username) }}</td>
                                         <td>{{ ucfirst($user->email) }}</td>
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                        {!! $users->links('pagination::bootstrap-4') !!}
+                        {!! $users->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

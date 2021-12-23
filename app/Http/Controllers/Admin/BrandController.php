@@ -12,7 +12,7 @@ class BrandController extends Controller
 {
     public function index()
     {
-        $brand = Brand::orderBy('id','DESC')->paginate($this->count);
+        $brand = Brand::orderBy('id','DESC')->whereNull('brands.deleted_at')->paginate($this->count);
         $data = [
             'title'   => 'Brands',
             'user'    => Auth::user(),

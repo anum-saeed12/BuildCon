@@ -79,7 +79,7 @@
                                 <tbody id="myTable">
                                 @forelse($customer as $cus)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration + intval(($customer->currentPage() - 1) * $customer->count())}}</td>
                                         <td>{{ ucfirst($cus->customer_name) }}</td>
                                         <td>{{ ucfirst($cus->attention_person) }}</td>
                                         <td>{{ ucfirst($cus->address) }}</td>
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                      {!! $customer->links('pagination::bootstrap-4') !!}
+                      {!! $customer->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

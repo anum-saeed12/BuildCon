@@ -56,7 +56,7 @@
             <td>{{ ucfirst($item->project_name) }}</td>
             <td>{{ ucfirst($item->category_name) }}</td>
             <td>{{ ucfirst($item->brand_name) }}</td>
-            <td>{{ str_pad($item->quotation_id, 5, '0', STR_PAD_LEFT) }}</td>
+            <td>{{ $item->quotation_ref }}</td>
             @php
                 $k = isset($k)?$k:0;
                 $currentRate = isset($item->rate)?floatval($item->rate):0.00;

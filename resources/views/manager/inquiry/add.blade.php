@@ -47,14 +47,14 @@
                                     <div class="text-danger">@error('project_name'){{ $message }}@enderror</div>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="date">Date</label><br/>
                                     <input type="date" name="date" class="form-control" id="date"
                                            value="{{ old('date') }}">
                                     <div class="text-danger">@error('date'){{ $message }}@enderror</div>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="timeline">Timeline</label><br/>
                                     <input type="date" name="timeline" class="form-control" id="timeline"
                                            value="{{ old('timeline') }}">
@@ -153,14 +153,14 @@
                 quantity_container = $('.quantity-container'),
                 rate_container = $('.rate-container'),
                 unit_container = $('.unit-container'),
-                $uid = $('.quantity').length;
+                $uid = $('.quantity').length,
                 add_button = $(".add_form_field"),
                 wrapper = $('.additional-products');
 
             var x = 1;
             $(add_button).click(function(e) {
                 e.preventDefault();
-                $uid = $('.category').length;
+                $uid = $('.categories').length;
 
                 let $itemRow = '<div class="row mt-3 ml-3">' +
                 '<div class="col-md-3 category-container">' +

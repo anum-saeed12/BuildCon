@@ -346,8 +346,9 @@ class InquiryController extends Controller
         $inquires = Inquiry::select($select)
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
             ->leftJoin('inquiry_order','inquiry_order.inquiry_id', '=', 'inquiries.id')
-            ->leftJoin('users','users.id' ,'=', 'inquiry_order.user_id')
+            ->leftJoin('users','users.id' ,'=', 'inquiries.user_id')
             ->leftJoin('categories', 'categories.id' ,'=', 'inquiry_order.category_id')
+            ->leftJoin('brands', 'brands.id' ,'=', 'inquiry_order.brand_id')
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
             ->where('inquiries.id',$id)
             ->get();

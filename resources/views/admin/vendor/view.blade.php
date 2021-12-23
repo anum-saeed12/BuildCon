@@ -80,7 +80,7 @@
                                 <tbody id="myTable">
                                 @forelse($vendors as $vendor)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration + intval(($vendors->currentPage() - 1) * $vendors->count()) }}</td>
                                         <td>{{ ucfirst($vendor->vendor_name) }}</td>
                                         <td>{{ ucfirst($vendor->attended_person) }}</td>
                                         <td>{{ ucfirst($vendor->address) }}</td>
@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                        {!! $vendors->links('pagination::bootstrap-4') !!}
+                        {!! $vendors->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

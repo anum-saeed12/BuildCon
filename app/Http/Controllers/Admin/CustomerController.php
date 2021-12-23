@@ -12,7 +12,7 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customer = Customer::orderBy('id','DESC')->paginate($this->count);
+        $customer = Customer::orderBy('id','DESC')->whereNull('customers.deleted_at')->paginate($this->count);
         $data = [
             'title'    => 'View Customers',
             'user'     => Auth::user(),

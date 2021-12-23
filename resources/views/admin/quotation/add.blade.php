@@ -125,7 +125,7 @@
                                 <div class="col-md-2 ">
                                     <label for="discount">Discount</label><br/>
                                     <div class="input-group mb-3">
-                                        <input type="number" min="0" max="100" step="0.1"
+                                        <input type="text" min="0" max="100" step="1"
                                                name="discount" class="form-control" id="discount"
                                                value="{{ old('discount') }}">
                                         <div class="input-group-append">
@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="col-md-2 ">
                                     <label for="total">Total Amount</label><br/>
-                                    <input type="number" min="0" name="total" class="form-control" id="total"
+                                    <input type="text" min="0" name="total" class="form-control" id="total"
                                            value="{{ old('total') }}">
                                 </div>
                                 <div class="col-md-6">
@@ -329,17 +329,17 @@
                     rate = id!=='none'?parseFloat($('#rate_' + id).val()):parseFloat($('#rate').val()),
                     discount_price_input = $(this), discounted_price, item_total, discounted_total,
                     discount_text=id!=='none'?$('#dc_txt_' + id):$('#dc_txt'),
-                    sub_total=id!=='none'?$('#total_amount_' + id):$('#total_amount')
+                    sub_total=id!=='none'?$('#total_amount_' + id):$('#total_amount'),
                     quantity = id!=='none'?parseFloat($('#quantity_' + id).val()):parseFloat($('#quantity').val());
 
                 // Validate values
                 rate = rate>0?rate:0;
                 quantity = quantity>0?quantity:0;
                 item_total = rate * quantity;
-                discounted_price = rate * discount;
-                discounted_total = item_total * discount;
-                discount_price_input.val(discounted_price);
-                sub_total.val(discounted_total);
+                discounted_price = parseFloat(rate) * parseFloat(discount);
+                discounted_total = parseFloat(item_total) * parseFloat(discount);
+                discount_price_input.val(discounted_price.toFixed(2));
+                sub_total.val(discounted_total.toFixed(2));
                 discount_text.html(discountPercentage);
                 $total += discounted_total;
             })

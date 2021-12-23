@@ -23,7 +23,7 @@ class QuotationController extends Controller
     public function customer(Request $request)
     {
         $select = [
-            'quotations.id',
+            'quotations.id as quotation_id',
             'customers.customer_name',
             'quotations.project_name',
             'quotations.date',
@@ -165,6 +165,7 @@ class QuotationController extends Controller
         $select = [
             "quotations.*",
            # "quotation_item.*",
+            'quotations.id as quotation_id',
             "customers.*"
         ];
         $quotation = Quotation::select($select)
@@ -276,7 +277,7 @@ class QuotationController extends Controller
 
         return redirect(
             route('customerquotation.list.admin')
-        )->with('success', 'Quotation was added successfully!');
+        )->with('success', 'Quotation was updated successfully!');
     }
 
     public function delete($id)

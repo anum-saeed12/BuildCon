@@ -12,7 +12,7 @@ class QuotationComparison extends Model
     use SoftDeletes;
 
     protected $table = 'quotation_comparison';
-    protected $fillable = ['user_id','customer_id','inquiry_id','project_name','quotation','date','discount','discount_comparison','terms_condition',
+    protected $fillable = ['user_id','customer_id','inquiry_id','project_name','competitor_name','quotation','date','discount','discount_comparison','terms_condition',
         'currency','total','total_comparison','created_at','updated_at'];
 
     public function customer()

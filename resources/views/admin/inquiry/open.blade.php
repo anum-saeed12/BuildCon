@@ -83,7 +83,7 @@
                                 @forelse($inquires as $inquiry)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('inquiry.view.admin',$inquiry->id) }}">
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ $loop->iteration }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ $loop->iteration + intval(($inquires->currentPage() - 1) * $inquires->count())}}</td>
                                         <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->item_description) }}</td>
@@ -112,7 +112,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                        {!! $inquires->links('pagination::bootstrap-4') !!}
+                        {!! $inquires->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                     <div class="modal" id="downloadable-files" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog modal-sm">

@@ -79,7 +79,7 @@
                                 <tbody id="myTable">
                                 @forelse($brands as $brand)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration + intval(($brands->currentPage() - 1) * $brands->count()) }}</td>
                                         <td>{{ ucfirst($brand->brand_name) }}</td>
                                         <td>{{ ucfirst($brand->attention_person) }}</td>
                                         <td>{{ ucfirst($brand->country) }}</td>
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                        {!! $brands->links('pagination::bootstrap-4') !!}
+                        {!! $brands->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

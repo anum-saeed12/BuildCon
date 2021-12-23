@@ -82,7 +82,7 @@
                                 @forelse($vendor_quotation as $quotation)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('vendorquotation.view.admin',$quotation->id) }}">
-                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $loop->iteration }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $loop->iteration + intval(($vendor_quotation->currentPage() - 1) * $vendor_quotation->count()) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ucfirst($quotation->vendor_name) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</a></td>
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                        {!! $vendor_quotation->links('pagination::bootstrap-4') !!}
+                        {!! $vendor_quotation->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

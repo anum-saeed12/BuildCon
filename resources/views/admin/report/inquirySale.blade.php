@@ -80,7 +80,7 @@
                                     <th class="pl-0">Customer</th>
                                     <th class="pl-0">Project</th>
                                     <th class="pl-0">Total Items</th>
-                                    <th class="pl-0">Start</th>
+                                    <th class="pl-0">Date</th>
                                     <th class="pl-0">Timeline</th>
                                     <th class="pl-0">Created</th>
                                 </tr>

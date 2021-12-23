@@ -14,7 +14,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $category = Category::orderBy('id','DESC')->paginate($this->count);
+        $category = Category::orderBy('id','DESC')->whereNull('categories.deleted_at')->paginate($this->count);
         $data = [
             'title'     => 'View Categories',
             'user'      => Auth::user(),
