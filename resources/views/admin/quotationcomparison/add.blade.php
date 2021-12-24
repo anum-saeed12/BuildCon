@@ -58,7 +58,7 @@
                                             <div class="col pb-2 pt-2">Quantity</div>
                                             <div class="col pb-2 pt-2">Unit</div>
                                             <div class="col pb-2 pt-2">Rate</div>
-                                            <div class="col pb-2 pt-2">Dis.Rate</div>
+                                            <div class="col pb-2 pt-2">{{ ceil($quotation->discount) }}% Off</div>
                                             <div class="col pb-2 pt-2">Sub-Total</div>
                                         </div>
                                     </div>
@@ -67,12 +67,13 @@
                                             <div class="col">Rate</div>
                                             <div class="col">Discounted</div>
                                             <div class="col">Sub-Total</div>
+                                            <div class="col">Change</div>
                                         </div>
                                     </div>
                                 </div>
                                 @foreach($quotation->items as $quotation_item)
-                                    <div class="row mt-0 border-top">
-                                        <div class="col-8 border-right bg-secondary pt-2 pb-3">
+                                    <div class="row mt-0 mb-0 border-top">
+                                        <div class="col-8 border-right bg-secondary pt-2 pb-2">
                                             <div class="row">
                                                 <div class="col-4 item-container">
                                                     <div class="row">
@@ -81,32 +82,77 @@
                                                     </div>
                                                 </div>
                                                 <div class="col quantity-container">
-                                                    <input type="text" name="quantity[]" value="{{ $quotation_item->quantity }}" class="form-control form-control-sm common quantity" id="quantity_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#rate_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
+                                                    <input type="text" name="quantity[]" value="{{ $quotation_item->quantity }}"
+                                                           class="form-control form-control-sm common quantity"
+                                                           id="quantity_{{ $loop->iteration }}"
+                                                           {{--data-target="#total_amount_{{ $loop->iteration }}"
+                                                           data-into="#rate_{{ $loop->iteration }}"
+                                                           onkeydown="calculate($(this))" onkeypress="calculate($(this))"
+                                                           onkeyup="calculate($(this))" onchange="calculate($(this))"--}}
+                                                           readonly>
                                                 </div>
                                                 <div class="col unit-container">
-                                                    <input type="text" name="unit[]" value="{{ $quotation_item->unit }}" readonly disabled class="form-control form-control-sm" id="unit_{{ $loop->iteration }}" >
+                                                    <input type="text" name="unit[]" value="{{ $quotation_item->unit }}"
+                                                           class="form-control form-control-sm" id="unit_{{ $loop->iteration }}"
+                                                           readonly disabled>
                                                 </div>
                                                 <div class="col rate-container">
-                                                    <input type="text" name="rate[]" value="{{ $quotation_item->rate }}" class="form-control form-control-sm common" id="rate_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#quantity_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
+                                                    <input type="text" name="rate[]" value="{{ $quotation_item->rate }}"
+                                                           class="form-control form-control-sm common" id="rate_{{ $loop->iteration }}"
+                                                           {{--data-target="#total_amount_{{ $loop->iteration }}"
+                                                           data-into="#quantity_{{ $loop->iteration }}"
+                                                           onkeydown="calculate($(this))" onkeypress="calculate($(this))"
+                                                           onkeyup="calculate($(this))" onchange="calculate($(this))"--}}
+                                                           readonly>
                                                 </div>
                                                 <div class="col discount_rate-container">
-                                                    <input type="text" name="discount_rate[]" value="{{ $quotation_item->discount_rate }}" class="form-control form-control-sm common" id="rate_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#quantity_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
+                                                    <input type="text" name="discount_rate[]" value="{{ $quotation_item->discount_rate }}"
+                                                           class="form-control form-control-sm with_out discounted_rate"
+                                                           id="discount_rate_{{ $loop->iteration }}" data-id="{{ $loop->iteration }}"
+                                                           {{--data-target="#total_amount_{{ $loop->iteration }}"
+                                                           data-into="#quantity_{{ $loop->iteration }}"
+                                                           onkeydown="calculate($(this))" onkeypress="calculate($(this))"
+                                                           onkeyup="calculate($(this))" onchange="calculate($(this))"--}}
+                                                           readonly>
                                                 </div>
                                                 <div class="col amount-container">
-                                                    <input type="text" name="amount[]" value="{!! floatval($quotation_item->rate) * intval($quotation_item->quantity) !!}" class="form-control form-control-sm total n" id="total_amount_{{ $loop->iteration }}">
+                                                    <input type="text" name="amount[]"
+                                                           value="{!! floatval($quotation_item->discount_rate) * intval($quotation_item->quantity) !!}"
+                                                           class="form-control form-control-sm total n"
+                                                           id="total_amount_{{ $loop->iteration }}" readonly>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-4 pt-2 pb-3 bg-cyan">
+                                        <div class="col-4 pt-2 pb-2 bg-cyan">
                                             <div class="row">
                                                 <div class="col rate-container">
-                                                    <input type="text" name="cp_rate[]" value="" class="form-control form-control-sm common" id="cp_rate_{{ $loop->iteration }}"{{-- data-target="#total_amount_{{ $loop->iteration }}" data-into="#quantity_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))"--}}>
+                                                    <input type="number" name="cp_rate[]"
+                                                           class="form-control form-control-sm cp-rate"
+                                                           id="cp_rate_{{ $loop->iteration }}"
+                                                           data-target="#cp_total_{{ $loop->iteration }}"
+                                                           data-into="#quantity_{{ $loop->iteration }}"
+                                                           onkeydown="calculate($(this))" onkeypress="calculate($(this))"
+                                                           onkeyup="calculate($(this))" onchange="calculate($(this))"/>
                                                 </div>
-                                                <div class="col dc-rate-container">
-                                                    <input type="text" name="cp_rate[]" value="" class="form-control form-control-sm common" id="cp_rate_{{ $loop->iteration }}"{{-- data-target="#total_amount_{{ $loop->iteration }}" data-into="#quantity_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))"--}}>
+                                                <div class="col discount_rate-container">
+                                                    <input type="text" name="cp_discount_rate[]"
+                                                           class="form-control form-control-sm with_out cp_discounted_rate"
+                                                           id="cp_discount_rate_{{ $loop->iteration }}" data-id="{{ $loop->iteration }}"
+                                                           data-target="#cp_total_amount_{{ $loop->iteration }}"
+                                                           data-into="#quantity_{{ $loop->iteration }}"
+                                                           onkeydown="calculate($(this))" onkeypress="calculate($(this))"
+                                                           onkeyup="calculate($(this))" onchange="calculate($(this))"
+                                                           readonly/>
                                                 </div>
                                                 <div class="col amount-container">
-                                                    <input type="text" name="cp_amount[]" value="" class="form-control form-control-sm total n" id="cp_total_amount_{{ $loop->iteration }}">
+                                                    <input type="text" name="cp_amount[]"
+                                                           class="form-control form-control-sm cp_total n"
+                                                           id="cp_total_amount_{{ $loop->iteration }}"/>
+                                                </div>
+                                                <div class="col change-container">
+                                                    <input type="text" name="cp_change[]"
+                                                           class="form-control form-control-sm cp-change"
+                                                           id="cp_change_{{ $loop->iteration }}"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,7 +166,8 @@
                                             </div>
                                             <div class="col-2 pb-2 pt-2">
                                                 <div class="input-group input-group-sm">
-                                                    <input type="text" name="discount" class="form-control form-control-sm" id="discount" value="{{ $quotation->discount }}">
+                                                    <input type="number" name="discount" class="form-control form-control-sm"
+                                                           id="discount" value="{{ $quotation->discount }}"/>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">%</span>
                                                     </div>
@@ -135,12 +182,13 @@
                                             </div>
                                             <div class="col">
                                                 <div class="input-group input-group-sm">
-                                                    <input type="text" name="cp_discount" class="form-control form-control-sm" id="cp_discount" value="0" aria-describedby="basic-addon2">
+                                                    <input type="number" name="cp_discount"
+                                                           class="form-control form-control-sm"
+                                                           id="cp_discount" value="0"/>
                                                     <div class="input-group-append">
-                                                        <span class="input-group-text" id="basic-addon2">%</span>
+                                                        <span class="input-group-text">%</span>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -152,7 +200,9 @@
                                                 <div class="pt-1">Quotation Total:</div>
                                             </div>
                                             <div class="col-2 pb-2 pt-2">
-                                                <input type="text" name="discount" class="form-control form-control-sm" id="total" value="{{ $quotation->total }}" readonly>
+                                                <input type="number" name="total" class="form-control form-control-sm"
+                                                       id="total" value="{{ $quotation->total }}"
+                                                       readonly/>
                                             </div>
                                         </div>
                                     </div>
@@ -162,7 +212,8 @@
                                                 <div class="pt-1">Comparison Total:</div>
                                             </div>
                                             <div class="col">
-                                                <input type="text" name="cp_discount" class="form-control form-control-sm" id="cp_discount" value="0" readonly>
+                                                <input type="text" name="cp_total" class="form-control form-control-sm"
+                                                       id="cp_total" value="0" readonly/>
                                             </div>
                                         </div>
                                     </div>
@@ -187,60 +238,44 @@
 @section('extras')
     <script type="text/javascript">
         $(document).ready(function() {
-            let category_container = $('.category-container'),
-                item_container = $('.item-container'),
-                brand_container = $('.brand-container'),
-                quantity_container = $('.quantity-container'),
-                unit_container = $('.unit-container'),
-                rate_container = $('.rate-container'),
-                discount_rate_container = $('.discount_rate-container'),
-                amount_container = $('.amount-container'),
-                add_button = $(".add_form_field"),
-                max_fields = 1000,
-                wrapper = $('.additional-products'),
-                $uid = $('.quantity').length;
-
-            $('.with_out').keyup(function() {
-                var txtFirstNumberValue = document.getElementById('quantity').value;
-                var txtSecondNumberValue = document.getElementById('rate').value;
-                var result = parseInt(txtFirstNumberValue) * parseInt(txtSecondNumberValue);
-                if (!isNaN(result)) {
-                    document.getElementById('amount').value = result;
-                }
-            })
-
-            function sumIt() {
-                var total = 0, val;
-                $('.common').each(function() {
-                    val = $(this).val()
-                    val = isNaN(val) || $.trim(val) === "" ? 0 : parseFloat(val);
-                    total += val;
-                });
-                $('#total_amount').val(Math.round(total));
-            }
-
-            $(document).on('keyup', '.common', sumIt,total);
-            sumIt() // run when loading
+            //$(document).on('keyup', '.common', sumIt);
+            //sumIt() // run when loading
         });
-        function calculate(ele) {
-            let total = 0,sum = 0, result, target=$(ele.data('target')),
-                first = ele.val(), second = $(ele.data('into')).val(),
-                sub_total, sum_of_sub_total = 0, sumOfTotal = $('#total');
-            result = parseFloat(first) * parseFloat(second);
-            if (!isNaN(result)) {
-                $(target).val(Math.round(result));
-                // Lets loop through all the total inputs
-                sub_total = $('.total.n');
-                for(i=0;i<sub_total.length;i++) {
-                    sum_of_sub_total += parseFloat(sub_total[i].value);
-                }
-                sumOfTotal.val(sum_of_sub_total);
-                return false;
-            }
-            $(target).val(0);
-            sumOfTotal.val(0);
-            //$('#total').val(sum_of_sub_total);
+        function calculate() {
+            let quotation_discount = $('#discount'),
+                cp_discount = $('#cp_discount'),
+                quotation_total, cp_total,
+                items = $('.cp_discounted_rate');
+            items.each(function(){
+                let id = $(this).data('id'),
+                    target = $($(this).data('target')),
+                    quotation_rate = parseFloat($(`#discount_rate_${id}`).val()),
+                    quotation_quantity = $(`#quantity_${id}`).val(),
+                    cp_rate_input = $(`#cp_rate_${id}`),
+                    cp_discount_rate_input = $(`#cp_discount_rate_${id}`),
+                    cp_sub_total_input = $(`#cp_total_amount_${id}`),
+                    cp_change_input = $(`#cp_change_${id}`),
+                    cp_rate = parseFloat(cp_rate_input.val()),
+                    applied_discount = parseFloat($('#cp_discount').val()),
+                    cp_discounted_price, sub_total, cp_sub_total_o, cp_sub_total, change;
+                cp_rate = cp_rate>0?cp_rate:0;
+                applied_discount = applied_discount>0?(100-applied_discount)/100:1;
+                applied_discount = Math.ceil(applied_discount);
+                cp_discounted_price = cp_rate * applied_discount;
+                // Update the discounted price
+                cp_discount_rate_input.val(cp_discounted_price);
+                // Sub total Qty. x Price
+                cp_sub_total_o = quotation_quantity * cp_discounted_price;
+                // Sub total (discount applied)
+                cp_sub_total = cp_sub_total_o * applied_discount;
+                cp_sub_total_input.val(cp_sub_total);
+                // Calculate change
+                change = (quotation_rate - cp_discounted_price / quotation_rate);
+                cp_change_input.val(change);
+                let str = `CP: ${cp_rate} | DC: ${applied_discount} | NR: ${cp_discounted_price}`;
+                console.log(str);
+                //let cp_sub_total = parseInt(quantity) * rate()
+            });
         }
     </script>
 @stop
-@include('includes.selectajax')
