@@ -24,7 +24,7 @@ class QuotationController extends Controller
     public function customer(Request $request)
     {
         $select = [
-            'quotations.id',
+            'quotations.id as quotation_id',
             'customer_name',
             'project_name',
             'terms_condition',
@@ -76,11 +76,6 @@ class QuotationController extends Controller
         $brands    = Brand::orderBy('id','DESC')->get();
         $category_assigned = UserCategory::select('category_id as id')->where('user_id', Auth::id())->get();
         if (count($category_assigned)<=0) return showError("Category not found");
-        /*$items = Item::select([
-                DB::raw("DISTINCT item_name"),
-            ])->where('category_id', $category_id)
-            ->orderBy('id','DESC')
-            ->get();*/
         $items = Item::select(DB::raw("DISTINCT items.item_name"))
             ->join('usercategory','usercategory.category_id','=','items.category_id')
             ->where('usercategory.user_id', Auth::id())

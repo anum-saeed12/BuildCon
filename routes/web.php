@@ -199,6 +199,7 @@ Route::prefix('/sourcing_team')->middleware('team')->group(function() {
         Route::get('/customer', '\App\Http\Controllers\Team\QuotationController@customer')->name('customerquotation.list.team');
         Route::get('/add', '\App\Http\Controllers\Team\QuotationController@add')->name('quotation.add.team');
         Route::post('/store', '\App\Http\Controllers\Team\QuotationController@store')->name('quotation.store.team');
+        Route::get('/generate/{inquiry_id}', '\App\Http\Controllers\Team\QuotationController@generateQuotation')->name('quotation.generate.team');
         Route::get('/edit/{id}', '\App\Http\Controllers\Team\QuotationController@edit')->name('quotation.edit.team');
         Route::post('/update/{id}', '\App\Http\Controllers\Team\QuotationController@update')->name('quotation.update.team');
         Route::get('/delete/{id}', '\App\Http\Controllers\Team\QuotationController@delete')->name('quotation.delete.team');

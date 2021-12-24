@@ -8,7 +8,7 @@
             font-family:  Verdana, Arial, Helvetica, sans-serif;
         }
         table {
-            font-size: 12px;
+            font-size: small;
         }
         tfoot tr td {
             font-weight: bold;
@@ -24,7 +24,7 @@
 <table width="100%">
     <tr>
         <td align="center">
-            <h1><b>BuildCon</b></h1>
+            <h1><b>Build Con</b></h1>
             <h2><b>Inquiry Invoice</b></h2>
         </td>
     </tr>
@@ -47,7 +47,7 @@
 
 <br />
 
-<table width="100%" style="text-align: center">
+<table width="100%" style="text-align: left">
     <thead style="background-color: #eae8e4;">
     <tr>
         <th>Sr.no</th>
@@ -65,7 +65,7 @@
             <td>{{ ucwords($item->item_name) }}</td>
             <td>{{ ucwords($item->item_description) }}</td>
             <td>{{ ucwords($item->brand_name) }}</td>
-            <td>{{ $item->quantity }}</td>
+            <td>{{ ucwords($item->quantity) }}</td>
             <td>{{ ucwords($item->unit) }}</td>
         </tr>
     @endforeach
@@ -75,3 +75,11 @@
 <hr class="hr1" />
 </body>
 </html>
+<script>
+    function number_format(num)
+    {
+        var num_parts = num.toString().split(".");
+        num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return num_parts.join(".");
+    }
+</script>

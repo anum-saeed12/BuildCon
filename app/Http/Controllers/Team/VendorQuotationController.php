@@ -27,6 +27,7 @@ class VendorQuotationController extends Controller
             'vendor_quotation.id',
             'vendors.vendor_name',
             'vendor_quotation.project_name',
+            'vendor_quotation.date',
             'vendor_quotation.total',
             'users.name'];
 

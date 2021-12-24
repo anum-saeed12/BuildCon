@@ -110,7 +110,7 @@ class InquiryController extends Controller
 
         $inquiries = $inquiries->paginate($this->count);
         $data = [
-            'title'   => 'Open Inquires',
+            'title'   => 'View Open Inquires',
             'user'    => Auth::user(),
             'inquires' => $inquiries,
             'sales_people' => User::where('user_role','sale')->get(),

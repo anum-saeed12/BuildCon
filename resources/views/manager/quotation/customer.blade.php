@@ -89,9 +89,9 @@
                                         <td><a href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">{{ $quotation->total }}</td>
                                         <td><a href="{{ route('quotation.view.manager',$quotation->quotation_id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-success list-btn"  href="#" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
-                                            <a class="bg-primary list-btn" href="{{ route('quotation.edit.manager',$quotation->quotation_id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('quotation.delete.manager',$quotation->quotation_id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-success list-btn" data-toggle="tooltip" data-placement="bottom" href="#" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('quotation.edit.manager',$quotation->quotation_id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('quotation.delete.manager',$quotation->quotation_id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                 @empty

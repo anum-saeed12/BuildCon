@@ -85,7 +85,7 @@
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $loop->iteration }}</td>
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->date }}</td>
+                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ \Carbon\Carbon::parse($quotation->date)->format('d-M-Y')}}</td>
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</td>
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
                                         <td class="text-right p-0">

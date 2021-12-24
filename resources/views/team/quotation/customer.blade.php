@@ -71,26 +71,27 @@
                                 <thead>
                                 <tr>
                                     <th>Sr.No.</th>
-                                    <th class="pl-0">Customer NAme</th>
+                                    <th class="pl-0">Customer Name</th>
                                     <th class="pl-0">Project Name</th>
                                     <th class="pl-0">Date</th>
-                                    <th class="pl-0">Terms & Condition</th>
                                     <th class="pl-0">Amount</th>
+                                    <th class="pl-0">Terms & Condition</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
                                 @forelse($quotations as $quotation)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('quotation.view.team',$quotation->id) }}">
-                                        <td><a href="{{ route('quotation.view.team',$quotation->id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('quotation.view.team',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.team',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.team',$quotation->id) }}">{{ $quotation->date }}</td>
-                                        <td><a href="{{ route('quotation.view.team',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
-                                        <td><a href="{{ route('quotation.view.team',$quotation->id) }}">{{ ucfirst($quotation->total) }}</td>
+                                        data-href="{{ route('quotation.view.team',$quotation->quotation_id) }}">
+                                        <td><a href="{{ route('quotation.view.team',$quotation->quotation_id) }}">{{ $loop->iteration + intval(($quotations->currentPage() - 1) * $quotations->count()) }}</td>
+                                        <td><a href="{{ route('quotation.view.team',$quotation->quotation_id) }}">{{ ucfirst($quotation->customer_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.team',$quotation->quotation_id) }}">{{ ucfirst($quotation->project_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.team',$quotation->quotation_id) }}">{{ $quotation->date }}</td>
+                                        <td><a href="{{ route('quotation.view.team',$quotation->quotation_id) }}">{{ $quotation->total }}</td>
+                                        <td><a href="{{ route('quotation.view.team',$quotation->quotation_id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-primary list-btn" href="{{ route('quotation.edit.team',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('quotation.delete.team',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-success list-btn" data-toggle="tooltip" data-placement="bottom" href="#" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('quotation.edit.team',$quotation->quotation_id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('quotation.delete.team',$quotation->quotation_id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                 @empty
@@ -103,7 +104,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                      {!! $quotations->links('pagination::bootstrap-4') !!}
+                      {!! $quotations->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>
