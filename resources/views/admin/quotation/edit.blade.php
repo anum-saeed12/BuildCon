@@ -408,5 +408,5 @@
 
         }
     </script>
+    @include('includes.selectajax')
 @stop
-@include('includes.selectajax')
