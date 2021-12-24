@@ -138,15 +138,20 @@ class ItemController extends Controller
             'unit'            => 'required',
             'width'           => 'required',
             'dimension'       => 'required',
-            'picture'         => 'required|file'
+            'picture'         => 'sometimes|required|file'
         ],[
             'category_id.required' => 'The category field is required.',
             'item_name.required' => 'The item name field is required.',
             'brand_id.required' => 'The brand field is required.',
         ]);
 
-        #$item    =  $request->all();
-        #$item['picture']     =  $this->uploadPicture($request->file('picture'));
+        if ($request->has('picture')) {
+            # Delete existing picture
+            $existing_picture = $item->picture;
+            if ($existing_picture) Storage::delete("public/images/{$existing_picture}");
+            # Upload the new picture
+            $item['picture'] = $this->uploadPicture($request->file('picture'));
+        }
 
         $request->input('item_name')        &&  $item->item_name        = $request->input('item_name');
         $request->input('category_id')      &&  $item->category_id      = $request->input('category_id');
@@ -190,10 +195,10 @@ class ItemController extends Controller
 
     private function uploadPicture($picture)
     {
-        $picturename  = Uuid::uuid4().".{$picture->extension()}";
-        $private_path = $picture->storeAs('public/images',$picturename);
-        $public_path  = Storage::url("picture/$picturename");
-        return $picturename;
+        $picture_name  = Uuid::uuid4().".{$picture->extension()}";
+        $private_path = $picture->storeAs('public/images',$picture_name);
+        $public_path  = Storage::url("picture/$picture_name");
+        return $picture_name;
     }
 
     public function delete($id)
