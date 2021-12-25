@@ -80,12 +80,12 @@
                                 @forelse($brands as $brand)
                                     <tr>
                                         <td>{{ $loop->iteration + intval(($brands->currentPage() - 1) * $brands->count()) }}</td>
-                                        <td>{{ ucfirst($brand->brand_name) }}</td>
-                                        <td>{{ ucfirst($brand->attention_person) }}</td>
-                                        <td>{{ ucfirst($brand->country) }}</td>
+                                        <td>{{ ucwords( $brand->brand_name) }}</td>
+                                        <td>{{ ucwords( $brand->attention_person) }}</td>
+                                        <td>{{ ucwords( $brand->country) }}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-primary list-btn"  href="{{ route('brand.edit.admin',$brand->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('brand.delete.admin',$brand->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('brand.edit.admin',$brand->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('brand.delete.admin',$brand->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                     @empty

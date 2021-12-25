@@ -30,13 +30,13 @@
                         @csrf
                         <div class="card-body pb-0 ">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md">
                                     <label for="customer_name">Customer Name</label><br/>
                                     <input type="text" name="customer_name" class="form-control" id="customer_name"
                                            value="{{ old('customer_name') }}">
                                     <div class="text-danger">@error('customer_name'){{ $message }}@enderror</div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md">
                                     <label for="attention_person">Attention Person</label><br/>
                                     <input type="text" name="attention_person" class="form-control" id="attention_person"
                                             value="{{ old('attention_person') }}">
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md">
                                 <label for="address">Address</label><br/>
                                 <textarea class="form-control" name="address" id="address"></textarea>
                                 <div class="text-danger">@error('address'){{ $message }}@enderror</div>

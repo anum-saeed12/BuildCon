@@ -82,16 +82,16 @@
                                 @forelse($vendor_quotation as $quotation)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('vendorquotation.view.manager',$quotation->id) }}">
-                                        <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ $loop->iteration }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ $loop->iteration + intval(($vendor_quotation->currentPage() - 1) * $vendor_quotation->count()) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ucfirst($quotation->vendor_name) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ $quotation->total }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ $quotation->date }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ ucfirst($quotation->name) }}</a></td>
                                         <td class="text-right p-0">
-                                            <a class="bg-warning list-btn"  href="{{ asset('storage/file/'.$quotation->quotation_pdf) }}" title="Quotation PDF" target="_blank"><i class="fas fa-file-pdf" aria-hidden="false"></i></a>
-                                            <a class="bg-primary list-btn"  href="{{ route('vendorquotation.edit.manager',$quotation->id) }}"title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('vendorquotation.delete.manager',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-warning list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ asset('storage/file/'.$quotation->quotation_pdf) }}" title="Quotation PDF" target="_blank"><i class="fas fa-file-pdf" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('vendorquotation.edit.manager',$quotation->id) }}"title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('vendorquotation.delete.manager',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                 @empty
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                        {!! $vendor_quotation->links('pagination::bootstrap-4') !!}
+                        {!! $vendor_quotation->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

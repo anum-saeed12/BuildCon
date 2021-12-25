@@ -86,11 +86,11 @@
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('inquiry.view.admin',$inquiry->id) }}">
                                         <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ $loop->iteration + intval(($inquires->currentPage() - 1) * $inquires->count())}}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucwords($inquiry->customer_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucwords($inquiry->project_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ $inquiry->username }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->date) }}</td>
-                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->timeline) }}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->date)->format('d-M-Y')}}</td>
+                                        <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->timeline)->format('d-M-Y')}}</td>
                                         <td><a href="{{ route('inquiry.view.admin',$inquiry->id) }}">{{ ucfirst($inquiry->inquiry_status) }}</td>
                                         <td class="text-right p-0">
                                             <a class="bg-warning list-btn" href="{{ route('inquiry.documents.admin', $inquiry->id) }}"
@@ -99,9 +99,9 @@
                                                title="Download Files" data-toggle="modal" data-target="#downloadable-files">
                                                 <i class="fas fa-download" aria-hidden="false"></i>
                                             </a>
-                                            @if($inquiry->inquiry_status=='open')<a class="bg-success list-btn"  href="{{ route('quotation.generate.admin',$inquiry->id) }}" title="Generate Quotation"><i class="fas fa-file" aria-hidden="false"></i></a>@endif
-                                            <a class="bg-primary list-btn"  href="{{ route('inquiry.edit.admin',$inquiry->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('inquiry.delete.admin',$inquiry->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            @if($inquiry->inquiry_status=='open')<a class="bg-success list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('quotation.generate.admin',$inquiry->id) }}" title="Generate Quotation"><i class="fas fa-file" aria-hidden="false"></i></a>@endif
+                                            <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('inquiry.edit.admin',$inquiry->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('inquiry.delete.admin',$inquiry->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                     @empty
@@ -134,11 +134,9 @@
     <script>
         $(document).ready(function(){
             $('#downloadable-files').on('show.bs.modal show', function (event) {
-                alert(10)
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var title = button.data('title')
                 var modal = $(this)
-                alert(10)
                 modal.find('.modal-title').text(title)
                 $('#downloadableFilesHolder').load(button.attr('href'))
             })

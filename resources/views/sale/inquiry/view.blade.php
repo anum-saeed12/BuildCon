@@ -85,7 +85,7 @@
                                 @forelse($inquires as $inquiry)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('inquiry.view.sale',$inquiry->id) }}">
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ $loop->iteration }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ $loop->iteration + intval(($inquires->currentPage() - 1) * $inquires->count())}}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ $inquiry->username }}</td>
@@ -98,8 +98,7 @@
                                                onclick="$('#downloadableFilesTitle').html($(this).data('doc'));$('#downloadableFilesHolder').html('Loading wait please...');$('#downloadableFilesHolder').load($(this).attr('href'));"
                                                title="Download Files" data-toggle="modal" data-target="#downloadable-files">
                                                 <i class="fas fa-download" aria-hidden="false"></i>
-                                            </a>
-                                           </td>
+                                            </a></td>
                                     </tr>
                                     @empty
                                         <tr>
@@ -111,7 +110,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                      {!! $inquires->links('pagination::bootstrap-4') !!}
+                      {!! $inquires->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                     <div class="modal" id="downloadable-files" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog modal-sm">
@@ -131,11 +130,9 @@
     <script>
         $(document).ready(function(){
             $('#downloadable-files').on('show.bs.modal show', function (event) {
-                alert(10)
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var title = button.data('title')
                 var modal = $(this)
-                alert(10)
                 modal.find('.modal-title').text(title)
                 $('#downloadableFilesHolder').load(button.attr('href'))
             })

@@ -83,15 +83,15 @@
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('vendorquotation.view.admin',$quotation->id) }}">
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $loop->iteration + intval(($vendor_quotation->currentPage() - 1) * $vendor_quotation->count()) }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ucfirst($quotation->vendor_name) }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucwords($quotation->vendor_name) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucwords($quotation->project_name) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ $quotation->date }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->name) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ \Carbon\Carbon::parse($quotation->date)->format('d-M-Y') }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.admin',$quotation->id) }}">{{ ucwords($quotation->name) }}</a></td>
                                         <td class="text-right p-0">
-                                            <a class="bg-warning list-btn"  href="{{ asset('storage/file/'.$quotation->quotation_pdf) }}" title="Quotation PDF" target="_blank"><i class="fas fa-file-pdf" aria-hidden="false"></i></a>
-                                            <a class="bg-primary list-btn"  href="{{ route('vendorquotation.edit.admin',$quotation->id) }}"title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('vendorquotation.delete.admin',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-warning list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ asset('storage/file/'.$quotation->quotation_pdf) }}" title="Quotation PDF" target="_blank"><i class="fas fa-file-pdf" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('vendorquotation.edit.admin',$quotation->id) }}"title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('vendorquotation.delete.admin',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                 @empty

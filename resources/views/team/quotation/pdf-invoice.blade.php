@@ -37,54 +37,54 @@
 
 <table width="100%" style="text-align:left;" border="1">
     <thead>
-    <tr>
-        <th>Sr.no</th>
-        <th>Item Description</th>
-        <th>Brand</th>
-        <th>Quantity</th>
-        <th>Unit</th>
-        <th>Unit Price ({{ ucwords($quotation->currency) }})</th>
-        <th>Dis.Price ({{ ucwords($quotation->currency) }})</th>
-        <th>Total</th>
-    </tr>
+        <tr>
+            <th>Sr.no</th>
+            <th>Item Description</th>
+            <th>Brand</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Unit Price ({{ ucwords($quotation->currency) }})</th>
+            <th>Dis.Price ({{ ucwords($quotation->currency) }})</th>
+            <th>Total</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach($quotation->items as $item)
-        @if(isset($category))
-            @if($category!=$item->category_id)
+        @foreach($quotation->items as $item)
+            @if(isset($category))
+                @if($category!=$item->category_id)
+                    <tr>
+                        <th colspan="9" style="text-align:left;text-transform:uppercase;"><b>{{ $item->category_name }}</b></th>
+                    </tr>
+                    @php $category = $item->category_id; @endphp
+                @endif
+            @else
                 <tr>
                     <th colspan="9" style="text-align:left;text-transform:uppercase;"><b>{{ $item->category_name }}</b></th>
                 </tr>
                 @php $category = $item->category_id; @endphp
             @endif
-        @else
             <tr>
-                <th colspan="9" style="text-align:left;text-transform:uppercase;"><b>{{ $item->category_name }}</b></th>
+                <td>{{ $loop->iteration }}</td>
+                <td>
+                    <b>{{ ucwords($item->item_name) }}</b><br/>
+                    {{ ucwords($item->item_description) }}
+                </td>
+                <td>{{ ucwords($item->brand_name) }}</td>
+                <td>{{ ucwords($item->quantity) }}</td>
+                <td>{{ ucwords($item->unit) }}</td>
+                <td>{{ ucwords($item->rate) }}</td>
+                <td>{{ ucwords($item->discount_rate) }}</td>
+                <td>{{ ucwords($item->amount) }}</td>
             </tr>
-            @php $category = $item->category_id; @endphp
-        @endif
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>
-                <b>{{ ucwords($item->item_name) }}</b><br/>
-                {{ ucwords($item->item_description) }}
-            </td>
-            <td>{{ ucwords($item->brand_name) }}</td>
-            <td>{{ ucwords($item->quantity) }}</td>
-            <td>{{ ucwords($item->unit) }}</td>
-            <td>{{ ucwords($item->rate) }}</td>
-            <td>{{ ucwords($item->discount_rate) }}</td>
-            <td>{{ ucwords($item->amount) }}</td>
+        @endforeach
+        <tr style="">
+            <th colspan="5" style="text-align:right;">Discount:</th>
+            <td colspan="2" style="text-align:right;">{{ $quotation->discount }}%</td>
         </tr>
-    @endforeach
-    <tr style="">
-        <th colspan="5" style="text-align:right;">Discount:</th>
-        <td colspan="2" style="text-align:right;">{{ $quotation->discount }}%</td>
-    </tr>
-    <tr style="">
-        <th colspan="5" style="text-align:right;">Total:</th>
-        <td colspan="2" style="text-align:right;"><b>{{ $quotation->currency }} {{number_format($quotation->total )}}</b></td>
-    </tr>
+        <tr style="">
+            <th colspan="5" style="text-align:right;">Total:</th>
+            <td colspan="2" style="text-align:right;"><b>{{ $quotation->currency }} {{number_format($quotation->total )}}</b></td>
+        </tr>
     </tbody>
 </table>
 
