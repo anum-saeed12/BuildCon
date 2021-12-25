@@ -36,7 +36,7 @@
                                         <select name="customer_id" class="form-control form-control-sm" id="customer_id">
                                             <option selected="selected" value>Select</option>
                                             @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}"{{ $inquiry->items[0]->customer_id==$customer->customer_id ? ' selected':'' }}>{{ ucfirst($customer->customer_name) }}</option>
+                                                <option value="{{ $customer->id }}"{{ $inquiry->items[0]->customer_id==$customer->id ? ' selected':'' }}>{{ ucfirst($customer->customer_name) }}</option>
                                             @endforeach
                                         </select>
                                         <div class="text-danger">@error('customer_id'){{ $message }}@enderror</div>

@@ -59,7 +59,7 @@ class QuotationComparisonController extends Controller
         $quotations = $quotations->paginate($this->count);
 
         $data = [
-            'title'     => 'Quotations',
+            'title'     => 'Comparison Quotations',
             'user'      => Auth::user(),
             'quotations' => $quotations,
             'sales_people' => User::where('user_role','sale')->get(),
@@ -115,9 +115,9 @@ class QuotationComparisonController extends Controller
         $rates = $request->rate;
         $discount_rates = $request->discount_rate;
         $amounts = $request->amount;
-        $comparison_rates = $request->rate;
-        $comparison_amounts = $request->amount;
-        $comparison_discount_rates = $request->discount_rate;
+        $comparison_rates = $request->rate_comparison;
+        $comparison_amounts = $request->amount_comparison;
+        $comparison_discount_rates = $request->discount_rate_comparison;
 
         $data = $request->all();
         $id=Auth::id();
@@ -224,11 +224,17 @@ class QuotationComparisonController extends Controller
 
         $select = [
             "quotation_comparison_item.*",
-            "items.item_name"
+            "items.item_name",
+            "categories.category_name",
+            "categories.id as category_id",
+            "brands.brand_name",
+            "brands.id as brand_id",
         ];
 
         $quotation->items = QuotationItemComparison::select($select)
             ->join('items', 'items.id', '=', 'quotation_comparison_item.item_id')
+            ->join('brands', 'brands.id', '=', 'quotation_comparison_item.brand_id')
+            ->join('categories', 'categories.id', '=', 'items.category_id')
             ->where('quotation_comparison_item.quotation_id', $id)
             ->get();
 

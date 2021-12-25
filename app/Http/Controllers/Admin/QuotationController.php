@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Inquiry;
 use App\Models\InquiryOrder;
@@ -33,8 +34,6 @@ class QuotationController extends Controller
         ];
         $quotations = Quotation::select($select)
             ->leftJoin('quotation_item', 'quotation_item.quotation_id', '=', 'quotations.id')
-            ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
-            ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
             ->leftJoin('users','users.id','=','quotations.user_id')
             ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
             ->groupBy('quotations.id');
@@ -69,6 +68,7 @@ class QuotationController extends Controller
 
     public function add()
     {
+        $categories = Category::orderBy('id','DESC')->get();
         $customers = Customer::orderBy('id','DESC')->get();
         $brands    = Brand::orderBy('id','DESC')->get();
         $items     = Item::select([
@@ -79,6 +79,7 @@ class QuotationController extends Controller
             'base_url' => env('APP_URL', 'http://127.0.0.1:8000'),
             'user'     => Auth::user(),
             'brands'    => $brands,
+            'categories' => $categories,
             'customers' => $customers,
             'items'     => $items
         ];
@@ -97,6 +98,8 @@ class QuotationController extends Controller
             'terms_condition'=> 'sometimes',
             'item_id'        => 'required|array',
             'item_id.*'      => 'required',
+            'category_id'    => 'required|array',
+            'category_id.*'  => 'required',
             'brand_id'       => 'required|array',
             'brand_id.*'     => 'required',
             'quantity'       => 'required|array',
@@ -118,6 +121,7 @@ class QuotationController extends Controller
 
         $items = $request->item_id;
         $brands = $request->brand_id;
+        $categories = $request->category_id;
         $quantities = $request->quantity;
         $units = $request->unit;
         $rates = $request->rate;
@@ -140,6 +144,7 @@ class QuotationController extends Controller
                 'quotation_id' => $quotation->id,
                 'item_id'  => $item_detail->id,
                 'brand_id' => $brands[$index],
+                'category_id' => $categories[$index],
                 'quantity' => $quantities[$index],
                 'unit'     => $units[$index],
                 'rate'     => $rates[$index],
@@ -157,19 +162,18 @@ class QuotationController extends Controller
     public function edit($id)
     {
         $customers = Customer::orderBy('id','DESC')->get();
+        $categories = Category::orderBy('id','DESC')->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name,id"),
         ])->orderBy('id','DESC')->get();
 
         $select = [
             "quotations.*",
-           # "quotation_item.*",
             'quotations.id as quotation_id',
             "customers.*"
         ];
         $quotation = Quotation::select($select)
             ->join('customers','customers.id','=','quotations.customer_id')
-            #->join('quotation_item','quotation_item.quotation_id','=','quotations.id')
             ->where('quotations.id', $id)
             ->first();
 
@@ -178,11 +182,13 @@ class QuotationController extends Controller
 
         $select = [
             "quotation_item.*",
-            "items.item_name"
+            "items.item_name",
+            "items.category_id",
         ];
 
         $quotation->items = QuotationItem::select($select)
             ->join('items', 'items.id', '=', 'quotation_item.item_id')
+            ->join('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->where('quotation_id', $id)
             ->get();
 
@@ -192,6 +198,7 @@ class QuotationController extends Controller
             'user'      => Auth::user(),
             'quotation' => $quotation,
             'customers' => $customers,
+            'categories' => $categories,
             'items'     => $items
         ];
 
@@ -221,6 +228,8 @@ class QuotationController extends Controller
             'item_id.*'      => 'required',
             'brand_id'       => 'required|array',
             'brand_id.*'     => 'required',
+            'category_id'       => 'required|array',
+            'category_id.*'     => 'required',
             'quantity'       => 'required|array',
             'quantity.*'     => 'required',
             'unit'           => 'required|array',
@@ -251,6 +260,7 @@ class QuotationController extends Controller
 
         $items = $request->item_id;
         $brands = $request->brand_id;
+        $categories = $request->category_id;
         $quantities = $request->quantity;
         $units = $request->unit;
         $rates = $request->rate;
@@ -265,6 +275,7 @@ class QuotationController extends Controller
                 'quotation_id' => $quotation->id,
                 'item_id'  => $item_detail->id,
                 'brand_id' => $brands[$index],
+                'category_id' => $categories[$index],
                 'quantity' => $quantities[$index],
                 'unit'     => $units[$index],
                 'rate'     => $rates[$index],
@@ -298,6 +309,7 @@ class QuotationController extends Controller
             'quotations.discount',
             'quotations.created_at as creationdate',
             'quotations.id as unique',
+            'categories.category_name',
             'items.item_name',
             'items.item_description',
             'brands.brand_name',
@@ -314,6 +326,7 @@ class QuotationController extends Controller
             ->leftJoin('quotation_item', 'quotation_item.quotation_id', '=', 'quotations.id')
             ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
+            ->leftJoin('categories', 'categories.id', '=', 'quotation_item.category_id')
             ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
             ->get();
         $data = [
@@ -329,6 +342,7 @@ class QuotationController extends Controller
     {
         $customers = Customer::orderBy('id','DESC')->get();
         $brands    = Brand::orderBy('id','DESC')->get();
+        $categories = Category::orderBy('id','DESC')->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name"),
         ])->orderBy('id','DESC')->get();
@@ -357,6 +371,7 @@ class QuotationController extends Controller
             'inquiry'   => $inquiry,
             'brands'    => $brands,
             'customers' => $customers,
+            'categories' => $categories,
             'items'     => $items
         ];
 
@@ -370,6 +385,7 @@ class QuotationController extends Controller
             'items.item_description',
             'items.category_id',
             'brands.brand_name',
+            'categories.category_name',
             'quotation_item.quantity',
             'quotation_item.amount',
             'quotation_item.unit',

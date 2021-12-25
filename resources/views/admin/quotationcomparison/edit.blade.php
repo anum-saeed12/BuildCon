@@ -311,8 +311,8 @@
                 // Calculate change
                 change = ((quotation_rate - cp_discounted_price) / quotation_rate) * 100;
                 cp_change_input.removeClass('bg-danger').removeClass('bg-success');
-                if (change < 0) cp_change_input.addClass('bg-danger');
-                if (change > 0) cp_change_input.addClass('bg-success');
+                if (change < 0) cp_change_input.addClass('bg-success');
+                if (change > 0) cp_change_input.addClass('bg-danger');
                 cp_change_input.val(change.toFixed(2) + '%');
             });
             cp_total_input.val(cp_total);

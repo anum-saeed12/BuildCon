@@ -10,7 +10,7 @@ class QuotationItemComparison extends Model
     use HasFactory;
 
     protected $table = 'quotation_comparison_item';
-    protected $fillable = ['item_id','brand_id','quantity','unit','rate','rate_comparison','discount_rate',
+    protected $fillable = ['item_id','category_id','brand_id','quantity','unit','rate','rate_comparison','discount_rate',
         'discount_rate_comparison','amount','amount_comparison','quotation_id',
         'created_at','updated_at'];
 
@@ -22,6 +22,10 @@ class QuotationItemComparison extends Model
     public function brand()
     {
         return $this->hasOne(Brand::class, 'id', 'brand_id');
+    }
+    public function category()
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
     public function quotation()
