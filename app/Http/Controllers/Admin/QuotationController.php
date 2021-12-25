@@ -378,16 +378,6 @@ class QuotationController extends Controller
             'categories.category_name',
         ];
 
-        /*$quotation = Quotation::select($select)
-            ->leftJoin('quotation_item', 'quotation_item.quotation_id', '=', 'quotations.id')
-            ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
-            ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
-            ->leftJoin('categories', 'category.id', '=', 'items.category_id')
-            ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
-            ->orderBy('items.category_id','ASC')
-            ->where('quotations.id',$id)
-            ->groupBy('items.id')
-            ->get();*/
         $quotation_select = [
             'quotations.quotation',
             'quotations.id',

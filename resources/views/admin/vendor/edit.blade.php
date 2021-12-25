@@ -30,19 +30,19 @@
                         @csrf
                         <div class="card-body pb-0 ">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md">
                                     <label for="vendor_name">Vendor Name</label><br/>
                                     <input type="text" name="vendor_name" class="form-control" id="vendor_name"
                                            value="{{ ucfirst($vendor->vendor_name) }}">
                                     <div class="text-danger">@error('vendor_name'){{ $message }}@enderror</div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md">
                                     <label for="attended_person">Attention Person</label><br/>
                                     <input type="text" name="attended_person" class="form-control" id="attended_person"
                                            value="{{ ucfirst($vendor->attended_person) }}">
                                     <div class="text-danger">@error('attended_person'){{ $message }}@enderror</div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md">
                                     <label for="country">Country</label><br/>
                                     <input type="text" name="country" class="form-control" id="country"
                                            value="{{ ucfirst($vendor->country) }}">
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md">
                                     <label for="address">Address</label><br/>
                                     <textarea class="form-control" name="address" id="address">{{ ucfirst($vendor->address) }}</textarea>
                                     <div class="text-danger">@error('address'){{ $message }}@enderror</div>

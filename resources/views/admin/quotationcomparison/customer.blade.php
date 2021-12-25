@@ -82,14 +82,13 @@
                                 <tbody id="myTable">
                                 @forelse($quotations as $quotation)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="{{ route('comparison.edit.admin',$quotation->id) }}">
-                                        <td><a href="{{ route('comparison.edit.admin',$quotation->id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('comparison.edit.admin',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td><a href="{{ route('comparison.edit.admin',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('comparison.edit.admin',$quotation->id) }}">{{ ucfirst($quotation->competitor_name) }}</td>
-                                        <td><a href="{{ route('comparison.edit.admin',$quotation->id) }}">{{ $quotation->date }}</td>
-                                        <td><a href="{{ route('comparison.edit.admin',$quotation->id) }}">{{ $quotation->total }}</td>
-                                        <td><a href="{{ route('comparison.edit.admin',$quotation->id) }}">{{ $quotation->total_comparison }}</td>
+                                        data-href="{{ route('quotation.view.admin',$quotation->id) }}">
+                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $loop->iteration }}</td>
+                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->customer_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ \Carbon\Carbon::parse($quotation->date)->format('d-M-Y')}}</td>
+                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</td>
+                                        <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
                                         <td class="text-right p-0">
                                             <a class="bg-primary list-btn" href="{{ route('comparison.edit.admin',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
                                             <a class="bg-danger list-btn"  href="{{ route('comparison.delete.admin',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>

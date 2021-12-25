@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-8">
-                    <h1>{{$title}} <a href="{{ route('item.export') }}" class="btn btn-info"><i class="fas fa-file-export mr-1"></i>Export</a></h1>
+                    <h1>{{$title}} <a href="{{ route('item.export') }}" class="btn btn-info btn-sm ml-2"><i class="fas fa-file-export mr-1"></i>Export</a></h1>
                 </div>
                 <div class="col-sm-4">
                     <ol class="breadcrumb float-sm-right">
@@ -78,7 +78,7 @@
                                 <tr>
                                     <th>Sr.No.</th>
                                     <th class="pl-0">Item Name</th>
-                                    <th class="pl-0">Item Picture</th>
+                                    {{--<th class="pl-0">Item Picture</th>--}}
                                     <th class="pl-0">Brand</th>
                                     <th class="pl-0">Category</th>
                                     <th class="pl-0">Item Description</th>
@@ -95,10 +95,10 @@
                                         data-href="{{ route('item.edit.manager',$item->item_id) }}">
                                         <td><a href="{{ route('item.edit.manager',$item->item_id) }}">{{ $loop->iteration + intval(($items->currentPage() - 1) * $items->count()) }}</td>
                                         <td><a href="{{ route('item.edit.manager',$item->item_id) }}">{{ucfirst($item->item_name)}}</td>
-                                        <td><a href="{{ asset('storage/images/'.$item->item_id) }}" target="_blank">
+                                        {{--<td><a href="{{ asset('storage/images/'.$item->item_id) }}" target="_blank">
                                                 <div class="list-img-thumbnail" style="background-image:url('{{ asset('storage/images/'.$item->picture) }}');"></div>
                                             </a>
-                                        </td>
+                                        </td>--}}
                                         <td><a href="{{ route('item.edit.manager',$item->item_id) }}">{{ucfirst($item->brand_name)}}</td>
                                         <td><a href="{{ route('item.edit.manager',$item->item_id) }}">{{ucfirst($item->category_name)}}</td>
                                         <td><a href="{{ route('item.edit.manager',$item->item_id) }}">{{ucfirst($item->item_description)}}</td>
@@ -108,8 +108,9 @@
                                         <td><a href="{{ route('item.edit.manager',$item->item_id) }}">{{$item->height}}</td>
                                         <td><a href="{{ route('item.edit.manager',$item->item_id) }}">{{$item->width}}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-primary list-btn"  href="{{ route('item.edit.manager',$item->item_id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('item.delete.manager',$item->item_id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-info list-btn" data-toggle="tooltip" data-placement="bottom" data-html="true" href="{{ asset('storage/images/'.$item->picture) }}" title="<img src='{{ asset('storage/images/'.$item->picture) }}' style='max-width:150px;'/>"><i class="fas fa-image" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('item.edit.manager',$item->item_id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('item.delete.manager',$item->item_id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                 @empty
@@ -131,7 +132,7 @@
 @stop
 
 @section('extras')
-    <script>
+    <script type="text/javascript">
         $(document).ready(function(){
             $("#myInput").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
@@ -139,7 +140,6 @@
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
-            $('.c-tt').tooltip();
         });
     </script>
 @stop

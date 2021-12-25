@@ -79,13 +79,13 @@
                                 <tbody id="myTable">
                                 @forelse($customer as $cus)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration + intval(($customer->currentPage() - 1) * $customer->count())}}</td>
                                         <td>{{ ucfirst($cus->customer_name) }}</td>
                                         <td>{{ ucfirst($cus->attention_person) }}</td>
                                         <td>{{ ucfirst($cus->address) }}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-primary list-btn"  href="{{ route('customer.edit.team' ,$cus->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('customer.delete.team' ,$cus->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('customer.edit.team' ,$cus->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('customer.delete.team' ,$cus->id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                     @empty
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                      {!! $customer->links('pagination::bootstrap-4') !!}
+                      {!! $customer->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

@@ -105,8 +105,7 @@
                                 <label for="picture">Item Picture</label><br/>
                                 <div class="input-group mt-3">
                                     <input name="picture" type="file"
-                                           class="form-control-file" accept=".jpg,.jpeg,.png,.svg"
-                                           required="required" >
+                                           class="form-control-file" accept=".jpg,.jpeg,.png,.svg">
                                 </div>
                             </div>
                             <div class="row mb-2">

@@ -8,7 +8,7 @@
             font-family:  Verdana, Arial, Helvetica, sans-serif;
         }
         table {
-            font-size: 12px;
+            font-size: small;
         }
         tfoot tr td {
             font-weight: bold;

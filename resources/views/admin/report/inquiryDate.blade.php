@@ -95,7 +95,6 @@
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ substr($item->inquiry,0,7) }}</td>
-                                        {{--      <td>{{ $item->inquiry }}</td>--}}
                                         <td>{{ ucfirst($item->username) }} ({{ $item->user_role }})</td>
                                         <td>{{ ucfirst($item->customer_name) }}</td>
                                         <td>{{ ucfirst($item->project_name) }}</td>

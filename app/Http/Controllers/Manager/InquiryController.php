@@ -62,8 +62,7 @@ class InquiryController extends Controller
             'inquiries.project_name',
             'inquiries.date',
             'inquiries.timeline',
-            'users.name',
-            'items.item_description',
+            'users.name as username',
             DB::raw("(
                 CASE
                     WHEN `quotations`.`id` iS NULL
@@ -104,7 +103,7 @@ class InquiryController extends Controller
         $sale = User::where('user_role','sale')->get();
 
         $data = [
-            'title'   => 'View Inquiries',
+            'title'   => 'View Open Inquiries',
             'user'    => Auth::user(),
             'inquires'=> $inquires,
             'sales_people' => $sale,

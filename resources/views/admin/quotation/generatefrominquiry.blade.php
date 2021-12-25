@@ -62,7 +62,7 @@
                                 <br/>
                                 <div class="row">
                                     <div class="col-md-3 item-container">
-                                        <label for="item_id">Select Item </label><br/>
+                                        <label for="item_id">Select Item {{ $inquiry->items[0]->item_id }}</label><br/>
                                         <select name="item_id[]" class="form-control form-control-sm trigger" id="item_id" data-target="#brand_id" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner" onchange="itemSelect($(this))">
                                             <option selected="selected" value>Select</option>
                                             @foreach ($items as $item)
@@ -71,7 +71,7 @@
                                         </select>
                                         <div id="item_spinner"></div>
                                     </div>
-                                    <div class="col-md-2 item-container">
+                                    <div class="col-md-2 brand-container">
                                         <label for="brand_id">Select Brand</label><br/>
                                         <select name="brand_id[]" class="form-control form-control-sm" id="brand_id"
                                                 data-unit="#unit" data-rate="#rate"
@@ -204,7 +204,7 @@
                                     <div class="col-md-2 ">
                                         <label for="discount">Discount</label><br/>
                                         <div class="input-group input-group-sm mb-3">
-                                            <input type="number" min="0" max="100" step="1"
+                                            <input type="text" min="0" max="100" step="1"
                                                    name="discount" class="form-control" id="discount"
                                                    value="{{ $inquiry->discount }}">
                                             <div class="input-group-append">
