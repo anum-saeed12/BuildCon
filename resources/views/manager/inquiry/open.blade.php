@@ -86,8 +86,8 @@
                                         <td><a href="{{ route('inquiry.view.manager',$inquiry->id) }}">{{ ucwords($inquiry->customer_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.manager',$inquiry->id) }}">{{ ucwords($inquiry->project_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.manager',$inquiry->id) }}">{{ ucwords($inquiry->username) }}</td>
-                                        <td><a href="{{ route('inquiry.view.manager',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->date)->format('d-M-Y') }}</td>
-                                        <td><a href="{{ route('inquiry.view.manager',$inquiry->id) }}">{{ ucwords($inquiry->timeline) }}</td>
+                                        <td><a href="{{ route('inquiry.view.manager',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->date)->format('d-M-Y')}}</td>
+                                        <td><a href="{{ route('inquiry.view.manager',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->timeline)->format('d-M-Y')}}</td>
                                         <td class="text-right p-0">
                                             <a class="bg-warning list-btn" href="{{ route('inquiry.documents.manager', $inquiry->id) }}"
                                                data-doc="Documents for {{ ucfirst($inquiry->customer_name) }} - {{ ucfirst($inquiry->project_name) }}"

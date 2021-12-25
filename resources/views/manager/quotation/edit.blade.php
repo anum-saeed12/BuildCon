@@ -35,7 +35,7 @@
                                         <select name="customer_id" class="form-control form-control-sm" id="customer_id">
                                             <option selected="selected" value>Select</option>
                                             @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}"{{ $quotation->items[0]->customer_id==$customer->customer_id ? ' selected':'' }}>{{ ucfirst($customer->customer_name) }}</option>
+                                                <option value="{{ $customer->id }}"{{ $quotation->customer_id==$customer->id ? ' selected':'' }}>{{ ucfirst($customer->customer_name) }}</option>
                                             @endforeach
                                         </select>
                                         <div class="text-danger">@error('customer_id'){{ $message }}@enderror</div>
@@ -60,7 +60,18 @@
                                 </div>
                                 <br/>
                                 <div class="row">
-                                    <div class="col-md-3 item-container">
+                                    <div class="col-md-2 category-container">
+                                        <label for="category_id">Select Category</label><br/>
+                                        <select name="category_id[]" class="form-control form-control-sm categories" id="category_id" data-target="#item_id" data-href="{{ route('category.fetch.ajax.manager') }}" data-spinner="#category_spinner" onchange="categorySelect($(this))">
+                                            <option selected="selected" value>Select Category</option>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}"{{ $quotation->items[0]->category_id==$category->id ? ' selected':'' }}>{{ ucfirst($category->category_name) }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div id="category_spinner"></div>
+                                        <div class="text-danger">@error('category_id'){{ $message }}@enderror</div>
+                                    </div>
+                                    <div class="col-md-2 item-container">
                                         <label for="item_id">Select Item </label><br/>
                                         <select name="item_id[]" class="form-control form-control-sm trigger" id="item_id" data-target="#brand_id" data-href="{{ route('item.fetch.ajax.manager') }}" data-spinner="#item_spinner" onchange="itemSelect($(this))">
                                             <option selected="selected" value>Select Item</option>
@@ -128,7 +139,17 @@
                                     @foreach($quotation->items as $quotation_item)
                                         @php if (isset($loop) && $loop->iteration <= 1) continue; @endphp
                                         <div class="row mt-3">
-                                            <div class="col-md-3 item-container">
+                                            <div class="col-md-2 category-container">
+                                                <select name="category_id[]" class="form-control form-control-sm" id="category_id_{{ $loop->iteration }}" data-target="#item_id_{{ $loop->iteration }}" data-href="{{ route('category.fetch.ajax.manager') }}" data-spinner="#item_spinner_{{ $loop->iteration }}" onchange="categorySelect($(this))">
+                                                    <option selected="selected" value>Select Category</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}"{{ $category->id == $quotation_item->category_id ? ' selected':'' }}>{{ ucfirst($category->category_name) }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div id="category_spinner"></div>
+                                                <div class="text-danger">@error('category_id'){{ $message }}@enderror</div>
+                                            </div>
+                                            <div class="col-md-2 item-container">
                                                 <select name="item_id[]" class="form-control form-control-sm trigger" id="item_id_{{ $loop->iteration - 1 }}" data-target="#brand_id_{{ $loop->iteration - 1 }}" data-href="{{ route('item.fetch.ajax.manager') }}" data-spinner="#item_spinner_{{ $loop->iteration - 1 }}" onchange="itemSelect($(this))">
                                                     <option selected="selected" value>Select Item</option>
                                                     @foreach ($items as $item)
@@ -250,12 +271,18 @@
                 $uid = $('.quantity').length + 1;
 
                 let $itemRow = '<div class="row mt-3">' +
-                    '<div class="col-md-3 item-container">' +
+                    '<div class="col-md-2 category-container">' +
+                    `<select name="category_id[]" class="form-control form-control-sm categories" id="category_id_${$uid}" data-target="#item_id_${$uid}" data-href="{{ route('category.fetch.ajax.manager') }}" data-spinner="#category_spinner_${$uid}" onchange="categorySelect($(this))">` +
+                    '<option selected="selected" value>Select Category</option>' +
+                    @foreach ($categories as $category)
+                        '<option value="{{ $category->id }}">{{ ucfirst($category->category_name) }}</option>'+
+                    @endforeach
+                        '</select>' +
+                    `<div id="category_spinner_${$uid}"></div>` +
+                    '</div>' +
+                    '<div class="col-md-2 item-container">' +
                     `<select name="item_id[]" class="form-control form-control-sm" id="item_id_${$uid}" data-target="#brand_id_${$uid}" data-href="{{ route('item.fetch.ajax.manager') }}" data-spinner="#item_spinner_${$uid}" onchange="itemSelect($(this))">` +
                     '<option selected="selected" value>Select Item</option>' +
-                    @foreach ($items as $item)
-                        '<option value="{{ $item->item_name }}">{{ ucfirst($item->item_name) }}</option>' +
-                    @endforeach
                         '</select>' +
                     `<span id="item_spinner_${$uid}"></span>` +
                     '</div>' +

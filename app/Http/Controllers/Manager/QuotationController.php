@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Inquiry;
 use App\Models\InquiryOrder;
@@ -331,6 +332,7 @@ class QuotationController extends Controller
     {
         $customers = Customer::orderBy('id','DESC')->get();
         $brands    = Brand::orderBy('id','DESC')->get();
+        $categories = Category::orderBy('id','DESC')->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name"),
         ])->orderBy('id','DESC')->get();
@@ -359,6 +361,7 @@ class QuotationController extends Controller
             'inquiry'   => $inquiry,
             'brands'    => $brands,
             'customers' => $customers,
+            'categories' => $categories,
             'items'     => $items
         ];
 

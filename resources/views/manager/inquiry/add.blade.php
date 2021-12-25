@@ -77,9 +77,6 @@
                                     <label for="item_id">Select Item</label><br/>
                                     <select name="item_id[]" class="form-control form-control-sm" id="item_id"  data-target="#brand_id" data-href="{{ route('item.fetch.ajax.manager') }}" data-spinner="#item_spinner" onchange="itemSelect($(this))">
                                         <option selected="selected" value>Select Item</option>
-                                        @foreach ($items as $item)
-                                            <option value="{{ $item->item_name }}">{{ ucfirst($item->item_name) }}</option>
-                                        @endforeach
                                     </select>
                                     <div id="item_spinner"></div>
                                     <div class="text-danger">@error('item_id'){{ $message }}@enderror</div>
@@ -88,9 +85,6 @@
                                     <label for="brand_id">Select Brand</label><br/>
                                     <select name="brand_id[]" class="form-control form-control-sm" id="brand_id">
                                         <option selected="selected" value>Select Brand</option>
-                                        @foreach ($brands as $brand)
-                                            <option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>
-                                        @endforeach
                                     </select>
                                     <div class="text-danger">@error('brand_id'){{ $message }}@enderror</div>
                                 </div>
@@ -171,18 +165,12 @@
                 '<div class="col-md-3 item-container">' +
                     `<select name="item_id[]" class="form-control form-control-sm" id="item_id_${$uid}" data-target="#brand_id_${$uid}" data-href="{{ route('item.fetch.ajax.manager') }}" data-spinner="#item_spinner_${$uid}" onchange="itemSelect($(this))">` +
                         '<option selected="selected" value>Select Item</option>' +
-                        @foreach ($items as $item)
-                            '<option value="{{ $item->item_name }}">{{ ucfirst($item->item_name) }}</option>'+
-                        @endforeach
                     '</select>' +
                     `<div id="item_spinner_${$uid}"></div>` +
                 '</div>' +
                 '<div class="col-md-2 brand-container">' +
                     `<select name="brand_id[]" class="form-control form-control-sm" id="brand_id_${$uid}">` +
                         '<option selected="selected" value>Select Brand</option>' +
-                            @foreach ($brands as $brand)
-                           '<option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>'+
-                            @endforeach
                     '</select>' +
                 '</div>' +
                     '<div class="col quantity-container">' +
