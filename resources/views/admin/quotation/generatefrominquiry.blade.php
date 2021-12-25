@@ -66,7 +66,7 @@
                                         <select name="item_id[]" class="form-control form-control-sm trigger" id="item_id" data-target="#brand_id" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner" onchange="itemSelect($(this))">
                                             <option selected="selected" value>Select</option>
                                             @foreach ($items as $item)
-                                                <option value="{{ $item->item_name }}"{{ $inquiry->items[0]->item_id==$item->id ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
+                                                <option value="{{ $item->item_name }}"{{ $inquiry->items[0]->item_name==$item->item_name ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
                                             @endforeach
                                         </select>
                                         <div id="item_spinner"></div>
