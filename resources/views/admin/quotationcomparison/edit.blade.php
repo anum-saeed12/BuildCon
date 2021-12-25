@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-info">
-                        <form class="form-horizontal" action="{{ route('comparison.store.admin',$quotation->id) }}" method="POST">
+                        <form class="form-horizontal" action="{{ route('comparison.update.admin', $quotation->quotation_id) }}" method="POST">
                             @csrf
                             <div class="card-body pb-0">
                                 <div class="row">
@@ -57,7 +57,7 @@
                                         </div>
                                         <div>
                                             <label for="competitor_name">Competitor Name:</label><br/>
-                                            <input type="text" class="form-control form-control-sm" style="width:auto;" placeholder="Apple's rates.." name="competitor_name" required/>
+                                            <input type="text" class="form-control form-control-sm" style="width:auto;" placeholder="Apple's rates.." name="competitor_name" value="{{ $quotation->competitor_name }}" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -157,6 +157,7 @@
                                             <div class="row">
                                                 <div class="col rate-container">
                                                     <input type="text" name="rate_comparison[]"
+                                                           value="{{ $quotation_item->rate_comparison }}"
                                                            class="form-control form-control-sm cp-rate"
                                                            id="cp_rate_{{ $loop->iteration }}"
                                                            data-target="#cp_total_{{ $loop->iteration }}"
@@ -166,6 +167,7 @@
                                                 </div>
                                                 <div class="col discount_rate-container">
                                                     <input type="text" name="discount_rate_comparison[]"
+                                                           value="{{ $quotation_item->discount_rate_comparison }}"
                                                            class="form-control form-control-sm with_out cp_discounted_rate"
                                                            id="cp_discount_rate_{{ $loop->iteration }}" data-id="{{ $loop->iteration }}"
                                                            data-target="#cp_total_amount_{{ $loop->iteration }}"
@@ -176,6 +178,7 @@
                                                 </div>
                                                 <div class="col amount-container">
                                                     <input type="text" name="amount_comparison[]"
+                                                           value="{{ $quotation_item->amount_comparison }}"
                                                            class="form-control form-control-sm cp_total n"
                                                            id="cp_total_amount_{{ $loop->iteration }}"/>
                                                 </div>
@@ -214,7 +217,7 @@
                                                 <div class="input-group input-group-sm">
                                                     <input type="text" name="discount_comparison"
                                                            class="form-control form-control-sm"
-                                                           id="cp_discount" value=""
+                                                           id="cp_discount" value="{{ $quotation->discount_comparison }}"
                                                            onkeydown="calculate($(this))" onkeypress="calculate($(this))"
                                                            onkeyup="calculate($(this))" onchange="calculate($(this))"/>
                                                     <div class="input-group-append">
@@ -245,7 +248,7 @@
                                             </div>
                                             <div class="col">
                                                 <input type="text" name="total_comparison" class="form-control form-control-sm"
-                                                       id="cp_total" value="0" readonly/>
+                                                       id="cp_total" value="{{ $quotation->total_comparison }}" readonly/>
                                             </div>
                                         </div>
                                     </div>
@@ -272,6 +275,7 @@
         $(document).ready(function() {
             //$(document).on('keyup', '.common', sumIt);
             //sumIt() // run when loading
+            calculate();
         });
         function calculate() {
             let quotation_discount = $('#discount'),

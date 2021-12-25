@@ -73,9 +73,10 @@
                                     <th>Sr.No.</th>
                                     <th class="pl-0">Customer Name</th>
                                     <th class="pl-0">Project Name</th>
+                                    <th class="pl-0">Competitor Name</th>
                                     <th class="pl-0">Date</th>
                                     <th class="pl-0">Amount</th>
-                                    <th class="pl-0">Terms & Condition</th>
+                                    <th class="pl-0">Competitor Amount</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
@@ -89,9 +90,8 @@
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ $quotation->total }}</td>
                                         <td><a href="{{ route('quotation.view.admin',$quotation->id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-success list-btn"  href="{{ route('comparison.add.admin',$quotation->id) }}" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
-                                            <a class="bg-primary list-btn" href="{{ route('quotation.edit.admin',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
-                                            <a class="bg-danger list-btn"  href="{{ route('quotation.delete.admin',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
+                                            <a class="bg-primary list-btn" href="{{ route('comparison.edit.admin',$quotation->id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
+                                            <a class="bg-danger list-btn"  href="{{ route('comparison.delete.admin',$quotation->id) }}" title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>
                                     </tr>
                                 @empty

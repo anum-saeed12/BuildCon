@@ -121,7 +121,6 @@
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
-            $('.c-tt').tooltip();
         });
     </script>
 @stop
