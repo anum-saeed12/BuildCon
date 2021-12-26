@@ -16,8 +16,8 @@ RUN apk --no-cache add php8 php8-fpm php8-mysqli php8-json php8-openssl php8-cur
     php8-mbstring php8-gd php-zip php-simplexml php8-pdo php8-pdo_mysql php8-pecl-redis nginx nginx-mod-http-geoip supervisor curl vim
 
 
-RUN apk del build-dependencies #&&\
-    #rm -rf /var/cache/apk/*
+RUN apk del build-dependencies
+#rm -rf /var/cache/apk/*
 
 #RUN pecl install xmlwriter
 #RUN docker-php-ext-install gd gd2 sockets pdo_mysql opcache php-zip php-gd2
