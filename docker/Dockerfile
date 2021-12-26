@@ -15,7 +15,7 @@ RUN apk --no-cache add php8 php8-fpm php8-mysqli php8-json php8-openssl php8-cur
     php8-zlib php8-xml php8-phar php8-intl php8-dom php8-xmlreader php8-ctype php8-session php8-fileinfo \
     php8-mbstring php8-gd php-zip php-simplexml php8-pdo php8-pdo_mysql php8-pecl-redis nginx nginx-mod-http-geoip supervisor curl vim
 
-RUN docker-php-ext-install xml
+
 RUN apk del build-dependencies #&&\
     #rm -rf /var/cache/apk/*
 
