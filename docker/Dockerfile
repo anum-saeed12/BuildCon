@@ -13,9 +13,9 @@ ARG OB_WEB_TOOLS_S3=https://${APP_NAME}-web-tools.s3-eu-west-1.amazonaws.com/
 # Install packages
 RUN apk --no-cache add php8 php8-fpm php8-mysqli php8-json php8-openssl php8-curl php8-iconv php8-tokenizer \
     php8-zlib php8-xml php8-phar php8-intl php8-dom php8-xmlreader php8-ctype php8-session php8-fileinfo \
-    php8-mbstring php8-gd php8-pdo php8-pdo_mysql php8-pecl-redis nginx nginx-mod-http-geoip supervisor curl vim
+    php8-mbstring php8-gd php-zip php-simplexml php8-pdo php8-pdo_mysql php8-pecl-redis nginx nginx-mod-http-geoip supervisor curl vim
 
-#RUN docker-php-ext-install sockets pdo_mysql opcache
+#RUN docker-php-ext-install gd gd2 sockets pdo_mysql opcache php-zip php-gd2
 #
 #RUN docker-php-ext-enable opcache && \
 #    pecl install event-2.5.3 && \
