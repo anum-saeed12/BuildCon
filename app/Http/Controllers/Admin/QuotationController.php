@@ -129,8 +129,15 @@ class QuotationController extends Controller
         $amounts = $request->amount;
 
         $data = $request->all();
-        $id=Auth::user()->id;
-        $data['user_id']  = $id;
+        $data['user_id'] = Auth::id();
+        # Checks if the inquiry ID exists
+        if ($request->has('inquiry_id')) {
+            # Fetches the user who created the inquiry
+            $inquiry = Inquiry::find($request->input('inquiry_id'));
+            # Assign the quotation's user ID to the user who created the inquiry
+            $data['user_id'] = $inquiry->user_id;
+        }
+
         $data['date'] = Carbon::parse($request->date)->format('Y-m-d');
         $data['quotation'] = Uuid::uuid4()->getHex();
         $quotation = new Quotation($data);
