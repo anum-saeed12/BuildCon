@@ -124,7 +124,7 @@ class UserController extends Controller
         ]);
 
         $request->input('email')       &&  $user->email        = $request->input('email');
-        empty($request->passowrd)      ||  $user->password     = Hash::make($request->input('password'));
+        empty($request->password)          ||  $user->password     = Hash::make($request->input('password'));
         $request->input('username')    &&  $user->username     = $request->input('username');
         $request->input('user_role')   &&  $user->user_role    = $request->input('user_role');
         $user->save();
