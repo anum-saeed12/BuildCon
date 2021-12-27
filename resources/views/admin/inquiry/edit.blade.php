@@ -124,7 +124,7 @@
                                             <select name="item_id[]" class="form-control form-control-sm trigger" id="item_id_{{ $loop->iteration - 1 }}" data-target="#brand_id_{{ $loop->iteration - 1 }}" data-href="{{ route('item.fetch.ajax.admin') }}" data-spinner="#item_spinner_{{ $loop->iteration - 1 }}" onchange="itemSelect($(this))">
                                                 <option selected="selected" value>Select Item</option>
                                                 @foreach (fetchItemsForCategory($inquiry_items->category_id) as $item)
-                                                    <option value="{{ $item->item_name }}"{{ $inquiry_items->->item_name==$item->item_name ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
+                                                    <option value="{{ $item->item_name }}"{{ $inquiry_items->item_name==$item->item_name ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
                                                 @endforeach
                                             </select>
                                             <span id="item_spinner_{{ $loop->iteration - 1 }}"></span>
