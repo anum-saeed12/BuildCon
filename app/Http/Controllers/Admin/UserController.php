@@ -85,16 +85,19 @@ class UserController extends Controller
 
         if($exist) return redirect(route('user.list.admin'))->with('error', 'User already exists!!');
 
+        $user             =  new User();
+        $user->name       = $request->name;
+        $user->email      = $request->email;
+        $user->username   = $request->username;
+        $user->user_role  = $request->user_role;
+        $user->password   =  Hash::make($request->password);
+        $user->save();
+
         if($request->user_role == 'team')
         {
             # Verify if categories exist
             $verification = Category::select('id')->whereIn('id', $request->category_id)->get();
             if (count($request->category_id) != $verification->count()) return redirect()->back()->with('error', 'Please select valid categories');
-
-            $data             =  $request->all();
-            $user             =  new User($data);
-            $user['password'] =  Hash::make($request->password);
-            $user->save();
 
             foreach ($request->category_id as $category) {
                 $user_category = new UserCategory();
@@ -102,14 +105,6 @@ class UserController extends Controller
                 $user_category->user_id = $user->id;
                 $user_category->save();
             }
-        } else {
-            $user             =  new User();
-            $user->name       = $request->name;
-            $user->email      = $request->email;
-            $user->username   = $request->username;
-            $user->user_role  = $request->user_role;
-            $user->password   =  Hash::make($request->password);
-            $user->save();
         }
 
         return redirect(
