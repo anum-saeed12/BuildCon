@@ -30,59 +30,55 @@
                             @csrf
                             <div class="card-body pb-0 pt-2 mt-2">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md">
                                         <div class="form-group">
                                             <label for="name">Name</label><br/>
                                             <input type="text" name="name" class="form-control" id="name"
-                                                   value="{{ ucfirst($users->name) }}" required>
+                                                   value="{{ ucfirst($users->name) }}" placeholder="Example: John Smith" required>
                                             <div class="text-danger">@error('name'){{ $message }}@enderror</div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md">
                                         <div class="form-group">
                                             <label for="username">Username</label><br/>
                                             <input type="text" name="username" class="form-control" id="username"
-                                                   value="{{ ucfirst($users->username) }}" required>
+                                                   value="{{ ucfirst($users->username) }}" placeholder="Example: johnsmith23" required>
                                             <div class="text-danger">@error('username'){{ $message }}@enderror</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md">
                                         <div class="form-group">
                                             <label for="email">Email</label><br/>
                                             <input type="email" name="email" class="form-control" id="email"
-                                                   value="{{ ucfirst($users->email) }}" required>
+                                                   value="{{ ucfirst($users->email) }}" placeholder="Example: johnsmith@buildcon.com" required>
                                             <div class="text-danger">@error('email'){{ $message }}@enderror</div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md">
                                         <div class="form-group">
                                             <label for="password">Password</label><br/>
-                                            <input type="password" name="password" class="form-control" id="password">
+                                            <input type="password" name="password" class="form-control" id="password" placeholder="Password should be 6 characters or more">
                                             <div class="text-danger">@error('password'){{ $message }}@enderror</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md">
                                         <div class="form-group">
                                             <label for="user_role">User Role</label><br/>
                                             <select name="user_role" class="form-control optional-trigger" data-trigger-value="team" data-target="#user_category" data-target-required="#category_id" id="user_role" required>
                                                 <option selected="selected" value>Select</option>
-                                                <option value="admin" {{ $users->user_role == 'admin' ? 'selected="selected"' : '' }}>Admin
-                                                </option>
-                                                <option value="sale" {{ $users->user_role == 'sale' ? 'selected="selected"' : '' }}>Sales Person
-                                                </option>
-                                                <option value="manager" {{ $users->user_role == 'manager' ? 'selected="selected"' : '' }}>Manager
-                                                </option>
-                                                <option value="team" {{ $users->user_role == 'team' ? 'selected="selected"' : '' }}>Sourcing Team
-                                                </option>
+                                                <option value="admin" {{ $users->user_role == 'admin' ? 'selected="selected"' : '' }}>Admin</option>
+                                                <option value="sale" {{ $users->user_role == 'sale' ? 'selected="selected"' : '' }}>Sales Person</option>
+                                                <option value="manager" {{ $users->user_role == 'manager' ? 'selected="selected"' : '' }}>Manager</option>
+                                                <option value="team" {{ $users->user_role == 'team' ? 'selected="selected"' : '' }}>Sourcing Team</option>
                                             </select>
                                             <div class="text-danger">@error('user_role'){{ $message }}@enderror</div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md">
                                         <div id="user_category" class="mt-3 category-selector"{!! $users->user_role!='team'?' style="display:none;"':'' !!}>
                                             <label>Select Category <small>({{ $category->count() }})</small></label><br/>
                                             <div class="input-group input-group-sm mb-3">

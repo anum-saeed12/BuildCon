@@ -71,8 +71,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'email'      => 'required',
-            'username'   => 'required',
+            'email'      => 'required|unique:App\Models\User,email',
+            'username'   => 'required|unique:App\Models\User,username',
             'name'       => 'required',
             'password'   => 'required',
             'user_role'  => 'required|in:admin,sale,manager,team'
@@ -83,12 +83,7 @@ class UserController extends Controller
         $exist = User::where('username',$request->username)
                       ->where('email',$request->email)->first();
 
-        if($exist)
-        {
-            return redirect(
-                route('user.list.admin')
-            )->with('success', 'User already exists!!');
-        }
+        if($exist) return redirect(route('user.list.admin'))->with('error', 'User already exists!!');
 
         if($request->user_role == 'team')
         {
@@ -107,6 +102,14 @@ class UserController extends Controller
                 $user_category->user_id = $user->id;
                 $user_category->save();
             }
+        } else {
+            $user             =  new User();
+            $user->name       = $request->name;
+            $user->email      = $request->email;
+            $user->username   = $request->username;
+            $user->user_role  = $request->user_role;
+            $user->password   =  Hash::make($request->password);
+            $user->save();
         }
 
         return redirect(
