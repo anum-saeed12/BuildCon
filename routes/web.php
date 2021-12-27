@@ -303,8 +303,8 @@ Route::prefix('/manager')->middleware('manager')->group(function() {
 Route::prefix('/sale_person')->middleware('sale')->group(function() {
     # Dashboard
     Route::get('/', '\App\Http\Controllers\DashboardController@sale')->name('dashboard.sale');
-    Route::get('/quotation', '\App\Http\Controllers\Sales\QuotationController@index')->name('quotation.list.sale');
-    Route::get('/quotation/view/{id}', '\App\Http\Controllers\Sales\QuotationController@view')->name('quotation.item.sale');
+    Route::get('/quotation', '\App\Http\Controllers\Sales\QuotationController@customer')->name('quotation.list.sale');
+    Route::get('/quotation/view/{id}', '\App\Http\Controllers\Sales\QuotationController@view')->name('quotation.view.sale');
     Route::prefix('/inquiry')->group(function() {
         Route::get('/', '\App\Http\Controllers\Sales\InquiryController@index')->name('inquiry.index.sale');
         Route::get('/index', '\App\Http\Controllers\Sales\InquiryController@index')->name('inquiry.list.sale');

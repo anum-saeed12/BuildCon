@@ -78,13 +78,13 @@
                                 <tbody id="myTable">
                                 @forelse($quotations as $quotation)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
-                                        data-href="#">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td>{{ ucfirst($quotation->project_name) }}</td>
-                                        <td>{{ $quotation->date }}</td>
-                                        <td>{{ $quotation->total }}</td>
-                                        <td>{{ ucfirst($quotation->terms_condition) }}</td>
+                                        data-href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ $loop->iteration }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucfirst($quotation->customer_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucfirst($quotation->project_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ $quotation->date }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ $quotation->total }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
                                     </tr>
                                 @empty
                                     <tr>

@@ -44,7 +44,7 @@
                         <div class="icon">
                             <i class="fas fa-pen-square nav-icon text-gray"></i>
                         </div>
-                        <a href="{{ route('inquiry.list.sale') }}" class="small-box-footer bg-gray" style="color:white!important;">View Inquiries <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('inquiry.open.sale') }}" class="small-box-footer bg-gray" style="color:white!important;">View Open Inquiries <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 

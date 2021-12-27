@@ -47,7 +47,7 @@
                         <div class="icon">
                             <i class="fas fa-file nav-icon text-gray"></i>
                         </div>
-                        <a href="{{ route('inquiry.list.manager') }}" class="small-box-footer bg-gray" style="color:white!important;">View Open Inquirires <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('inquiry.open.manager') }}" class="small-box-footer bg-gray" style="color:white!important;">View Open Inquirires <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
 
