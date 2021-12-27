@@ -132,7 +132,7 @@
                                         <div class="col-md-3 item-container">
                                             <select name="item_id[]" class="form-control form-control-sm" id="item_id_{{ $loop->iteration - 1 }}" data-target="#brand_id_{{ $loop->iteration - 1 }}" data-href="{{ route('item.fetch.ajax.team') }}" data-spinner="#item_spinner_{{ $loop->iteration - 1 }}" onchange="itemSelect($(this))">
                                                 <option selected="selected" value>Select Item</option>
-                                                @foreach ($items as $item)
+                                                @foreach (fetchItemsForCategory($inquiry_item->category_id) as $item)
                                                     <option value="{{ $item->item_name }}"{{ $inquiry_item->item_name == $item->item_name ? " selected":'' }}>{{ ucfirst($item->item_name) }}</option>
                                                 @endforeach
                                             </select>

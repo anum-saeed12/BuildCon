@@ -123,8 +123,8 @@
                                         <div class="col-md-3 item-container">
                                             <select name="item_id[]" class="form-control form-control-sm trigger" id="item_id_{{ $loop->iteration - 1 }}" data-target="#brand_id_{{ $loop->iteration - 1 }}" data-href="{{ route('item.fetch.ajax.manager') }}" data-spinner="#item_spinner_{{ $loop->iteration - 1 }}" onchange="itemSelect($(this))">
                                                 <option selected="selected" value>Select Item</option>
-                                                @foreach (fetchItemsForCategory($inquiry_items->category_id) as $item)
-                                                    <option value="{{ $item->item_name }}"{{ $inquiry_items->->item_name==$item->item_name ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
+                                                @foreach (fetchItemsForCategory($inquiry_item->category_id) as $item)
+                                                    <option value="{{ $item->item_name }}"{{ $inquiry_item->item_name==$item->item_name ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
                                                 @endforeach
                                             </select>
                                             <span id="item_spinner_${$uid}"></span>
@@ -132,8 +132,8 @@
                                         <div class="col-md-2 brand-container">
                                             <select name="brand_id[]" class="form-control form-control-sm" id="brand_id_{{ $loop->iteration }}">
                                                 <option selected="selected" value>Select Brand</option>
-                                                @foreach (fetchBrandsForItem($inquiry_items->item_name) as $brand)
-                                                    <option value="{{ $brand->id }}"{{ $inquiry_items->brand_id==$brand->id ?' selected':'' }}>{{ ucfirst($brand->brand_name) }}</option>
+                                                @foreach (fetchBrandsForItem($inquiry_item->item_name) as $brand)
+                                                    <option value="{{ $brand->id }}"{{ $inquiry_item->brand_id==$brand->id ?' selected':'' }}>{{ ucfirst($brand->brand_name) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
