@@ -111,7 +111,7 @@
                                     @php if (isset($loop) && $loop->iteration <= 1) continue; @endphp
                                     <div class="row mt-3">
                                         <div class="col-md-3 category-container">
-                                            <select name="category_id[]" class="form-control form-control-sm" id="category_id_{{ $loop->iteration }}" data-target="#item_id_{{ $loop->iteration }}" data-href="{{ route('category.fetch.ajax.sale') }}" data-spinner="#item_spinner_{{ $loop->iteration }}" onchange="categorySelect($(this))">
+                                            <select name="category_id[]" class="form-control form-control-sm" id="category_id_{{ $loop->iteration - 1 }}" data-target="#item_id_{{ $loop->iteration - 1 }}" data-href="{{ route('category.fetch.ajax.sale') }}" data-spinner="#item_spinner_{{ $loop->iteration - 1 }}" onchange="categorySelect($(this))">
                                                 <option selected="selected" value>Select Category</option>
                                                 @foreach ($categories as $category)
                                                     <option value="{{ $category->id }}"{{ $category->id == $inquiry_item->category_id ? ' selected':'' }}>{{ ucfirst($category->category_name) }}</option>
@@ -121,16 +121,16 @@
                                             <div class="text-danger">@error('category_id'){{ $message }}@enderror</div>
                                         </div>
                                         <div class="col-md-3 item-container">
-                                            <select name="item_id[]" class="form-control form-control-sm" id="item_id_{{ $loop->iteration }}" data-target="#brand_id_{{ $loop->iteration }}" data-href="{{ route('item.fetch.ajax.sale') }}" data-spinner="#item_spinner_{{ $loop->iteration }}" onchange="itemSelect($(this))">
+                                            <select name="item_id[]" class="form-control form-control-sm" id="item_id_{{ $loop->iteration - 1 }}" data-target="#brand_id_{{ $loop->iteration - 1 }}" data-href="{{ route('item.fetch.ajax.sale') }}" data-spinner="#item_spinner_{{ $loop->iteration - 1 }}" onchange="itemSelect($(this))">
                                                 <option selected="selected" value>Select Item</option>
                                                 @foreach ($items as $item)
                                                     <option value="{{ $item->item_name }}"{{ $inquiry_item->item_name == $item->item_name ? " selected":'' }}>{{ ucfirst($item->item_name) }}</option>
                                                 @endforeach
                                             </select>
-                                            <span id="item_spinner_${$uid}"></span>
+                                            <span id="item_spinner_{{ $loop->iteration - 1 }}"></span>
                                         </div>
                                         <div class="col-md-2 brand-container">
-                                            <select name="brand_id[]" class="form-control form-control-sm" id="brand_id_{{ $loop->iteration }}">
+                                            <select name="brand_id[]" class="form-control form-control-sm" id="brand_id_{{ $loop->iteration - 1 }}">
                                                 <option selected="selected" value>Select Brand</option>
                                                 @foreach (fetchBrandsForItem($inquiry_item->item_name) as $brand)
                                                     <option value="{{ $brand->id }}"{{ $brand->id == $inquiry_item->brand_id ? ' selected':'' }}>{{ ucfirst($brand->brand_name) }}</option>
@@ -138,10 +138,10 @@
                                             </select>
                                         </div>
                                         <div class="col quantity-container">
-                                            <input type="text" name="quantity[]" value="{{ $inquiry_item->quantity }}" class="form-control form-control-sm common quantity" id="quantity_{{ $loop->iteration }}" data-target="#total_amount_{{ $loop->iteration }}" data-into="#rate_{{ $loop->iteration }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
+                                            <input type="text" name="quantity[]" value="{{ $inquiry_item->quantity }}" class="form-control form-control-sm common quantity" id="quantity_{{ $loop->iteration - 1 }}" data-target="#total_amount_{{ $loop->iteration - 1 }}" data-into="#rate_{{ $loop->iteration - 1 }}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">
                                         </div>
                                         <div class="col unit-container">
-                                            <input type="text" name="unit[]" value="{{ $inquiry_item->unit }}" class="form-control form-control-sm" id="unit_{{ $loop->iteration }}" >
+                                            <input type="text" name="unit[]" value="{{ $inquiry_item->unit }}" class="form-control form-control-sm" id="unit_{{ $loop->iteration - 1 }}" >
                                         </div>
                                         <div class="col-0">
                                             <button type="button" class="delete btn btn-danger btn-sm"><span><i class="fas fa-trash-alt" aria-hidden="false"></i></span></button>
@@ -195,41 +195,35 @@
 
                 let $itemRow = '<div class="row mt-3 ">' +
                     '<div class="col-md-3 category-container">' +
-                    `<select name="category_id[]" class="form-control form-control-sm categories" id="category_id_${$uid}" data-target="#item_id_${$uid}" data-href="{{ route('category.fetch.ajax.sale') }}" data-spinner="#category_spinner_${$uid}" onchange="categorySelect($(this))">` +
-                    '<option selected="selected" value>Select Category</option>' +
-                    @foreach ($categories as $category)
-                        '<option value="{{ $category->id }}">{{ ucfirst($category->category_name) }}</option>'+
-                    @endforeach
+                        `<select name="category_id[]" class="form-control form-control-sm categories" id="category_id_${$uid}" data-target="#item_id_${$uid}" data-href="{{ route('category.fetch.ajax.sale') }}" data-spinner="#category_spinner_${$uid}" onchange="categorySelect($(this))">` +
+                            '<option selected="selected" value>Select Category</option>' +
+                            @foreach ($categories as $category)
+                                '<option value="{{ $category->id }}">{{ ucfirst($category->category_name) }}</option>'+
+                            @endforeach
                         '</select>' +
-                    `<div id="category_spinner_${$uid}"></div>` +
+                        `<div id="category_spinner_${$uid}"></div>` +
                     '</div>' +
                     '<div class="col-md-3 item-container">' +
-                    `<select name="item_id[]" class="form-control form-control-sm " id="item_id_${$uid}" data-target="#brand_id_${$uid}" data-href="{{ route('item.fetch.ajax.sale') }}" data-spinner="#item_spinner_${$uid}" onchange="itemSelect($(this))">` +
-                    '<option selected="selected" value>Select Item</option>' +
-                    @foreach ($items as $item)
-                        '<option value="{{ $item->item_name }}">{{ ucfirst($item->item_name) }}</option>'+
-                    @endforeach
+                        `<select name="item_id[]" class="form-control form-control-sm " id="item_id_${$uid}" data-target="#brand_id_${$uid}" data-href="{{ route('item.fetch.ajax.sale') }}" data-spinner="#item_spinner_${$uid}" onchange="itemSelect($(this))">` +
+                            '<option selected="selected" value>Select Item</option>' +
                         '</select>' +
-                    `<div id="item_spinner_${$uid}"></div>` +
+                        `<div id="item_spinner_${$uid}"></div>` +
                     '</div>' +
                     '<div class="col-md-2 brand-container">' +
-                    `<select name="brand_id[]" class="form-control form-control-sm" id="brand_id_${$uid}">` +
-                    '<option selected="selected" value>Select Brand</option>' +
-                    @foreach ($brands as $brand)
-                        '<option value="{{ $brand->id }}">{{ ucfirst($brand->brand_name) }}</option>'+
-                    @endforeach
+                        `<select name="brand_id[]" class="form-control form-control-sm" id="brand_id_${$uid}">` +
+                            '<option selected="selected" value>Select Brand</option>' +
                         '</select>' +
                     '</div>' +
                     '<div class="col quantity-container">' +
-                    `<input type="text" name="quantity[]" class="form-control form-control-sm common quantity" id="quantity_${$uid}" data-target="#total_amount_${$uid}" data-into="#rate_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">`+
+                        `<input type="text" name="quantity[]" class="form-control form-control-sm common quantity" id="quantity_${$uid}" data-target="#total_amount_${$uid}" data-into="#rate_${$uid}" onkeydown="calculate($(this))" onkeypress="calculate($(this))" onkeyup="calculate($(this))" onchange="calculate($(this))">`+
                     '</div>' +
                     '<div class="col unit-container">' +
-                    `<input type="text" name="unit[]" class="form-control form-control-sm" id="unit_${$uid}" >` +
+                        `<input type="text" name="unit[]" class="form-control form-control-sm" id="unit_${$uid}" >` +
                     '</div>' +
                     '<div class="col-0">' +
-                    '<button class="delete btn btn-danger btn-sm"><span><i class="fas fa-trash-alt" aria-hidden="false"></i></span></button>' +
+                        '<button class="delete btn btn-danger btn-sm"><span><i class="fas fa-trash-alt" aria-hidden="false"></i></span></button>' +
                     '</div>' +
-                    '</div>';
+                '</div>';
                 x++;
                 $(wrapper).append($itemRow); // add input box
             });

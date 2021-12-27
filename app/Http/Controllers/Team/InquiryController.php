@@ -222,10 +222,12 @@ class InquiryController extends Controller
 
     public function edit($id)
     {
-        $customers = Customer::orderBy('id','DESC')->get();
-        $brands    = Brand::orderBy('id','DESC')->get();
-        $categories    = Category::orderBy('id','DESC')->get();
-        $items     = Item::select([
+        $customers  = Customer::orderBy('id','DESC')->get();
+        $brands     = Brand::orderBy('id','DESC')->get();
+        # Fetch the assigned categories of the logged in user
+        $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
+        $categories = Category::whereIn('id', $assigned_categories)->orderBy('category_name','DESC')->get();
+        $items      = Item::select([
             DB::raw("DISTINCT item_name,id"),
         ])->orderBy('id','DESC')->get();
 
@@ -251,8 +253,14 @@ class InquiryController extends Controller
 
         $inquiry->items = InquiryOrder::select($select_item)
             ->join('items', 'items.id', '=', 'inquiry_order.item_id')
+            ->whereIn('items.category_id', $assigned_categories)
             ->where('inquiry_order.inquiry_id', $id)
             ->get();
+
+        $inquiry->total_items = InquiryOrder::select($select_item)
+            ->join('items', 'items.id', '=', 'inquiry_order.item_id')
+            ->where('inquiry_order.inquiry_id', $id)
+            ->get()->count();
 
         $data = [
             'title'     => 'Edit Inquiry',
@@ -374,7 +382,8 @@ class InquiryController extends Controller
     public function update(Request $request,$id)
     {
         $inquiry = Inquiry::find($id);
-
+        # Fetch the assigned categories of the logged in user
+        $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
         if(!$inquiry)
         {
             return redirect(
@@ -407,7 +416,11 @@ class InquiryController extends Controller
         $inquiry->remarks = $request->remarks;
         $inquiry->save();
 
-        $inquiry_item = InquiryOrder::where('inquiry_id',$inquiry->id)->delete();
+        /*$inquiry_item = InquiryOrder::where('inquiry_id',$inquiry->id)->delete();*/
+        # Only delete the items belonging to the assigned categories of the logged in user
+        $inquiry_item = InquiryOrder::join('items', 'items.id', '=', 'inquiry_order.item_id')
+            ->whereIn('items.category_id', $assigned_categories)
+            ->where('inquiry_order.inquiry_id', $id)->delete();
 
         $items      = $request->item_id;
         $categories = $request->category_id;
