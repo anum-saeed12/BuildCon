@@ -273,17 +273,17 @@ Route::prefix('/manager')->middleware('manager')->group(function() {
         Route::get('/view/{id}', '\App\Http\Controllers\Manager\QuotationController@view')->name('quotation.view.manager');
         Route::get('/invoice/{id}', '\App\Http\Controllers\Manager\QuotationController@pdfinquiry')->name('quotation.pdfinquiry.manager');
         Route::prefix('/cmd/comparison')->group(function() {
-            Route::get('/customer', '\App\Http\Controllers\Admin\QuotationComparisonController@customer')->name('comparison.list.admin');
-            Route::get('/add/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@add')->name('comparison.add.admin');
-            Route::post('/store/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@store')->name('comparison.store.admin');
-            Route::get('/generate/{inquiry_id}', '\App\Http\Controllers\Admin\QuotationComparisonController@generateQuotation')->name('comparison.generate.admin');
-            Route::get('/edit/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@edit')->name('comparison.edit.admin');
-            Route::post('/update/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@update')->name('comparison.update.admin');
-            Route::get('/delete/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@delete')->name('comparison.delete.admin');
-            Route::get('/view/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@view')->name('comparison.view.admin');
-            Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@pdfinquiry')->name('comparison.pdfinquiry.admin');
-            Route::get('/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@comparison')->name('comparison.comparison.admin');
-            Route::post('/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@compare')->name('comparison.compare.admin');
+            Route::get('/customer', '\App\Http\Controllers\Admin\QuotationComparisonController@customer')->name('comparison.list.manager');
+            Route::get('/add/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@add')->name('comparison.add.manager');
+            Route::post('/store/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@store')->name('comparison.store.manager');
+            Route::get('/generate/{inquiry_id}', '\App\Http\Controllers\Admin\QuotationComparisonController@generateQuotation')->name('comparison.generate.manager');
+            Route::get('/edit/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@edit')->name('comparison.edit.manager');
+            Route::post('/update/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@update')->name('comparison.update.manager');
+            Route::get('/delete/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@delete')->name('comparison.delete.manager');
+            Route::get('/view/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@view')->name('comparison.view.manager');
+            Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@pdfinquiry')->name('comparison.pdfinquiry.manager');
+            Route::get('/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@comparison')->name('comparison.comparison.manager');
+            Route::post('/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@compare')->name('comparison.compare.manager');
         });
     });
     Route::prefix('/vendor/quotation')->group(function() {
