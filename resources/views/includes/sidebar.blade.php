@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4 sidebar-no-expand">
     <a href="#" class="brand-link text-center">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
     </a>

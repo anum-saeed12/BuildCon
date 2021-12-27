@@ -144,7 +144,7 @@ class QuotationController extends Controller
                 'quotation_id' => $quotation->id,
                 'item_id'  => $item_detail->id,
                 'brand_id' => $brands[$index],
-                'category_id' => $categories[$index],
+                #'category_id' => $categories[$index],
                 'quantity' => $quantities[$index],
                 'unit'     => $units[$index],
                 'rate'     => $rates[$index],
