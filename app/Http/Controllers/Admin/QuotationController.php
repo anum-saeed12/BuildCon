@@ -326,7 +326,7 @@ class QuotationController extends Controller
             ->leftJoin('quotation_item', 'quotation_item.quotation_id', '=', 'quotations.id')
             ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
-            ->leftJoin('categories', 'categories.id', '=', 'quotation_item.category_id')
+            ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
             ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
             ->get();
         $data = [
