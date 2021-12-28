@@ -42,7 +42,7 @@
         </td>
         <td><p style="color:white"> hello</p></td>
         <td>
-            <p><b>Date: </b>{{ ucwords(\Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->date))->format('Y-m-d')) }}</p>
+            <p><b>Date: </b>{{ ucwords(\Carbon\Carbon::createFromDate($quotation[0]->date)->format('d-M-Y')) }}</p>
             <p><b>Quotation Ref# </b>{{ $quotation[0]->quotation_ref }}</p>
         </td>
     </tr>

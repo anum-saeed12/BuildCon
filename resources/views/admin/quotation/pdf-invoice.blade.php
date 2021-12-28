@@ -26,7 +26,7 @@
 <table width="100%">
     <tr>
         <td colspan="2">
-            <p><b>Ref: </b>{{ strtoupper(substr($quotation->quotation,0,4)) }}-{{ strtoupper(substr($quotation->quotation,4,4)) }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('dm') }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('Y') }}</p>
+            <p><b>Ref: </b>{{ strtoupper(substr($quotation->quotation,0,4)) }}-{{ strtoupper(substr($quotation->quotation,4,4)) }}-{{ \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('dm') }}-{{ \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('Y') }}</p>
             <p><b>Attention: </b>{{ ucwords($quotation->attention_person) }}</p>
             <p><b>Customer Name: </b>{{ ucwords($quotation->customer_name) }}</p>
             <p><b>Project Name: </b>{{ ucwords($quotation->project_name) }}</p>

@@ -299,6 +299,7 @@ class QuotationController extends Controller
             'quotations.total',
             'quotations.currency',
             'quotations.discount',
+            'quotations.created_at',
             'quotations.created_at as creationdate',
             'quotations.id as unique',
             'items.item_name',
@@ -396,6 +397,7 @@ class QuotationController extends Controller
         $quotation_select = [
             'quotations.quotation',
             'quotations.id',
+            'quotations.created_at',
             'quotations.project_name',
             'quotations.total',
             'quotations.currency',

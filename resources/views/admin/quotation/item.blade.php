@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="offset-6 col-sm-2 invoice-col">
                                     <address>
-                                        <p><b>Date: </b>{{ ucwords(\Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->date))->format('Y-m-d')) }}</p>
+                                        <p><b>Date: </b>{{ \Illuminate\Support\Carbon::createFromDate($quotation[0]->date)->format('d-M-Y') }}</p>
                                     </address>
                                 </div>
                             </div>
