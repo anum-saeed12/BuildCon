@@ -385,7 +385,7 @@ class QuotationController extends Controller
         return view('admin.quotation.generatefrominquiry', $data);
     }
 
-    public function pdfinquiry($id)
+    public function pdfquotation($id)
     {
         $select=[
             'items.item_name',

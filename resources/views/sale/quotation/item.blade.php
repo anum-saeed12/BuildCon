@@ -9,8 +9,8 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard.admin') }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('customerquotation.list.admin') }}">Quotation</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard.sale') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('quotation.list.sale') }}">Quotation</a></li>
                         <li class="breadcrumb-item active">{{$title}}</li>
                     </ol>
                 </div>
@@ -22,6 +22,12 @@
 @section('content')
 <section class="content">
     <div class="container-fluid">
+        <div class="row mb-3">
+            <div class="col-12">
+                <a href="{{ route('quotation.pdfquotation.sale',$quotation[0]->unique) }}" type="submit" class="btn btn-info toastrDefaultSuccess btn-sm" target="btnActionIframe"><i class="far fa-file-alt mr-1"></i> Create Quotation Pdf</a>
+                <iframe name="btnActionIframe" style="display:none;" onload="setTimeout(function(){this.src=''},1000)"></iframe>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-12">

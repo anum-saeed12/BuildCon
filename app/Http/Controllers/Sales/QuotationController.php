@@ -86,4 +86,58 @@ class QuotationController extends Controller
         ];
         return view('sale.quotation.item', $data);
     }
+
+    public function pdfquotation($id)
+    {
+        $select=[
+            'items.item_name',
+            'items.item_description',
+            'items.category_id',
+            'brands.brand_name',
+            'categories.category_name',
+            'quotation_item.quantity',
+            'quotation_item.amount',
+            'quotation_item.unit',
+            'quotation_item.rate',
+            'quotation_item.discount_rate',
+            'categories.category_name',
+        ];
+
+        $quotation_select = [
+            'quotations.quotation',
+            'quotations.id',
+            'quotations.project_name',
+            'quotations.total',
+            'quotations.currency',
+            'quotations.discount',
+            'customers.customer_name',
+            'customers.attention_person',
+        ];
+        $quotation = Quotation::select($quotation_select)
+            ->join('customers', 'customers.id','=','quotations.customer_id')
+            ->where('quotations.id', $id)
+            ->first();
+
+        if (!isset($quotation->id)) return redirect()->back()->with('error', 'Quotation not found');
+
+        $quotation->items = QuotationItem::select($select)
+            ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
+            ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
+            ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
+            ->orderBy('items.category_id','ASC')
+            ->where('quotation_item.quotation_id',$quotation->id)
+            ->groupBy('items.id')
+            ->get();
+        $quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('d-M-Y');
+
+        $data = [
+            'title'      => 'Quotation Pdf',
+            'base_url'   => env('APP_URL', 'http://omnibiz.local'),
+            'user'       => Auth::user(),
+            'quotation'  => $quotation
+        ];
+        $date = "Quotation-Invoice-". Carbon::now()->format('d-M-Y')  .".pdf";
+        $pdf = PDF::loadView('admin.quotation.pdf-invoice', $data);
+        return $pdf->download($date);
+    }
 }

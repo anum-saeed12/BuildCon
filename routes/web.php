@@ -105,7 +105,7 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
         Route::post('/update/{id}', '\App\Http\Controllers\Admin\QuotationController@update')->name('quotation.update.admin');
         Route::get('/delete/{id}', '\App\Http\Controllers\Admin\QuotationController@delete')->name('quotation.delete.admin');
         Route::get('/view/{id}', '\App\Http\Controllers\Admin\QuotationController@view')->name('quotation.view.admin');
-        Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\QuotationController@pdfinquiry')->name('quotation.pdfinquiry.admin');
+        Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\QuotationController@pdfquotation')->name('quotation.pdfinquiry.admin');
         Route::prefix('/cmd/comparison')->group(function() {
             Route::get('/customer', '\App\Http\Controllers\Admin\QuotationComparisonController@customer')->name('comparison.list.admin');
             Route::get('/add/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@add')->name('comparison.add.admin');
@@ -305,6 +305,7 @@ Route::prefix('/sale_person')->middleware('sale')->group(function() {
     Route::get('/', '\App\Http\Controllers\DashboardController@sale')->name('dashboard.sale');
     Route::get('/quotation', '\App\Http\Controllers\Sales\QuotationController@customer')->name('quotation.list.sale');
     Route::get('/quotation/view/{id}', '\App\Http\Controllers\Sales\QuotationController@view')->name('quotation.view.sale');
+    Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\QuotationController@pdfquotation')->name('quotation.pdfquotation.sale');
     Route::prefix('/inquiry')->group(function() {
         Route::get('/', '\App\Http\Controllers\Sales\InquiryController@index')->name('inquiry.index.sale');
         Route::get('/index', '\App\Http\Controllers\Sales\InquiryController@index')->name('inquiry.list.sale');
