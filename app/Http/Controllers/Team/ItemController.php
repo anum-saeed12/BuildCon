@@ -17,7 +17,21 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $items = Item::select('*')
+        $select=[
+            'items.id as item_id',
+            'items.item_name',
+            'categories.category_name',
+            'brands.brand_name',
+            'items.weight',
+            'items.picture',
+            'items.price',
+            'items.dimension',
+            'items.height',
+            'items.width',
+            'items.unit',
+            'items.item_description',
+        ];
+        $items = Item::select($select)
                        ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
                        ->leftJoin('brands', 'brands.id', '=', 'items.brand_id')
                        ->whereIn('items.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
