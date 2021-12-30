@@ -75,8 +75,8 @@
                                         <label for="item_id">Select Item </label><br/>
                                         <select name="item_id[]" class="form-control form-control-sm trigger" id="item_id" data-target="#brand_id" data-href="{{ route('item.fetch.ajax.team') }}" data-spinner="#item_spinner" onchange="itemSelect($(this))">
                                             <option selected="selected" value>Select Item</option>
-                                            @foreach ($items as $item)
-                                                <option value="{{ $item->item_name }}"{{ $quotation->items[0]->item_id==$item->id ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
+                                            @foreach (fetchItemsForCategory($quotation->items[0]->category_id) as $item)
+                                                <option value="{{ $item->item_name }}"{{ $quotation->items[0]->item_name==$item->item_name ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
                                             @endforeach
                                         </select>
                                         <div id="item_spinner"></div>
@@ -152,7 +152,7 @@
                                             <div class="col-md-2 item-container">
                                                 <select name="item_id[]" class="form-control form-control-sm trigger" id="item_id_{{ $loop->iteration - 1 }}" data-target="#brand_id_{{ $loop->iteration - 1 }}" data-href="{{ route('item.fetch.ajax.team') }}" data-spinner="#item_spinner_{{ $loop->iteration - 1 }}" onchange="itemSelect($(this))">
                                                     <option selected="selected" value>Select Item</option>
-                                                    @foreach ($items as $item)
+                                                    @foreach (fetchItemsForCategory($quotation_item->category_id) as $item)
                                                         <option value="{{ $item->item_name }}"{{ $quotation_item->item_name==$item->item_name ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
                                                     @endforeach
                                                 </select>

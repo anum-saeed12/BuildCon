@@ -182,17 +182,18 @@ class QuotationController extends Controller
         # Fetch the assigned categories of the logged in user
         $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
         $categories = Category::select($category_select)
-            ->whereIn('items.category_id', $assigned_categories)
+            ->whereIn('categories.id', $assigned_categories)
             ->groupBy('categories.category_name')
             ->get();
         $items     = Item::select([
-            DB::raw("DISTINCT item_name,id"),
+            DB::raw("DISTINCT item_name"),
         ])->orderBy('id','DESC')->get();
 
         $select = [
             "quotations.*",
             # "quotation_item.*",
-            "customers.*"
+            "customers.customer_name",
+            "customers.attention_person",
         ];
         $quotation = Quotation::select($select)
             ->join('customers','customers.id','=','quotations.customer_id')
@@ -206,13 +207,15 @@ class QuotationController extends Controller
         $select = [
             "quotation_item.*",
             "items.item_name",
+            "items.brand_id",
             "items.category_id",
+            /*"items.category_id",*/
         ];
 
         $quotation->items = QuotationItem::select($select)
             ->join('items', 'items.id', '=', 'quotation_item.item_id')
             ->join('categories', 'categories.id', '=', 'items.category_id')
-            ->whereIn('items.category_id', $assigned_categories)
+            ->whereIn('categories.id', $assigned_categories)
             ->where('quotation_id', $id)
             ->get();
 
@@ -378,11 +381,14 @@ class QuotationController extends Controller
             "quotation_item.*",
             "items.item_name",
             "items.category_id",
+            "items.item_description",
+            "brands.brand_name",
         ];
 
         $quotation->items = QuotationItem::select($select)
             ->join('items', 'items.id', '=', 'quotation_item.item_id')
             ->join('categories', 'categories.id', '=', 'items.category_id')
+            ->join('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->whereIn('items.category_id', $assigned_categories)
             ->where('quotation_id', $id)
             ->get();
@@ -406,7 +412,7 @@ class QuotationController extends Controller
         # Fetch the assigned categories of the logged in user
         $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
         $categories = Category::select($category_select)
-            ->whereIn('items.category_id', $assigned_categories)
+            ->whereIn('categories.id', $assigned_categories)
             ->groupBy('categories.category_name')
             ->get();
         $brands    = Brand::orderBy('id','DESC')->get();

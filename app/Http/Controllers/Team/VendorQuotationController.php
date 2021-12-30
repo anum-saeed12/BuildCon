@@ -29,7 +29,6 @@ class VendorQuotationController extends Controller
             'vendor_quotation.project_name',
             'vendor_quotation.date',
             'vendor_quotation.total',
-            'vendor_quotation.quotation_ref',
             'users.name'];
 
         $vendors_quotation = VendorQuotation::select($select)
@@ -202,7 +201,9 @@ class VendorQuotationController extends Controller
 
         $select_items = [
             "vendor_quotation_item.*",
-            "items.item_name"
+            "items.item_name",
+            "items.brand_id",
+            "items.category_id",
         ];
 
         $vendor_quotation->items = VendorQuotationItem::select($select_items)
@@ -210,7 +211,6 @@ class VendorQuotationController extends Controller
             ->whereIn('vendor_quotation_item.category_id', UserCategory::select('category_id as id')->where('user_id', Auth::user()->id)->get())
             ->where('vendor_quotation_item.vendor_quotation_id', $id)
             ->get();
-
 
         $data = [
             'title'            => 'Edit Vendor Quotation',
