@@ -29,7 +29,7 @@ class QuotationController extends Controller
             'quotations.date',
             'quotations.total',
             'quotations.terms_condition',
-            'users.name'
+            'users.name as username'
         ];
         $quotations = Quotation::select($select)
             ->where('quotations.user_id',Auth::user()->id)
@@ -54,11 +54,11 @@ class QuotationController extends Controller
             'quotations.quotation',
             'quotations.project_name',
             'quotations.total',
+            'quotations.created_at',
             'quotations.currency',
             'quotations.discount',
             'quotations.created_at as creationdate',
             'quotations.id as unique',
-            'quotations.created_at',
             'categories.category_name',
             'items.item_name',
             'items.item_description',
@@ -107,13 +107,14 @@ class QuotationController extends Controller
         $quotation_select = [
             'quotations.quotation',
             'quotations.id',
-            'quotations.created_at',
             'quotations.project_name',
             'quotations.total',
             'quotations.currency',
+            'quotations.created_at',
             'quotations.discount',
             'customers.customer_name',
             'customers.attention_person',
+            'quotations.terms_condition'
         ];
         $quotation = Quotation::select($quotation_select)
             ->join('customers', 'customers.id','=','quotations.customer_id')
@@ -139,7 +140,7 @@ class QuotationController extends Controller
             'quotation'  => $quotation
         ];
         $date = "Quotation-Invoice-". Carbon::now()->format('d-M-Y')  .".pdf";
-        $pdf = PDF::loadView('admin.quotation.pdf-invoice', $data);
+        $pdf = PDF::loadView('sale.quotation.pdf-invoice', $data);
         return $pdf->download($date);
     }
 }

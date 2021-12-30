@@ -57,7 +57,7 @@
                             <div class="row invoice-info">
                                 <div class="col-sm-4 invoice-col">
                                     <address>
-                                        <p><b>Ref: </b>{{ strtoupper(substr($quotation[0]->vendor_quotation,0,4)) }}-{{ strtoupper(substr($quotation[0]->vendor_quotation,4,4)) }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('dm') }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('Y') }}</p>
+                                        <p><b>Ref: </b>{{ strtoupper(substr($quotation[0]->vendor_quotation,0,4)) }}-{{ strtoupper(substr($quotation[0]->vendor_quotation,4,4)) }}-{{ \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('dm') }}-{{ \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('Y') }}</p>
                                         <p><b>Attention: </b>{{ ucwords($quotation[0]->attended_person) }}</p>
                                         <p><b>Vendor Name: </b>{{ ucwords($quotation[0]->vendor_name) }}</p>
                                         <p><b>Project Name: </b>{{ ucwords($quotation[0]->project_name) }}</p>

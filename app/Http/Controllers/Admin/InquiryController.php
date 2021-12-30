@@ -332,6 +332,7 @@ class InquiryController extends Controller
             'inquiries.id as unique',
             'inquiries.inquiry',
             'inquiries.project_name',
+            'inquiries.created_at',
             'customers.attention_person',
             'customers.customer_name',
             'items.item_name',
@@ -360,20 +361,10 @@ class InquiryController extends Controller
         return view('admin.inquiry.item',$data);
     }
 
-    public function delete($id)
-    {
-        $document = InquiryDocument::where('inquiry_id',$id)->delete();
-        $order    = InquiryOrder::where('inquiry_id',$id)->delete();
-        $inquiry = Inquiry::find($id)->delete();
-        return redirect(
-            route('inquiry.list.admin')
-        )->with('success', 'Inquiry deleted successfully!');
-    }
-
     public function pdfinquiry($id)
     {
         $select=[
-            'inquiries.created_at as creationdate',
+            'inquiries.created_at',
             'inquiries.id as unique',
             'inquiries.inquiry',
             'inquiries.project_name',
@@ -394,9 +385,6 @@ class InquiryController extends Controller
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
             ->where('inquiries.id',$id)
             ->get();
-
-        $inquires->creation = Carbon::createFromTimeStamp(strtotime($inquires[0]->creationdate))->format('d-M-Y');
-
         $data = [
             'title'      => 'Inquiry Pdf',
             'base_url'   => env('APP_URL', 'http://omnibiz.local'),
@@ -406,6 +394,16 @@ class InquiryController extends Controller
         $date = "Inquiry-Invoice-". Carbon::now()->format('d-M-Y')  .".pdf";
         $pdf = PDF::loadView('admin.inquiry.pdf-invoice', $data);
         return $pdf->download($date);
+    }
+
+    public function delete($id)
+    {
+        $document = InquiryDocument::where('inquiry_id',$id)->delete();
+        $order    = InquiryOrder::where('inquiry_id',$id)->delete();
+        $inquiry = Inquiry::find($id)->delete();
+        return redirect(
+            route('inquiry.list.admin')
+        )->with('success', 'Inquiry deleted successfully!');
     }
 
     public function fetchDocuments($id)

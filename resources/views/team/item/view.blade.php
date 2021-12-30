@@ -108,7 +108,7 @@
                                         <td><a href="{{ route('item.edit.team',$item->item_id) }}">{{$item->height}}</td>
                                         <td><a href="{{ route('item.edit.team',$item->item_id) }}">{{$item->width}}</td>
                                         <td class="text-right p-0">
-                                            <a class="bg-info list-btn" data-toggle="tooltip" data-placement="bottom" data-html="true" href="{{ asset('storage/images/'.$item->picture) }}" title="<img src='{{ asset('storage/images/'.$item->picture) }}' style='max-width:150px;'/>"><i class="fas fa-image" aria-hidden="false"></i></a>
+                                            <a class="bg-info list-btn" data-toggle="tooltip" data-placement="bottom" data-html="true" href="{{ asset('storage/images/'.$item->picture) }}" title='View Image' style='max-width:150px;'><i class="fas fa-image" aria-hidden="false"></i></a>
                                             <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('item.edit.team',$item->item_id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>
                                             <a class="bg-danger list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('item.delete.team',$item->item_id) }}"  title="Delete"><i class="fas fa-trash-alt" aria-hidden="false"></i></a>
                                         </td>

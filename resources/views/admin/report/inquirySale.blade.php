@@ -75,11 +75,11 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th class="pl-0">Inquiry Id</th>
+                                    <th class="pl-0">Inquiry</th>
                                     <th class="pl-0">User</th>
                                     <th class="pl-0">Customer</th>
                                     <th class="pl-0">Project</th>
-                                    <th class="pl-0">Total Items</th>
+                                    <th class="pl-0">Count</th>
                                     <th class="pl-0">Date</th>
                                     <th class="pl-0">Timeline</th>
                                     <th class="pl-0">Created</th>
@@ -90,7 +90,6 @@
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ substr($item->inquiry,0,7) }}</td>
-                                  {{--      <td>{{ $item->inquiry }}</td>--}}
                                         <td>{{ ucfirst($item->username) }} ({{ $item->user_role }})</td>
                                         <td>{{ ucfirst($item->customer_name) }}</td>
                                         <td>{{ ucfirst($item->project_name) }}</td>
@@ -101,7 +100,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="99" class="py-3 text-center">No quotes found</td>
+                                        <td colspan="99" class="py-3 text-center">No inquiries found</td>
                                     </tr>
                                 @endforelse
                                 </tbody>

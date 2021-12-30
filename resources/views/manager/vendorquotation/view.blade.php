@@ -71,11 +71,12 @@
                                 <thead>
                                 <tr>
                                     <th>Sr.No.</th>
-                                    <th class="pl-0">Client</th>
+                                    <th class="pl-0">Vendor</th>
+                                    <th class="pl-0">Quotation Ref#</th>
                                     <th class="pl-0">Project</th>
                                     <th class="pl-0">Amount</th>
                                     <th class="pl-0">Date</th>
-                                    <th class="pl-0">Sales Person</th>
+                                    <th class="pl-0">User</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
@@ -84,6 +85,7 @@
                                         data-href="{{ route('vendorquotation.view.manager',$quotation->id) }}">
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ $loop->iteration + intval(($vendor_quotation->currentPage() - 1) * $vendor_quotation->count()) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ ucwords($quotation->vendor_name) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ ucwords($quotation->quotation_ref) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ ucwords($quotation->project_name) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ $quotation->total }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.manager',$quotation->id) }}">{{ \Carbon\Carbon::parse($quotation->date)->format('d-M-Y') }}</a></td>

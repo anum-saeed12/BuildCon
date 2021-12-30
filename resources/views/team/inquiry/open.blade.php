@@ -83,11 +83,11 @@
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('inquiry.view.team',$inquiry->id) }}">
                                         <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ $loop->iteration + intval(($inquires->currentPage() - 1) * $inquires->count())}}</td>
-                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->username) }}</td>
-                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ $inquiry->date }}</td>
-                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucfirst($inquiry->timeline) }}</td>
+                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucwords($inquiry->customer_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucwords($inquiry->project_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ ucwords($inquiry->username) }}</td>
+                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->date)->format('d-M-Y')}}</td>
+                                        <td><a href="{{ route('inquiry.view.team',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->timeline)->format('d-M-Y')}}</td>
                                         <td class="text-right p-0">
                                             <a class="bg-warning list-btn" href="{{ route('inquiry.documents.team', $inquiry->id) }}"
                                                data-doc="Documents for {{ ucfirst($inquiry->customer_name) }} - {{ ucfirst($inquiry->project_name) }}"

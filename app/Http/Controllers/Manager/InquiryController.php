@@ -331,6 +331,7 @@ class InquiryController extends Controller
         $select=[
             'inquiries.id as unique',
             'inquiries.inquiry',
+            'inquiries.created_at',
             'inquiries.project_name',
             'customers.attention_person',
             'customers.customer_name',
@@ -373,7 +374,7 @@ class InquiryController extends Controller
     public function pdfinquiry($id)
     {
         $select=[
-            'inquiries.created_at as creationdate',
+            'inquiries.created_at',
             'inquiries.id as unique',
             'inquiries.inquiry',
             'inquiries.project_name',
@@ -394,9 +395,6 @@ class InquiryController extends Controller
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
             ->where('inquiries.id',$id)
             ->get();
-
-        $inquires->creation = Carbon::createFromTimeStamp(strtotime($inquires[0]->creationdate))->format('d-M-Y');
-
         $data = [
             'title'      => 'Inquiry Pdf',
             'base_url'   => env('APP_URL', 'http://omnibiz.local'),

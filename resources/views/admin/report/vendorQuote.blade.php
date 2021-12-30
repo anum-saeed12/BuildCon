@@ -27,10 +27,10 @@
                 <div class="col-md-3">
                     <form class="form-horizontal" action="{{ route('vendorQuotes.report.admin') }}" method="GET" id="itemSelect">
                         <label>Item Name</label>
-                        <select name="item_id" class="form-control mb-3" id="item_id" onchange="$('#itemSelect').submit()">
+                        <select name="item" class="form-control mb-3" id="item_id" onchange="$('#itemSelect').submit()">
                             <option selected="selected" value>Select</option>
                             @foreach ($items as $item)
-                                <option value="{{ $item->id }}"{!! $item->id==request('item_id')?' selected':'' !!}>{{ ucfirst($item->item_name) }}</option>
+                                <option value="{{ $item->item_name }}"{!! $item->item_name==request('item')?' selected':'' !!}>{{ ucfirst($item->item_name) }}</option>
                             @endforeach
                         </select>
                     </form>
@@ -41,7 +41,7 @@
                     <div class="card">
                         <div class="row mb-3 mt-3 ml-3">
                             <div class="col-md-6">
-                                <form action="" method="GET" id="perPage">
+                                <form action="." method="GET" id="perPage">
                                     <label for="perPageCount">Show</label>
                                     <select id="perPageCount" name="count" onchange="$('#perPage').submit();"
                                             class="input-select mx-2">
@@ -65,8 +65,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if(request('item_id'))
-                                <a href="{{ route('vendorQuotes.reportPDF.admin',request('item_id')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
+                                @if(request('item'))
+                                <a href="{{ route('vendorQuotes.reportPDF.admin',request('item')) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
                                 @endif
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="99" class="py-3 text-center">No quotes found</td>
+                                        <td colspan="99" class="py-3 text-center">No vendor quotes found</td>
                                     </tr>
                                 @endforelse
                                 </tbody>

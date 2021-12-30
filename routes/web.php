@@ -205,7 +205,7 @@ Route::prefix('/sourcing_team')->middleware('team')->group(function() {
         Route::get('/delete/{id}', '\App\Http\Controllers\Team\QuotationController@delete')->name('quotation.delete.team');
         Route::get('/view/{id}', '\App\Http\Controllers\Team\QuotationController@view')->name('quotation.view.team');
         Route::get('/generate/{inquiry_id}', '\App\Http\Controllers\Team\QuotationController@generateQuotation')->name('quotation.generate.team');
-        Route::get('/invoice/{id}', '\App\Http\Controllers\Team\QuotationController@pdfinquiry')->name('quotation.pdfinquiry.team');
+        Route::get('/invoice/{id}', '\App\Http\Controllers\Team\QuotationController@pdfquotation')->name('quotation.pdfquotation.team');
 
     });
     Route::prefix('/vendor/quotation')->group(function() {
@@ -271,7 +271,7 @@ Route::prefix('/manager')->middleware('manager')->group(function() {
         Route::post('/update/{id}', '\App\Http\Controllers\Manager\QuotationController@update')->name('quotation.update.manager');
         Route::get('/delete/{id}', '\App\Http\Controllers\Manager\QuotationController@delete')->name('quotation.delete.manager');
         Route::get('/view/{id}', '\App\Http\Controllers\Manager\QuotationController@view')->name('quotation.view.manager');
-        Route::get('/invoice/{id}', '\App\Http\Controllers\Manager\QuotationController@pdfinquiry')->name('quotation.pdfinquiry.manager');
+        Route::get('/invoice/{id}', '\App\Http\Controllers\Manager\QuotationController@pdfquotation')->name('quotation.pdfquotation.manager');
         Route::prefix('/cmd/comparison')->group(function() {
             Route::get('/customer', '\App\Http\Controllers\Admin\QuotationComparisonController@customer')->name('comparison.list.manager');
             Route::get('/add/{id}', '\App\Http\Controllers\Admin\QuotationComparisonController@add')->name('comparison.add.manager');
@@ -303,7 +303,7 @@ Route::prefix('/manager')->middleware('manager')->group(function() {
 Route::prefix('/sale_person')->middleware('sale')->group(function() {
     # Dashboard
     Route::get('/', '\App\Http\Controllers\DashboardController@sale')->name('dashboard.sale');
-    Route::get('/quotation', '\App\Http\Controllers\Sales\QuotationController@customer')->name('quotation.list.sale');
+    Route::get('/quotation', '\App\Http\Controllers\Sales\QuotationController@customer')->name('customerquotation.list.sale');
     Route::get('/quotation/view/{id}', '\App\Http\Controllers\Sales\QuotationController@view')->name('quotation.view.sale');
     Route::get('/invoice/{id}', '\App\Http\Controllers\Admin\QuotationController@pdfquotation')->name('quotation.pdfquotation.sale');
     Route::prefix('/inquiry')->group(function() {

@@ -27,12 +27,12 @@
                 <div class="row mb-3">
                     <div class="col-md-3">
                         <label for="date_start" class="normal">From</label><br/>
-                        <input type="date" class="form-control" name="date_start" value="{{ request('date_start') ?? date('Y-m-d') }}"/>
+                        <input type="date" class="form-control" name="date_start" value="{{ request('date_start')?request('date_start'):date('Y-m-d') }}"/>
                     </div>
                     <div class="col-md-3">
                         <form class="form-horizontal" action="{{ route('inquiry.datewise.admin') }}" method="GET" id="date_range">
                             <label for="date_end" class="normal">To</label><br/>
-                            <input type="date" class="form-control" name="date_end" value="{{ request('date_end') ?? date('Y-m-d') }}"/>
+                            <input type="date" class="form-control" name="date_end" value="{{ request('date_end')?request('date_end'):date('Y-m-d') }}"/>
                         </form>
                     </div>
                     <div class="col">
@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
                                 @if(count($data) > 0)
-                                    <a href="{{ route('datewise.reportPDF.admin',[request('date_start') ?? date('Y-m-d'), request('date_end') ?? date('Y-m-d') ]) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
+                                    <a href="{{ route('datewise.reportPDF.admin',[request('date_start')?request('date_start'):date('Y-m-d'), request('date_end')?request('date_end'):date('Y-m-d') ]) }}" class="btn btn-success"><i class="fa fa-plus-circle mr-1"></i>Download PDf</a>
                                 @endif
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="99" class="py-3 text-center">No quotes found</td>
+                                        <td colspan="99" class="py-3 text-center">No inquiries found</td>
                                     </tr>
                                 @endforelse
                                 </tbody>

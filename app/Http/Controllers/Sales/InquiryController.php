@@ -228,11 +228,13 @@ class InquiryController extends Controller
             'inquiries.id as unique',
             'inquiries.inquiry',
             'inquiries.project_name',
+            'inquiries.created_at',
             'customers.attention_person',
             'customers.customer_name',
             'items.item_name',
             'items.item_description',
             'brands.brand_name',
+            'users.name',
             'categories.category_name',
             'inquiry_order.quantity',
             'inquiry_order.unit',
@@ -240,8 +242,9 @@ class InquiryController extends Controller
         $inquires = Inquiry::select($select)
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
             ->leftJoin('inquiry_order','inquiry_order.inquiry_id', '=', 'inquiries.id')
-            ->leftJoin('brands','brands.id' ,'=', 'inquiry_order.brand_id')
+            ->leftJoin('users','users.id' ,'=', 'inquiries.user_id')
             ->leftJoin('categories', 'categories.id' ,'=', 'inquiry_order.category_id')
+            ->leftJoin('brands', 'brands.id' ,'=', 'inquiry_order.brand_id')
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
             ->where('inquiries.id',$id)
             ->get();
@@ -257,7 +260,7 @@ class InquiryController extends Controller
     public function pdfinquiry($id)
     {
         $select=[
-            'inquiries.created_at as creationdate',
+            'inquiries.created_at',
             'inquiries.id as unique',
             'inquiries.inquiry',
             'inquiries.project_name',
@@ -278,9 +281,6 @@ class InquiryController extends Controller
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
             ->where('inquiries.id',$id)
             ->get();
-
-        $inquires->creation = Carbon::createFromTimeStamp(strtotime($inquires[0]->creationdate))->format('d-M-Y');
-
         $data = [
             'title'      => 'Inquiry Pdf',
             'base_url'   => env('APP_URL', 'http://omnibiz.local'),

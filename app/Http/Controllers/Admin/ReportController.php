@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Inquiry;
 use App\Models\InquiryOrder;
 use App\Models\Item;
+use App\Models\Quotation;
 use App\Models\QuotationItem;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -21,8 +22,10 @@ class ReportController extends Controller
 
     public function vendorQuotes(Request $request)
     {
-        $item_id = $request->input('item_id');
-        $items = Item::all();
+        $item_name = $request->input('item');
+        $items     = Item::select([
+            DB::raw("DISTINCT item_name")
+        ])->orderBy('id','DESC')->get();
         $select = [
             'items.item_name',
             'categories.category_name',
@@ -37,16 +40,16 @@ class ReportController extends Controller
             'vendor_quotation_item.amount',
             'vendors.vendor_name',
             'users.name as username',
-            'users.user_role',
+            'users.user_role'
         ];
         $datavendor = VendorQuotationItem::select($select)
-            ->leftJoin('items', 'items.id', '=', 'vendor_quotation_item.item_id')
+            ->join('items', 'items.id', '=', 'vendor_quotation_item.item_id')
             ->leftJoin('categories', 'categories.id', '=', 'vendor_quotation_item.category_id')
             ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
             ->leftJoin('vendor_quotation', 'vendor_quotation.id', '=', 'vendor_quotation_item.vendor_quotation_id')
             ->leftJoin('users', 'users.id', '=', 'vendor_quotation.user_id')
             ->leftJoin('vendors', 'vendors.id', '=', 'vendor_quotation.vendor_id')
-            ->where('vendor_quotation_item.item_id',$item_id)
+            ->where('items.item_name',$item_name)
             ->orderBy('vendor_quotation.created_at','DESC')
             ->paginate($this->count);
 
@@ -76,7 +79,7 @@ class ReportController extends Controller
             ->paginate($this->count);
 
         $data = [
-            'title' =>'Item',
+            'title' =>'Items by Category',
             'categorys' =>$categorys,
             'data' => $dataItem
         ];
@@ -88,24 +91,29 @@ class ReportController extends Controller
         $customer_id = $request->input('customer_id');
         $customers = Customer::all();
         $select = [
-            'items.item_name',
-            'brands.brand_name',
+            'users.name as username',
+            'users.user_role',
             'customers.customer_name',
-            'quotation_item.rate',
-            'quotation_item.amount',
+            'quotations.project_name',
+            'quotations.id as quotation_id',
+            'quotations.created_at',
+            'quotations.date',
+            'quotations.total',
+            DB::raw("COUNT(quotation_item.item_id) as total_items")
         ];
-        $dataquotation = QuotationItem::select($select)
-            ->join('quotations', 'quotations.id', '=', 'quotation_item.quotation_id')
-            ->join('customers', 'customers.id', '=', 'quotations.customer_id')
-            ->join('items', 'items.id', '=', 'quotation_item.item_id')
-            ->join('brands', 'brands.id', '=', 'quotation_item.brand_id')
-            ->where('quotations.customer_id',$customer_id);
-        $dataquotation = $dataquotation->paginate($this->count);
+        $data_quotation = Quotation::select($select)
+            ->join('quotation_item', 'quotation_item.quotation_id','=','quotations.id')
+            ->join('items', 'items.id','=','quotation_item.item_id')
+            ->leftJoin('customers','customers.id','=','quotations.customer_id')
+            ->leftJoin('users','users.id','=','quotations.user_id')
+            ->where('quotations.customer_id',$customer_id)
+            ->groupBy('quotations.id');
+        $data_quotation = $data_quotation->paginate($this->count);
 
         $data = [
             'title' =>'Quotation',
             'customers' =>$customers,
-            'data' => $dataquotation
+            'data' => $data_quotation
         ];
         return view('admin.report.quotationWise',$data);
     }
@@ -128,22 +136,22 @@ class ReportController extends Controller
             'inquiries.timeline',
             DB::raw("COUNT(inquiry_order.item_id) as total_items")
         ];
-        $datainquiry = Inquiry::select($select)
+        $data_inquiry = Inquiry::select($select)
             ->join('inquiry_order', 'inquiry_order.inquiry_id','=','inquiries.id')
             ->join('items', 'items.id','=','inquiry_order.item_id')
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
-            ->leftJoin('users','users.id','=','inquiries.user_id');
+            ->leftJoin('users','users.id','=','inquiries.user_id')
+            ->groupBy('inquiries.id');
             #->get();
 
-        if ($request->has('date_start') && !empty($request->input('date_start'))) $datainquiry = $datainquiry->where('inquiries.created_at', '>=', $start_date);
-        if ($request->has('date_end') && !empty($request->input('data_end'))) $datainquiry = $datainquiry->where('inquiries.created_at', '<=', $end_date);
-
-        $datainquiry = $datainquiry->paginate($this->count);
+        if ($request->has('date_start') && !empty($request->input('date_start'))) $data_inquiry = $data_inquiry->where('inquiries.created_at', '>=', "{$start_date} 00:00:00");
+        if ($request->has('date_end') && !empty($request->input('date_end'))) $data_inquiry = $data_inquiry->where('inquiries.created_at', '<=', "{$end_date} 23:59:59");
+        $data_inquiry = $data_inquiry->paginate($this->count);
 
         $data = [
             'title' =>'Inquiries Date Wise',
-            'items' =>$items,
-            'data' => $datainquiry
+            'items' => $items,
+            'data' => $data_inquiry
         ];
         return view('admin.report.inquiryDate',$data);
     }
@@ -162,9 +170,18 @@ class ReportController extends Controller
             'inquiries.created_at',
             'inquiries.date',
             'inquiries.timeline',
-            DB::raw("COUNT(inquiry_order.item_id) as total_items")
+            DB::raw("COUNT(inquiry_order.item_id) as total_items"),
         ];
         $dataSale = Inquiry::select($select)
+            ->join('inquiry_order', 'inquiry_order.inquiry_id','=','inquiries.id')
+            ->join('items', 'items.id','=','inquiry_order.item_id')
+            ->leftJoin('customers','customers.id','=','inquiries.customer_id')
+            ->leftJoin('users','users.id','=','inquiries.user_id')
+            ->where('users.id',$sale_id)
+            ->groupBy('inquiries.id')
+            ->paginate($this->count);
+
+        $total_query = Inquiry::select($select)
             ->join('inquiry_order', 'inquiry_order.inquiry_id','=','inquiries.id')
             ->join('items', 'items.id','=','inquiry_order.item_id')
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
@@ -229,22 +246,22 @@ class ReportController extends Controller
             'vendor_quotation_item.amount',
             'vendors.vendor_name',
             'users.name as username',
-            'users.user_role',
+            'users.user_role'
         ];
-        $datavendor = VendorQuotationItem::select($select)
-            ->leftJoin('items', 'items.id', '=', 'vendor_quotation_item.item_id')
+        $data_vendor = VendorQuotationItem::select($select)
+            ->join('items', 'items.id', '=', 'vendor_quotation_item.item_id')
             ->leftJoin('categories', 'categories.id', '=', 'vendor_quotation_item.category_id')
             ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
             ->leftJoin('vendor_quotation', 'vendor_quotation.id', '=', 'vendor_quotation_item.vendor_quotation_id')
             ->leftJoin('users', 'users.id', '=', 'vendor_quotation.user_id')
             ->leftJoin('vendors', 'vendors.id', '=', 'vendor_quotation.vendor_id')
-            ->where('vendor_quotation_item.item_id',$id)
+            ->where('items.item_name',$id)
             ->orderBy('vendor_quotation.created_at','DESC')
             ->get();
 
         $data = [
             'title' =>'Reports',
-            'data' => $datavendor
+            'data' => $data_vendor
         ];
         $date = "Vendor-Report-". Carbon::now()->format('d-M-Y')  .".pdf";
         $pdf = PDF::loadView('admin.report.vendorQuote-pdf', $data);
@@ -254,23 +271,29 @@ class ReportController extends Controller
     public function quotationWisePdf($id)
     {
         $select = [
-            'items.item_name',
-            'brands.brand_name',
+            'users.name as username',
+            'users.user_role',
             'customers.customer_name',
-            'quotation_item.rate',
-            'quotation_item.amount',
+            'quotations.project_name',
+            'quotations.id as quotation_id',
+            'quotations.created_at',
+            'quotations.date',
+            'quotations.total',
+            DB::raw("COUNT(quotation_item.item_id) as total_items")
         ];
-        $dataquotation = QuotationItem::select($select)
-            ->join('quotations', 'quotations.id', '=', 'quotation_item.quotation_id')
-            ->join('customers', 'customers.id', '=', 'quotations.customer_id')
-            ->join('items', 'items.id', '=', 'quotation_item.item_id')
-            ->join('brands', 'brands.id', '=', 'quotation_item.brand_id')
+        $data_quotation = Quotation::select($select)
+            ->join('quotation_item', 'quotation_item.quotation_id','=','quotations.id')
+            ->join('items', 'items.id','=','quotation_item.item_id')
+            ->leftJoin('customers','customers.id','=','quotations.customer_id')
+            ->leftJoin('users','users.id','=','quotations.user_id')
             ->where('quotations.customer_id',$id)
-            ->get();
+            ->groupBy('quotations.id');
+
+        $data_quotation = $data_quotation->get();
 
         $data = [
-            'title' =>'Quotation',
-            'data' => $dataquotation
+            'title' =>'Quotation Wise',
+            'data' => $data_quotation
         ];
         $date = "Quotation-Report-". Carbon::now()->format('d-M-Y')  .".pdf";
         $pdf = PDF::loadView('admin.report.quotationWise-pdf', $data);
@@ -285,6 +308,7 @@ class ReportController extends Controller
             'categories.category_name',
             'items.price',
             'items.unit',
+            'items.created_at',
             'brands.brand_name',
         ];
         $dataItem = Item::select($select)
@@ -307,7 +331,6 @@ class ReportController extends Controller
         $start_date = $request->input('date_start', false);
         $end_date = $request->input('date_end', false);
 
-        $items = Item::all();
         $select = [
             'users.name as username',
             'users.user_role',
@@ -320,21 +343,21 @@ class ReportController extends Controller
             'inquiries.timeline',
             DB::raw("COUNT(inquiry_order.item_id) as total_items")
         ];
-        $datainquiry = Inquiry::select($select)
+        $data_inquiry = Inquiry::select($select)
             ->join('inquiry_order', 'inquiry_order.inquiry_id','=','inquiries.id')
             ->join('items', 'items.id','=','inquiry_order.item_id')
             ->leftJoin('customers','customers.id','=','inquiries.customer_id')
-            ->leftJoin('users','users.id','=','inquiries.user_id');
+            ->leftJoin('users','users.id','=','inquiries.user_id')
+            ->groupBy('inquiries.id');
 
-        if ($request->has('date_start') && !empty($request->input('date_start'))) $datainquiry = $datainquiry->where('inquiries.created_at', '>=', $start_date);
-        if ($request->has('date_end') && !empty($request->input('data_end'))) $datainquiry = $datainquiry->where('inquiries.created_at', '<=', $end_date);
+        if ($request->has('date_start') && !empty($request->input('date_start'))) $data_inquiry = $data_inquiry->where('inquiries.created_at', '>=', "{$start_date} 00:00:00");
+        if ($request->has('date_end') && !empty($request->input('date_end'))) $data_inquiry = $data_inquiry->where('inquiries.created_at', '<=', "{$end_date} 23:59:59");
 
-        $datainquiry = $datainquiry->get();
+        $data_inquiry = $data_inquiry->get();
 
         $data = [
             'title' =>'Inquiries Date Wise',
-            'items' =>$items,
-            'data' => $datainquiry
+            'data' => $data_inquiry
         ];
         $date = "Inquiry-Date-Report-". Carbon::now()->format('d-M-Y')  .".pdf";
         $pdf = PDF::loadView('admin.report.inquiryDate-pdf', $data);

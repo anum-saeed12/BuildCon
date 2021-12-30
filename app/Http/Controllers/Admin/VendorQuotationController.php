@@ -25,6 +25,7 @@ class VendorQuotationController extends Controller
             'vendor_quotation.quotation_pdf',
             'vendor_quotation.id',
             'vendor_quotation.date',
+            'vendor_quotation.quotation_ref',
             'vendors.vendor_name',
             'vendor_quotation.project_name',
             'vendor_quotation.total',
@@ -319,46 +320,56 @@ class VendorQuotationController extends Controller
 
     public function pdfinquiry($id)
     {
-
         $select=[
-            'vendor_quotation.vendor_quotation',
-            'vendor_quotation.project_name',
-            'vendor_quotation.currency',
-            'vendor_quotation.created_at',
-            'vendor_quotation.quotation_ref',
-            'vendor_quotation.created_at as creationdate',
-            'vendor_quotation.id as unique',
-            'vendor_quotation.total as totals',
             'items.item_name',
             'items.item_description',
-            'vendors.vendor_name',
-            'vendors.attended_person',
-            'categories.category_name',
+            'items.category_id',
             'brands.brand_name',
-            'vendor_quotation_item.unit',
+            'categories.category_name',
             'vendor_quotation_item.quantity',
             'vendor_quotation_item.amount',
-            'vendor_quotation.total',
+            'vendor_quotation_item.unit',
             'vendor_quotation_item.rate',
+            'categories.category_name',
         ];
-        $vendors_quotation = VendorQuotation::select($select)
-            ->where('vendor_quotation.id',$id)
-            ->leftJoin('vendor_quotation_item', 'vendor_quotation_item.vendor_quotation_id', '=', 'vendor_quotation.id')
-            ->leftJoin('vendors', 'vendor_quotation.vendor_id', '=', 'vendors.id')
-            ->leftJoin('items', 'items.id', '=', 'vendor_quotation_item.item_id')
-            ->leftJoin('users', 'users.id', '=', 'vendor_quotation.user_id')
+
+        $quotation_select = [
+            'vendor_quotation.vendor_quotation',
+            'vendor_quotation.id',
+            'vendor_quotation.project_name',
+            'vendor_quotation.total',
+            'vendor_quotation.quotation_ref',
+            'vendor_quotation.currency',
+            'vendor_quotation.created_at',
+            'vendors.vendor_name',
+            'vendors.attended_person'
+        ];
+        $quotation = VendorQuotation::select($quotation_select)
+            ->join('vendors', 'vendors.id','=','vendor_quotation.vendor_id')
+            ->where('vendor_quotation.id', $id)
+            ->first();
+
+        if (!isset($quotation->id)) return redirect()->back()->with('error', 'Vendor Quotation not found');
+
+        $quotation->items = VendorQuotationItem::select($select)
             ->leftJoin('brands', 'brands.id', '=', 'vendor_quotation_item.brand_id')
-            ->leftJoin('categories', 'categories.id', '=', 'vendor_quotation_item.category_id')
+            ->leftJoin('items', 'items.id', '=', 'vendor_quotation_item.item_id')
+            ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
+            ->orderBy('items.category_id','ASC')
+            ->where('vendor_quotation_item.vendor_quotation_id',$quotation->id)
+            ->groupBy('items.id')
             ->get();
-        $vendors_quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($vendors_quotation[0]->creationdate))->format('d-M-Y');
+        $quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('d-M-Y');
 
         $data = [
             'title'      => 'Vendor Quotation Pdf',
             'user'       => Auth::user(),
-            'quotation'  => $vendors_quotation
+            'quotation'  => $quotation
         ];
         $date = "Vendor-Quotation-Invoice-". Carbon::now()->format('d-M-Y')  .".pdf";
         $pdf = PDF::loadView('admin.vendorquotation.pdf-invoice', $data);
         return $pdf->download($date);
     }
+
+
 }

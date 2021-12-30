@@ -75,7 +75,7 @@
                                     <th class="pl-0">Project Name</th>
                                     <th class="pl-0">Date</th>
                                     <th class="pl-0">Amount</th>
-                                    <th class="pl-0">Terms & Condition</th>
+                                    <th class="pl-0">Inquiry Person</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
@@ -87,7 +87,7 @@
                                         <td><a href="{{ route('quotation.view.admin',$quotation->quotation_id) }}">{{ ucwords($quotation->project_name) }}</td>
                                         <td><a href="{{ route('quotation.view.admin',$quotation->quotation_id) }}">{{ \Carbon\Carbon::parse($quotation->date)->format('d-M-Y')}}</td>
                                         <td><a href="{{ route('quotation.view.admin',$quotation->quotation_id) }}">{{ $quotation->total }}</td>
-                                        <td><a href="{{ route('quotation.view.admin',$quotation->quotation_id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
+                                        <td><a href="{{ route('quotation.view.admin',$quotation->quotation_id) }}">{{ ucfirst($quotation->username) }}</td>
                                         <td class="text-right p-0">
                                             <a class="bg-success list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('comparison.add.admin',$quotation->quotation_id) }}" title="Comparison"><i class="fas fa-file" aria-hidden="false"></i></a>
                                             <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('quotation.edit.admin',$quotation->quotation_id) }}" title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>

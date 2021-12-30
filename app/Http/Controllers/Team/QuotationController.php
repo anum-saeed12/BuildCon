@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Team;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Inquiry;
 use App\Models\InquiryOrder;
@@ -25,12 +26,12 @@ class QuotationController extends Controller
     {
         $select = [
             'quotations.id as quotation_id',
-            'customer_name',
-            'project_name',
-            'terms_condition',
-            'date',
-            'total',
-            'users.name'
+            'customers.customer_name',
+            'quotations.project_name',
+            'quotations.terms_condition',
+            'quotations.date',
+            'quotations.total',
+            'users.name as username'
         ];
 
         $quotations = Quotation::select($select)
@@ -76,6 +77,15 @@ class QuotationController extends Controller
         $brands    = Brand::orderBy('id','DESC')->get();
         $category_assigned = UserCategory::select('category_id as id')->where('user_id', Auth::id())->get();
         if (count($category_assigned)<=0) return showError("Category not found");
+        $category_select = [
+            'categories.category_name',
+            'categories.id',
+        ];
+        $categories = Category::select($category_select)
+            ->join('items', 'items.category_id','=','categories.id')->orderBy('id','DESC')
+            ->whereIn('items.category_id', $category_assigned)
+            ->groupBy('categories.category_name')
+            ->get();
         $items = Item::select(DB::raw("DISTINCT items.item_name"))
             ->join('usercategory','usercategory.category_id','=','items.category_id')
             ->where('usercategory.user_id', Auth::id())
@@ -87,6 +97,7 @@ class QuotationController extends Controller
             'user'     => Auth::user(),
             'brands'    => $brands,
             'customers' => $customers,
+            'categories' => $categories,
             'items'     => $items
         ];
         return view('team.quotation.add', $data);
@@ -164,6 +175,16 @@ class QuotationController extends Controller
     public function edit($id)
     {
         $customers = Customer::orderBy('id','DESC')->get();
+        $category_select = [
+            'categories.category_name',
+            'categories.id',
+        ];
+        # Fetch the assigned categories of the logged in user
+        $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
+        $categories = Category::select($category_select)
+            ->whereIn('items.category_id', $assigned_categories)
+            ->groupBy('categories.category_name')
+            ->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name,id"),
         ])->orderBy('id','DESC')->get();
@@ -184,11 +205,14 @@ class QuotationController extends Controller
 
         $select = [
             "quotation_item.*",
-            "items.item_name"
+            "items.item_name",
+            "items.category_id",
         ];
 
         $quotation->items = QuotationItem::select($select)
             ->join('items', 'items.id', '=', 'quotation_item.item_id')
+            ->join('categories', 'categories.id', '=', 'items.category_id')
+            ->whereIn('items.category_id', $assigned_categories)
             ->where('quotation_id', $id)
             ->get();
 
@@ -198,6 +222,7 @@ class QuotationController extends Controller
             'user'      => Auth::user(),
             'quotation' => $quotation,
             'customers' => $customers,
+            'categories' => $categories,
             'items'     => $items
         ];
 
@@ -207,7 +232,8 @@ class QuotationController extends Controller
     public function update(Request $request,$id)
     {
         $quotation = Quotation::find($id);
-
+        # Fetch the assigned categories of the logged in user
+        $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
         if(!$quotation)
         {
             return redirect(
@@ -253,7 +279,10 @@ class QuotationController extends Controller
         $quotation->total = $request->total;
         $quotation->save();
 
-        $quotation_item = QuotationItem::where('quotation_id',$quotation->id)->delete();
+        /*$quotation_item = QuotationItem::where('quotation_id',$quotation->id)->delete();*/
+        $quotation_item = QuotationItem::join('items', 'items.id', '=', 'quotation_item.item_id')
+            ->whereIn('items.category_id', $assigned_categories)
+            ->where('quotation_item.quotation_id', $quotation->id)->delete();
 
         $items = $request->item_id;
         $brands = $request->brand_id;
@@ -296,7 +325,7 @@ class QuotationController extends Controller
 
     public function view ($id)
     {
-        $select=[
+        /*$select=[
             'quotations.quotation',
             'quotations.project_name',
             'quotations.total',
@@ -322,7 +351,42 @@ class QuotationController extends Controller
             ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
             ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
+            ->get();*/
+        $category_select = [
+            'categories.category_name',
+            'categories.id',
+        ];
+        # Fetch the assigned categories of the logged in user
+        $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
+
+        $select = [
+            "quotations.*",
+            # "quotation_item.*",
+            "customers.customer_name",
+            "customers.attention_person",
+        ];
+        $quotation = Quotation::select($select)
+            ->join('customers','customers.id','=','quotations.customer_id')
+            #->join('quotation_item','quotation_item.quotation_id','=','quotations.id')
+            ->where('quotations.id', $id)
+            ->first();
+
+        # If quotation was not found
+        if (!$quotation) return redirect()->back()->with('error', 'Quotation not found');
+
+        $select = [
+            "quotation_item.*",
+            "items.item_name",
+            "items.category_id",
+        ];
+
+        $quotation->items = QuotationItem::select($select)
+            ->join('items', 'items.id', '=', 'quotation_item.item_id')
+            ->join('categories', 'categories.id', '=', 'items.category_id')
+            ->whereIn('items.category_id', $assigned_categories)
+            ->where('quotation_id', $id)
             ->get();
+
         $data = [
             'title'      => 'Quotations',
             'base_url'   => env('APP_URL', 'http://omnibiz.local'),
@@ -335,6 +399,16 @@ class QuotationController extends Controller
     public function generateQuotation($inquiry_id)
     {
         $customers = Customer::orderBy('id','DESC')->get();
+        $category_select = [
+            'categories.category_name',
+            'categories.id',
+        ];
+        # Fetch the assigned categories of the logged in user
+        $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
+        $categories = Category::select($category_select)
+            ->whereIn('items.category_id', $assigned_categories)
+            ->groupBy('categories.category_name')
+            ->get();
         $brands    = Brand::orderBy('id','DESC')->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name"),
@@ -364,19 +438,24 @@ class QuotationController extends Controller
             'inquiry'   => $inquiry,
             'brands'    => $brands,
             'customers' => $customers,
+            'categories' => $categories,
             'items'     => $items
         ];
 
         return view('team.quotation.generatefrominquiry', $data);
     }
 
-    public function pdfinquiry($id)
+    public function pdfquotation($id)
     {
+        # Fetch the assigned categories of the logged in user
+        $assigned_categories = UserCategory::select('category_id')->where('user_id', Auth::id())->get();
+
         $select=[
             'items.item_name',
             'items.item_description',
             'items.category_id',
             'brands.brand_name',
+            'categories.category_name',
             'quotation_item.quantity',
             'quotation_item.amount',
             'quotation_item.unit',
@@ -385,26 +464,17 @@ class QuotationController extends Controller
             'categories.category_name',
         ];
 
-        /*$quotation = Quotation::select($select)
-            ->leftJoin('quotation_item', 'quotation_item.quotation_id', '=', 'quotations.id')
-            ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
-            ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
-            ->leftJoin('categories', 'category.id', '=', 'items.category_id')
-            ->leftJoin('customers', 'customers.id', '=', 'quotations.customer_id')
-            ->orderBy('items.category_id','ASC')
-            ->where('quotations.id',$id)
-            ->groupBy('items.id')
-            ->get();*/
         $quotation_select = [
             'quotations.quotation',
             'quotations.id',
             'quotations.project_name',
-            'quotations.created_at',
             'quotations.total',
             'quotations.currency',
+            'quotations.created_at',
             'quotations.discount',
             'customers.customer_name',
             'customers.attention_person',
+            'quotations.terms_condition'
         ];
         $quotation = Quotation::select($quotation_select)
             ->join('customers', 'customers.id','=','quotations.customer_id')
@@ -417,8 +487,9 @@ class QuotationController extends Controller
             ->leftJoin('brands', 'brands.id', '=', 'quotation_item.brand_id')
             ->leftJoin('items', 'items.id', '=', 'quotation_item.item_id')
             ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
-            ->orderBy('items.category_id','ASC')
+            ->whereIn('categories.id', $assigned_categories)
             ->where('quotation_item.quotation_id',$quotation->id)
+            ->orderBy('items.category_id','ASC')
             ->groupBy('items.id')
             ->get();
         $quotation->creation = \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('d-M-Y');

@@ -213,7 +213,7 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('quotation.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
                         <i class="fas fa-file-alt nav-icon"></i>
                         <p>
                             Quotation

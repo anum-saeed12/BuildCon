@@ -74,10 +74,10 @@
                             <table class="table table-hover text-nowrap table-compact">
                                 <thead>
                                 <tr>
-                                    <th>Sr.No.</th>
-                                    <th class="pl-0">Category Name</th>
-                                    <th class="pl-0">Item Name</th>
-                                    <th class="pl-0">Brand Name</th>
+                                    <th>#</th>
+                                    <th class="pl-0">Category</th>
+                                    <th class="pl-0">Item</th>
+                                    <th class="pl-0">Brand</th>
                                     <th class="pl-0">Price</th>
                                     <th class="pl-0">Unit</th>
                                 </tr>

@@ -277,41 +277,6 @@ class InquiryController extends Controller
         return view('team.inquiry.edit', $data);
     }
 
-    public function view($id)
-    {
-        $select=[
-            'inquiries.id as unique',
-            'inquiries.inquiry',
-            'inquiries.project_name',
-            'customers.attention_person',
-            'customers.customer_name',
-            'items.item_name',
-            'items.item_description',
-            'brands.brand_name',
-            'users.name',
-            'categories.category_name',
-            'inquiry_order.quantity',
-            'inquiry_order.unit',
-        ];
-        $inquires = Inquiry::select($select)
-            ->leftJoin('customers','customers.id','=','inquiries.customer_id')
-            ->leftJoin('inquiry_order','inquiry_order.inquiry_id', '=', 'inquiries.id')
-            ->leftJoin('users','users.id' ,'=', 'inquiries.user_id')
-            ->leftJoin('brands','brands.id' ,'=', 'inquiry_order.brand_id')
-            ->leftJoin('categories', 'categories.id' ,'=', 'inquiry_order.category_id')
-            ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
-            ->where('inquiries.id',$id)
-            ->get();
-
-
-        $data = [
-            'title'   => 'View Inquires',
-            'user'    => Auth::user(),
-            'inquiry'=> $inquires
-        ];
-        return view('team.inquiry.item',$data);
-    }
-
     public function ajaxFetchCategory(Request $request)
     {
         $request->validate([
@@ -341,10 +306,45 @@ class InquiryController extends Controller
         return response($item_categories, 200);
     }
 
+    public function view($id)
+    {
+        $select=[
+            'inquiries.id as unique',
+            'inquiries.inquiry',
+            'inquiries.project_name',
+            'inquiries.created_at',
+            'customers.attention_person',
+            'customers.customer_name',
+            'items.item_name',
+            'items.item_description',
+            'brands.brand_name',
+            'users.name',
+            'categories.category_name',
+            'inquiry_order.quantity',
+            'inquiry_order.unit',
+        ];
+        $inquires = Inquiry::select($select)
+            ->leftJoin('customers','customers.id','=','inquiries.customer_id')
+            ->leftJoin('inquiry_order','inquiry_order.inquiry_id', '=', 'inquiries.id')
+            ->leftJoin('users','users.id' ,'=', 'inquiries.user_id')
+            ->leftJoin('categories', 'categories.id' ,'=', 'inquiry_order.category_id')
+            ->leftJoin('brands', 'brands.id' ,'=', 'inquiry_order.brand_id')
+            ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
+            ->where('inquiries.id',$id)
+            ->get();
+
+        $data = [
+            'title'   => 'View Inquires',
+            'user'    => Auth::user(),
+            'inquiry'=> $inquires
+        ];
+        return view('team.inquiry.item',$data);
+    }
+
     public function pdfinquiry($id)
     {
         $select=[
-            'inquiries.created_at as creationdate',
+            'inquiries.created_at',
             'inquiries.id as unique',
             'inquiries.inquiry',
             'inquiries.project_name',
@@ -365,9 +365,6 @@ class InquiryController extends Controller
             ->leftJoin( 'items','items.id' ,'=', 'inquiry_order.item_id')
             ->where('inquiries.id',$id)
             ->get();
-
-        $inquires->creation = Carbon::createFromTimeStamp(strtotime($inquires[0]->creationdate))->format('d-M-Y');
-
         $data = [
             'title'      => 'Inquiry Pdf',
             'base_url'   => env('APP_URL', 'http://omnibiz.local'),
@@ -449,6 +446,7 @@ class InquiryController extends Controller
             route('inquiry.list.team')
         )->with('success', 'Inquiry was updated successfully!');
     }
+
     public function fetchDocuments($id)
     {
         $documents = InquiryDocument::select('file_path', 'id')->where('inquiry_id', $id)->get();

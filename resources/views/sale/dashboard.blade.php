@@ -57,7 +57,7 @@
                         <div class="icon">
                             <i class="fas fa-receipt  nav-icon text-info"></i>
                         </div>
-                        <a href="{{ route('quotation.list.sale') }}" class="small-box-footer bg-info" style="color:white!important;">View Submitted Quotation <i class="fas"></i></a>
+                        <a href="{{ route('customerquotation.list.sale') }}" class="small-box-footer bg-info" style="color:white!important;">View Submitted Quotation <i class="fas"></i></a>
                     </div>
                 </div>
             </div>

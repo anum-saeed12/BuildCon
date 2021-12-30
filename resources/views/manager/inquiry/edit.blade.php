@@ -127,7 +127,7 @@
                                                     <option value="{{ $item->item_name }}"{{ $inquiry_item->item_name==$item->item_name ? ' selected':'' }}>{{ ucfirst($item->item_name) }}</option>
                                                 @endforeach
                                             </select>
-                                            <span id="item_spinner_${$uid}"></span>
+                                            <span id="item_spinner_{{ $loop->iteration - 1 }}"></span>
                                         </div>
                                         <div class="col-md-2 brand-container">
                                             <select name="brand_id[]" class="form-control form-control-sm" id="brand_id_{{ $loop->iteration }}">

@@ -86,11 +86,11 @@
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('inquiry.view.sale',$inquiry->id) }}">
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ $loop->iteration + intval(($inquires->currentPage() - 1) * $inquires->count())}}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->customer_name) }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->project_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucwords($inquiry->customer_name) }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucwords($inquiry->project_name) }}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ $inquiry->username }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->date) }}</td>
-                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->timeline) }}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->date)->format('d-M-Y')}}</td>
+                                        <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ \Carbon\Carbon::parse($inquiry->timeline)->format('d-M-Y')}}</td>
                                         <td><a href="{{ route('inquiry.view.sale',$inquiry->id) }}">{{ ucfirst($inquiry->inquiry_status) }}</td>
                                         <td class="text-right p-0">
                                             <a class="bg-warning list-btn" href="{{ route('inquiry.documents.sale', $inquiry->id) }}"
@@ -98,7 +98,8 @@
                                                onclick="$('#downloadableFilesTitle').html($(this).data('doc'));$('#downloadableFilesHolder').html('Loading wait please...');$('#downloadableFilesHolder').load($(this).attr('href'));"
                                                title="Download Files" data-toggle="modal" data-target="#downloadable-files">
                                                 <i class="fas fa-download" aria-hidden="false"></i>
-                                            </a></td>
+                                            </a>
+                                        </td>
                                     </tr>
                                     @empty
                                         <tr>

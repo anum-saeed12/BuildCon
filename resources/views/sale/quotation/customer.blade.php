@@ -72,19 +72,19 @@
                                     <th class="pl-0">Project Name</th>
                                     <th class="pl-0">Date</th>
                                     <th class="pl-0">Amount</th>
-                                    <th class="pl-0">Terms & Condition</th>
+                                    <th class="pl-0">Inquiry Person</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
                                 @forelse($quotations as $quotation)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">
-                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucfirst($quotation->customer_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucfirst($quotation->project_name) }}</td>
-                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ $quotation->date }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ $loop->iteration + intval(($quotations->currentPage() - 1) * $quotations->count()) }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucwords($quotation->customer_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucwords($quotation->project_name) }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ \Carbon\Carbon::parse($quotation->date)->format('d-M-Y')}}</td>
                                         <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ $quotation->total }}</td>
-                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucfirst($quotation->terms_condition) }}</td>
+                                        <td><a href="{{ route('quotation.view.sale',$quotation->quotation_id) }}">{{ ucfirst($quotation->username) }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse">
-                      {!! $quotations->links('pagination::bootstrap-4') !!}
+                      {!! $quotations->appends($_GET)->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>
@@ -113,7 +113,6 @@
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
-            $('.c-tt').tooltip();
         });
     </script>
 @stop

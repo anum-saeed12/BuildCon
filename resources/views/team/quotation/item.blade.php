@@ -24,7 +24,7 @@
     <div class="container-fluid">
         <div class="row mb-3">
             <div class="col-12">
-                <a href="{{ route('quotation.pdfinquiry.team',$quotation[0]->unique) }}" type="submit" class="btn btn-info toastrDefaultSuccess btn-sm" target="btnActionIframe"><i class="far fa-file-alt mr-1"></i> Create Quotation Pdf</a>
+                <a href="{{ route('quotation.pdfquotation.team',$quotation->id) }}" type="submit" class="btn btn-info toastrDefaultSuccess btn-sm" target="btnActionIframe"><i class="far fa-file-alt mr-1"></i> Create Quotation Pdf</a>
                 <iframe name="btnActionIframe" style="display:none;" onload="setTimeout(function(){this.src=''},1000)"></iframe>
             </div>
         </div>
@@ -57,15 +57,15 @@
                             <div class="row invoice-info">
                                 <div class="col-sm-4 invoice-col">
                                     <address>
-                                        <p><b>Ref: </b>{{ strtoupper(substr($quotation[0]->quotation,0,4)) }}-{{ strtoupper(substr($quotation[0]->quotation,4,4)) }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('dm') }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation[0]->created_at))->format('Y') }}</p>
-                                        <p><b>Attention: </b>{{ ucwords($quotation[0]->attention_person) }}</p>
-                                        <p><b>Customer Name: </b>{{ ucwords($quotation[0]->customer_name) }}</p>
-                                        <p><b>Project Name: </b>{{ ucwords($quotation[0]->project_name) }}</p>
+                                        <p><b>Ref: </b>{{ strtoupper(substr($quotation->quotation,0,4)) }}-{{ strtoupper(substr($quotation->quotation,4,4)) }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('dm') }}-{{ \Carbon\Carbon::createFromTimeStamp(strtotime($quotation->created_at))->format('Y') }}</p>
+                                        <p><b>Attention: </b>{{ ucwords($quotation->attention_person) }}</p>
+                                        <p><b>Customer Name: </b>{{ ucwords($quotation->customer_name) }}</p>
+                                        <p><b>Project Name: </b>{{ ucwords($quotation->project_name) }}</p>
                                     </address>
                                 </div>
                                 <div class="offset-6 col-sm-2 invoice-col">
                                     <address>
-                                        <p><b>Date: </b>{{ \Illuminate\Support\Carbon::createFromDate($quotation[0]->date)->format('d-M-Y') }}</p>
+                                        <p><b>Date: </b>{{ \Illuminate\Support\Carbon::createFromDate($quotation->date)->format('d-M-Y') }}</p>
                                     </address>
                                 </div>
                             </div>
@@ -80,13 +80,13 @@
                                             <th>Brand</th>
                                             <th>Quantity</th>
                                             <th>Unit</th>
-                                            <th>Unit Price ( {{ ucwords($quotation[0]->currency) }} )</th>
-                                            <th>Dis.Price ( {{ ucwords($quotation[0]->currency) }} )</th>
+                                            <th>Unit Price</th>
+                                            <th>{{ $quotation->discount }}% Off</th>
                                             <th>Total</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($quotation as $item)
+                                        @foreach($quotation->items as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ ucwords($item->item_name) }}</td>
@@ -94,8 +94,8 @@
                                             <td>{{ ucwords($item->brand_name) }}</td>
                                             <td>{{ ucwords($item->quantity) }}</td>
                                             <td>{{ ucwords($item->unit) }}</td>
-                                            <td>{{ ucwords($item->rate) }}</td>
-                                            <td>{{ ucwords($item->discount_rate) }}</td>
+                                            <td>{{ ucwords($item->rate) }} {{ $quotation->currency }}</td>
+                                            <td>{{ ucwords($item->discount_rate) }} {{ $quotation->currency }}</td>
                                             <td>{{ ucwords($item->amount) }}</td>
                                         </tr>
                                         @endforeach
@@ -111,11 +111,11 @@
                                         <table class="table">
                                            <tr>
                                                 <th style="width:50%">Discount:</th>
-                                               <td>{{ $item->discount }}<b>%</b></td>
+                                               <td>{{ $quotation->discount }}<b>%</b></td>
                                            </tr>
                                             <tr>
                                                 <th style="width:50%">Total Amount:</th>
-                                                <td><b>{{ ucwords($item->currency) }}</b> {{ $item->total }}</td>
+                                                <td><b>{{ ucwords($quotation->currency) }}</b> {{ $quotation->total }}</td>
                                            </tr>
                                         </table>
                                     </div>

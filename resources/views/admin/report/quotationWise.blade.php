@@ -52,7 +52,7 @@
                                     </select>
                                 </form>
 
-                                <div>Total Amount: <b>{!!  $data->sum('amount') !!}</b></div>
+                                <div>Total Amount: <b>{!!  $data->sum('total') !!}</b></div>
                             </div>
                             <div class="col-md-6 text-right pr-md-4">
                                 <div class="mr-2" style="display:inline-block;vertical-align:top;">
@@ -75,27 +75,31 @@
                             <table class="table table-hover text-nowrap table-compact">
                                 <thead>
                                 <tr>
-                                    <th>Sr.No.</th>
-                                    <th class="pl-0">Customer Name</th>
-                                    <th class="pl-0">Item Name</th>
-                                    <th class="pl-0">Brand Name</th>
-                                    <th class="pl-0">Rate</th>
-                                    <th class="pl-0">Total Amount</th>
+                                    <th>#</th>
+                                    <th class="pl-0">User</th>
+                                    <th class="pl-0">Customer</th>
+                                    <th class="pl-0">Project</th>
+                                    <th class="pl-0">Total Items</th>
+                                    <th class="pl-0">Total</th>
+                                    <th class="pl-0">Date</th>
+                                    <th class="pl-0">Created</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
                                 @forelse($data as $quote)
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal">
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ ucfirst($quote->username) }} ({{ $quote->user_role }})</td>
                                         <td>{{ ucfirst($quote->customer_name) }}</td>
-                                        <td>{{ ucfirst($quote->item_name) }}</td>
-                                        <td>{{ ucfirst($quote->brand_name) }}</td>
-                                        <td>{{ $quote->rate }}</td>
-                                        <td>{{ $quote->amount }}</td>
+                                        <td>{{ ucfirst($quote->project_name) }}</td>
+                                        <td><b>{{ $quote->total_items }}</b> items</td>
+                                        <td>{{ $quote->total }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromDate($quote->date)->format('d M Y') }}</td>
+                                        <td>{{ $quote->created_at->format('d M Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-3 text-center">No quotes found</td>
+                                        <td colspan="100" class="py-3 text-center">No quotes found</td>
                                     </tr>
                                 @endforelse
                                 </tbody>

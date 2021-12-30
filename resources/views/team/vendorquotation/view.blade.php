@@ -71,11 +71,12 @@
                                 <thead>
                                 <tr>
                                     <th>Sr.No.</th>
-                                    <th class="pl-0">Client</th>
+                                    <th class="pl-0">Vendor</th>
+                                    <th class="pl-0">Quotation Ref#</th>
                                     <th class="pl-0">Project</th>
                                     <th class="pl-0">Amount</th>
                                     <th class="pl-0">Date</th>
-                                    <th class="pl-0">Sales Person</th>
+                                    <th class="pl-0">User</th>
                                 </tr>
                                 </thead>
                                 <tbody id="myTable">
@@ -83,11 +84,12 @@
                                     <tr style="cursor:pointer" class="no-select" data-toggle="modal"
                                         data-href="{{ route('vendorquotation.view.team',$quotation->id) }}">
                                         <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ $loop->iteration + intval(($vendor_quotation->currentPage() - 1) * $vendor_quotation->count()) }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ucfirst($quotation->vendor_name) }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ ucfirst($quotation->project_name) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ ucwords($quotation->vendor_name) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ ucwords($quotation->quotation_ref) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ ucwords($quotation->project_name) }}</a></td>
                                         <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ $quotation->total }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ $quotation->date }}</a></td>
-                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ ucfirst($quotation->name) }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ \Carbon\Carbon::parse($quotation->date)->format('d-M-Y') }}</a></td>
+                                        <td><a href="{{ route('vendorquotation.view.team',$quotation->id) }}">{{ ucwords($quotation->name) }}</a></td>
                                         <td class="text-right p-0">
                                             <a class="bg-warning list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ asset('storage/file/'.$quotation->quotation_pdf) }}" title="Quotation PDF" target="_blank"><i class="fas fa-file-pdf" aria-hidden="false"></i></a>
                                             <a class="bg-primary list-btn" data-toggle="tooltip" data-placement="bottom" href="{{ route('vendorquotation.edit.team',$quotation->id) }}"title="Edit"><i class="fas fa-tools" aria-hidden="false"></i></a>

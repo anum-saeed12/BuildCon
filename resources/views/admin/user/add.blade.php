@@ -118,7 +118,7 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col mb-3 text-center">
-                                    <button type="submit" class="btn btn-default">Cancel</button>
+                                    <button type="button" onclick="window.location.href='{{ url()->previous() }}'" class="btn btn-default">Cancel</button>
                                     <span class="mr-3"></span>
                                     <button type="submit" class="btn btn-info">{{$title}}</button>
                                 </div>
