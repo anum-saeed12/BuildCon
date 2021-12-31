@@ -48,3 +48,10 @@ if (!function_exists('fetchItemsForCategory'))
         return $items;
     }
 }
+
+if (!function_exists('role')) {
+    function role()
+    {
+
+    }
+}

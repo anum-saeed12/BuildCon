@@ -7,14 +7,15 @@
         <nav class="mt-4">
             <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget='treeview' role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{ route('dashboard.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('dashboard.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role    )?' active':''}}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 @admin()
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-item has-treeview{{request()->is(auth()->user()->user_role.'/report/*')?' menu-open':''}}">
+                    <a href="#" class="nav-link{{request()->is(auth()->user()->user_role.'/report/*')?' active':''}}">
                         <i class="fas fa-file-pdf nav-icon"></i>
                         <p>
                             Report
@@ -55,7 +56,8 @@
                     </ul>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('user.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('user.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/user/*')?' active':''}}">
                         <i class="fas fa-users nav-icon"></i>
                         <p>
                             Users
@@ -63,7 +65,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('inquiry.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('inquiry.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{(request()->is(auth()->user()->user_role.'/inquiry/*')&&!request()->is(auth()->user()->user_role.'/inquiry/open'))?' active':''}}">
                         <i class="fas fa-file nav-icon"></i>
                         <p>
                             Inquiry
@@ -71,7 +74,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('inquiry.open.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('inquiry.open.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/inquiry/open')?' active':''}}">
                         <i class="fas fa-pen-square nav-icon"></i>
                         <p>
                             Open Inquiry
@@ -79,7 +83,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('customer.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('customer.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/customer/*')?' active':''}}">
                         <i class="fas fa-users nav-icon"></i>
                         <p>
                             Customer
@@ -87,7 +92,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('item.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('item.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/item/*')?' active':''}}">
                         <i class="fas fa-boxes nav-icon"></i>
                         <p>
                             Items
@@ -95,7 +101,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('brand.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('brand.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/brand/*')?' active':''}}">
                         <i class="fas fa-certificate nav-icon"></i>
                         <p>
                             Brand
@@ -103,7 +110,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('category.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('category.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/category/*')?' active':''}}">
                         <i class="fas fa-bezier-curve nav-icon"></i>
                         <p>
                             Category
@@ -111,7 +119,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{(request()->is(auth()->user()->user_role.'/quotation/*')&&!request()->is(auth()->user()->user_role.'/quotation/cmd/*'))?' active':''}}">
                         <i class="fas fa-receipt nav-icon"></i>
                         <p>
                             Customer Quotation
@@ -119,7 +128,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('comparison.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('comparison.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/quotation/cmd/*')?' active':''}}">
                         <i class="fas fa-compress-arrows-alt nav-icon"></i>
                         <p>
                             Comparison Quotation
@@ -127,7 +137,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('vendorquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('vendorquotation.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{(request()->is(auth()->user()->user_role.'/vendor/quotation/*'))?' active':''}}">
                         <i class="fas fa-paste nav-icon"></i>
                         <p>
                             Vendor Quotation
@@ -135,7 +146,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('vendor.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('vendor.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{(request()->is(auth()->user()->user_role.'/vendor/*')&&!request()->is(auth()->user()->user_role.'/vendor/quotation/*'))?' active':''}}">
                         <i class="fas fa-warehouse nav-icon"></i>
                         <p>
                             Vendor
@@ -146,7 +158,8 @@
 
                 @manager()
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('inquiry.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('inquiry.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{(request()->is(auth()->user()->user_role.'/inquiry/*')&&!request()->is(auth()->user()->user_role.'/inquiry/open'))?' active':''}}">
                         <i class="fas fa-file nav-icon"></i>
                         <p>
                             Inquiry
@@ -154,7 +167,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('inquiry.open.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('inquiry.open.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/inquiry/open')?' active':''}}">
                         <i class="fas fa-pen-square nav-icon"></i>
                         <p>
                             Open Inquiry
@@ -162,7 +176,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('customer.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('customer.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/customer/*')?' active':''}}">
                         <i class="fas fa-users nav-icon"></i>
                         <p>
                             Customer
@@ -170,7 +185,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('item.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('item.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/item/*')?' active':''}}">
                         <i class="fas fa-boxes nav-icon"></i>
                         <p>
                             Items
@@ -178,7 +194,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/quotation/*')?' active':''}}">
                         <i class="fas fa-receipt nav-icon"></i>
                         <p>
                             Customer Quotation
@@ -186,7 +203,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('vendorquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('vendorquotation.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/vendor/quotation/*')?' active':''}}">
                         <i class="fas fa-paste nav-icon"></i>
                         <p>
                             Vendor Quotation
@@ -197,7 +215,8 @@
 
                 @sale()
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('inquiry.open.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('inquiry.open.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/inquiry/open')?' active':''}}">
                         <i class="fas fa-pen-square nav-icon"></i>
                         <p>
                             Open Inquiry
@@ -205,7 +224,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('inquiry.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('inquiry.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{(request()->is(auth()->user()->user_role.'/inquiry/*')&&!request()->is(auth()->user()->user_role.'/inquiry/open'))?' active':''}}">
                         <i class="fas fa-file-alt nav-icon"></i>
                         <p>
                             My Submitted Inquiry
@@ -213,7 +233,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{(request()->is(auth()->user()->user_role.'/quotation')||request()->is(auth()->user()->user_role.'/quotation/*'))?' active':''}}">
                         <i class="fas fa-file-alt nav-icon"></i>
                         <p>
                             Quotation
@@ -224,7 +245,8 @@
 
                 @team()
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('inquiry.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('inquiry.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{(request()->is(auth()->user()->user_role.'/inquiry/*')&&!request()->is(auth()->user()->user_role.'/inquiry/open'))?' active':''}}">
                         <i class="fas fa-file nav-icon"></i>
                         <p>
                             Inquiry
@@ -232,7 +254,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('inquiry.open.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('inquiry.open.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/inquiry/open')?' active':''}}">
                         <i class="fas fa-pen-square nav-icon"></i>
                         <p>
                             Open Inquiry
@@ -240,7 +263,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('customer.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('customer.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/customer/*')?' active':''}}">
                         <i class="fas fa-users nav-icon"></i>
                         <p>
                             Customer
@@ -248,7 +272,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('item.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('item.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/item/*')?' active':''}}">
                         <i class="fas fa-boxes nav-icon"></i>
                         <p>
                             Items
@@ -256,7 +281,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('customerquotation.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/quotation/*')?' active':''}}">
                         <i class="fas fa-receipt nav-icon"></i>
                         <p>
                             Customer Quotation
@@ -264,7 +290,8 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('vendorquotation.list.' . auth()->user()->user_role) }}" class="nav-link">
+                    <a href="{{ route('vendorquotation.list.' . auth()->user()->user_role) }}"
+                       class="nav-link{{request()->is(auth()->user()->user_role.'/vendor/quotation/*')?' active':''}}">
                         <i class="fas fa-paste nav-icon"></i>
                         <p>
                             Vendor Quotation

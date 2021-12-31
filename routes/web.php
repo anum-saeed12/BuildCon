@@ -154,7 +154,7 @@ Route::prefix('/admin')->middleware('admin')->group(function() {
     Route::get('/report/itemwise/{id}', '\App\Http\Controllers\Admin\ReportController@itemWisePdf')->name('itemwise.reportPDF.admin');
 });
 
-Route::prefix('/sourcing_team')->middleware('team')->group(function() {
+Route::prefix('/team')->middleware('team')->group(function() {
     # Dashboard
     Route::get('/', '\App\Http\Controllers\DashboardController@team')->name('dashboard.team');
 
@@ -300,7 +300,7 @@ Route::prefix('/manager')->middleware('manager')->group(function() {
     });
 });
 
-Route::prefix('/sale_person')->middleware('sale')->group(function() {
+Route::prefix('/sale')->middleware('sale')->group(function() {
     # Dashboard
     Route::get('/', '\App\Http\Controllers\DashboardController@sale')->name('dashboard.sale');
     Route::get('/quotation', '\App\Http\Controllers\Sales\QuotationController@customer')->name('customerquotation.list.sale');
