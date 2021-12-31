@@ -70,11 +70,12 @@ class QuotationController extends Controller
 
     public function add()
     {
-        $customers = Customer::orderBy('id','DESC')->get();
-        $brands    = Brand::orderBy('id','DESC')->get();
+        $customers = Customer::orderBy('customer_name','ASC')->get();
+        $categories = Category::orderBy('category_name','ASC')->get();
+        $brands    = Brand::orderBy('brand_name','ASC')->get();
         $items     = Item::select([
             DB::raw("DISTINCT item_name"),
-        ])->orderBy('id','DESC')->get();
+        ])->orderBy('item_name','ASC')->get();
 
 
         $data = [
@@ -83,6 +84,7 @@ class QuotationController extends Controller
             'user'     => Auth::user(),
             'brands'    => $brands,
             'customers' => $customers,
+            'categories' => $categories,
             'items'     => $items
         ];
         return view('manager.quotation.add', $data);
